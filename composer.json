@@ -3,14 +3,5 @@
   "description": "Modular Flexible Content System",
   "homepage": "https://github.com/DekodeInteraktiv/hogan-core",
   "type": "wordpress-plugin",
-  "license": "GPL-2.0+",
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.dekodes.no/"
-    }
-  ],
-  "require": {
-    "dekode/advanced-custom-fields-pro": "*"
-  }
+  "license": "GPL-2.0+"
 }
