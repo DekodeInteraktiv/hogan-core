@@ -56,7 +56,7 @@ class Core {
 		add_filter( 'acf/fields/wysiwyg/toolbars', [ $this, 'append_hogan_wysiwyg_toolbar' ] );
 		add_filter( 'tiny_mce_before_init', [ $this, 'override_tinymce_settings' ] );
 
-		if ( true === apply_filters( 'hogan_flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
+		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
 	}
@@ -103,7 +103,7 @@ class Core {
 
 		$this->field_groups[] = $name;
 
-		if ( true !== apply_filters( 'hogan_field_group_' . $name . '_enabled', true ) ) {
+		if ( true !== apply_filters( 'hogan/field_group/' . $name . '/enabled', true ) ) {
 			return;
 		}
 
@@ -144,8 +144,8 @@ class Core {
 				'key'            => 'hogan_' . $name, // i.e. hogan_default.
 				'title'          => $label,
 				'fields'         => $field_group_fields,
-				'location'       => apply_filters( 'hogan_field_group_' . $name . '_location', $location ),
-				'hide_on_screen' => apply_filters( 'hogan_field_group_' . $name . '_hide_on_screen', $hide_on_screen ),
+				'location'       => apply_filters( 'hogan/field_group/' . $name . '/location', $location ),
+				'hide_on_screen' => apply_filters( 'hogan/field_group/' . $name . '/hide_on_screen', $hide_on_screen ),
 			]
 		);
 	}
@@ -271,7 +271,7 @@ class Core {
 	 * @return array $settings Optimized TinyMCE settings.
 	 */
 	public function override_tinymce_settings( $settings ) {
-		$settings['block_formats'] = apply_filters( 'hogan_tinymce_block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
+		$settings['block_formats'] = apply_filters( 'hogan/tinymce_block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
 		return $settings;
 	}
 

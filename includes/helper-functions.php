@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * De-register default field group.
  */
 function hogan_deregister_default_field_group() {
-	add_filter( 'hogan_field_group_default_enabled', '__return_false' );
+	add_filter( 'hogan/field_group/default/enabled', '__return_false' );
 }
 
 /**

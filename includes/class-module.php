@@ -69,11 +69,11 @@ abstract class Module {
 		} );
 
 		$this->wrapper_classes = array_merge(
-			apply_filters( 'hogan_module_wrapper_classes', [
+			apply_filters( 'hogan/module/wrapper_classes', [
 				'row',
 				'hogan-module',
 			] ),
-			apply_filters( 'hogan_module_' . $this->name . '_wrapper_classes', [
+			apply_filters( 'hogan/module/' . $this->name . '/wrapper_classes', [
 				'hogan-module-' . $this->name,
 			] )
 		);
@@ -107,6 +107,6 @@ abstract class Module {
 	 */
 	public function render_template() {
 		// TODO: Filter template and check if the template exists.
-		include $this->template;
+		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
 	}
 }
