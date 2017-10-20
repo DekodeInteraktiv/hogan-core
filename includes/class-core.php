@@ -69,6 +69,10 @@ class Core {
 
 	/**
 	 * Registert module
+	 *
+	 * @param object $module Module object.
+	 *
+	 * @return void
 	 */
 	public function register_module( $module ) {
 
@@ -148,8 +152,6 @@ class Core {
 
 	/**
 	 * Register default field group for modules.
-	 *
-	 * @param object $module Module object.
 	 *
 	 * @return void
 	 */
