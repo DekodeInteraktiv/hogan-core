@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Registert module
+ *
+ * @param object $module Module object.
+ *
+ * @return void
  */
 function hogan_register_module( $module ) {
 	global $hogan;
