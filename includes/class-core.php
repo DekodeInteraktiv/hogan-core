@@ -148,6 +148,10 @@ class Core {
 
 	/**
 	 * Register default field group for modules.
+	 *
+	 * @param object $module Module object.
+	 *
+	 * @return void
 	 */
 	public function register_default_field_group() {
 		$location = [
