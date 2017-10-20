@@ -14,8 +14,25 @@ defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
  */
 class Core {
 
+	/**
+	 * Directory.
+	 *
+	 * @var string $dir
+	 */
 	public $dir;
+
+	/**
+	 * Field groups.
+	 *
+	 * @var array $field_groups
+	 */
 	private $field_groups = [];
+
+	/**
+	 * Modules.
+	 *
+	 * @var array $modules
+	 */
 	private $modules = [];
 
 	/**
@@ -24,7 +41,6 @@ class Core {
 	 * @param string $dir Plugin directory.
 	 */
 	public function __construct( $dir ) {
-
 		$this->dir = $dir;
 
 		// Load text domain on plugins_loaded.
@@ -40,7 +56,7 @@ class Core {
 		add_filter( 'acf/fields/wysiwyg/toolbars', [ $this, 'append_hogan_wysiwyg_toolbar' ] );
 		add_filter( 'tiny_mce_before_init', [ $this, 'override_tinymce_settings' ] );
 
-		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
+		if ( true === apply_filters( 'hogan_flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
 	}
@@ -56,10 +72,8 @@ class Core {
 	 * Register all modules that exends class Modules.
 	 */
 	public function register_modules() {
-
-		// All modules are automatically registered upon creation in class-module.php __construct()
-
-		foreach ( apply_filters( 'hogan/modules', [] ) as $module ) {
+		// All modules are automatically registered upon creation in class-module.php __construct().
+		foreach ( apply_filters( 'hogan_modules', [] ) as $module ) {
 
 			if ( $module instanceof Module ) {
 				$this->modules[ $module->name ] = $module;
@@ -70,57 +84,68 @@ class Core {
 		}
 	}
 
+	/**
+	 * Register a specific field group.
+	 *
+	 * @param string $name                           Field group name.
+	 * @param mixed  $label                          Label.
+	 * @param mixed  $modules                        Array/String with supported modules.
+	 * @param array  $location                       Location rules.
+	 * @param array  $hide_on_screen                 Array of elements to hide on edit screen.
+	 * @param array  $fields_before_flexible_content Prepend fields.
+	 * @param array  $fields_after_flexible_content  Append fields.
+	 *
+	 * @return void
+	 */
 	public function register_field_group( $name, $label, $modules = 'all', $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
-
+		// Sanitized field group name will be used for all filters, and prefix for field group and field names.
 		$name = sanitize_key( $name );
-		// Sanitized field group name will be used for all filters, and prefix for field group and field names
 
 		$this->field_groups[] = $name;
 
-		if ( true !== apply_filters( 'hogan/field_group/' . $name . '/enabled', true ) ) {
+		if ( true !== apply_filters( 'hogan_field_group_' . $name . '_enabled', true ) ) {
 			return;
 		}
 
-		// Get flexible content layouts from modules
+		// Get flexible content layouts from modules.
 		$field_group_layouts = array_map( function( $module ) use ( $modules ) {
 
 			if ( is_array( $modules ) && ! empty( $modules ) ) {
 
-				// Limit modules to specified only
-				if ( in_array( $module->name, $modules ) ) {
+				// Limit modules to specified only.
+				if ( in_array( $module->name, $modules, true ) ) {
 					return $module->get_layout_definition();
 				}
-
 			} else {
-				// All modules
+				// All modules.
 				return $module->get_layout_definition();
 			}
 
 		}, $this->modules );
 
 		if ( empty( $field_group_layouts ) ) {
-			// No modules, no fun
+			// No modules, no fun.
 			return;
 		}
 
-		// Include custom fields before and after flexible content field
+		// Include custom fields before and after flexible content field.
 		$field_group_fields = [
 			array_merge( $fields_before_flexible_content, [
-				'type' => 'flexible_content',
-				'key' => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key
-				'name' => 'hogan_' . $name . '_modules_name',
-				'button_label' => __( 'Add module', 'hogan' ),
-				'layouts' => $field_group_layouts,
+				'type'         => 'flexible_content',
+				'key'          => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key.
+				'name'         => 'hogan_' . $name . '_modules_name',
+				'button_label' => esc_html__( 'Add module', 'hogan' ),
+				'layouts'      => $field_group_layouts,
 			], $fields_after_flexible_content )
 		];
 
 		acf_add_local_field_group(
 			[
-				'key' => 'hogan_' . $name, // i.e. hogan_default
-				'title' => $label,
-				'fields' => $field_group_fields,
-				'location' => apply_filters( 'hogan/field_group/' . $name . '/location', $location ),
-				'hide_on_screen' => apply_filters( 'hogan/field_group/' . $name . '/hide_on_screen', $hide_on_screen ),
+				'key'            => 'hogan_' . $name, // i.e. hogan_default.
+				'title'          => $label,
+				'fields'         => $field_group_fields,
+				'location'       => apply_filters( 'hogan_field_group_' . $name . '_location', $location ),
+				'hide_on_screen' => apply_filters( 'hogan_field_group_' . $name . '_hide_on_screen', $hide_on_screen ),
 			]
 		);
 	}
@@ -129,8 +154,7 @@ class Core {
 	 * Register default field group for modules.
 	 */
 	public function register_default_field_group() {
-
-		$this->register_field_group( 'default', __( 'Content modules', 'hogan' ), null, [
+		$location = [
 			[
 				[
 					'param' => 'post_type',
@@ -144,21 +168,23 @@ class Core {
 					'operator' => '==',
 					'value' => 'page',
 				],
-			] ],
-			[
-				'the_content',
-				'custom_fields',
-				'discussion',
-				'comments',
-				'revisions',
-				'slug',
-				'author',
-				'format',
-				'tags',
-				'send-trackbacks',
-			]
-		);
+			],
+		];
 
+		$hide_on_screen = [
+			'the_content',
+			'custom_fields',
+			'discussion',
+			'comments',
+			'revisions',
+			'slug',
+			'author',
+			'format',
+			'tags',
+			'send-trackbacks',
+		];
+
+		$this->register_field_group( 'default', __( 'Content modules', 'hogan' ), null, $location, $hide_on_screen );
 	}
 
 	/**
@@ -171,7 +197,7 @@ class Core {
 		global $more, $post;
 		$flexible_content = '';
 
-		// Remove current filter to avoid recursive loop
+		// Remove current filter to avoid recursive loop.
 		remove_filter( 'the_content', [ $this, 'render_modules' ] );
 
 		if ( $more && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
@@ -191,9 +217,7 @@ class Core {
 						$module = $this->modules[ $layout['acf_fc_layout'] ];
 
 						if ( $module instanceof Module ) {
-
-							// TODO: Cache HTML …
-
+							// TODO: Cache HTML.
 							ob_start();
 
 							$module->load_args_from_layout_content( $layout );
@@ -206,18 +230,23 @@ class Core {
 			}
 		}
 
-		// Re add filter after parsing content
+		// Re add filter after parsing content.
 		add_filter( 'the_content', [ $this, 'render_modules' ] );
 
 		return $content . $flexible_content;
 	}
 
+	/**
+	 * Add custom toolbars
+	 *
+	 * @param array $toolbars Current Toolbars.
+	 * @return array $toolbars Array with new toolbars.
+	 */
 	public function append_hogan_wysiwyg_toolbar( $toolbars ) {
-
+		// TODO: Include blockquote tinymce plugin. 'blockquote_cite'.
 		$toolbars['hogan'] = [
 			1 => [
 				'formatselect',
-				//'blockquote_cite', // TODO: include tiny mce plugin?
 				'bold',
 				'italic',
 				'numlist',
@@ -229,14 +258,20 @@ class Core {
 				'pastetext',
 				'removeformat',
 				'code',
-			]
+			],
 		];
 
 		return $toolbars;
 	}
 
+	/**
+	 * Override TinyMCE Settings
+	 *
+	 * @param array $settings TinyMCE settings.
+	 * @return array $settings Optimized TinyMCE settings.
+	 */
 	public function override_tinymce_settings( $settings ) {
-		$settings['block_formats'] = apply_filters( 'hogan/tinymce/block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
+		$settings['block_formats'] = apply_filters( 'hogan_tinymce_block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
 		return $settings;
 	}
 
@@ -257,5 +292,4 @@ class Core {
 		</script>
 		<?php
 	}
-
 }
