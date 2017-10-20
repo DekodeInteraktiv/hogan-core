@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <ruleset name="Hogan Coding Standards">
-    <description>Write code using Hogan's Standards and Hogan will stay happy!</description>
-    <rule ref="WordPress-Core"/>
-    <rule ref="WordPress-Docs"/>
-    <rule ref="WordPress-Extra"/>
-    <rule ref="WordPress-VIP"/>
+	<description>Write code using Hogan's standards and Hogan will stay happy!</description>
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores" />
+	</rule>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-VIP"/>
 </ruleset>
