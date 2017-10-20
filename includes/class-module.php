@@ -24,18 +24,18 @@ abstract class Module {
 	public $name;
 
 	/**
-	 * Module label.
-	 *
-	 * @var string $label
-	 */
-	public $label;
-
-	/**
 	 * Module field key prefix.
 	 *
 	 * @var string $field_key
 	 */
 	public $field_key;
+
+	/**
+	 * Module label.
+	 *
+	 * @var string $label
+	 */
+	public $label;
 
 	/**
 	 * Module output template.
@@ -62,6 +62,8 @@ abstract class Module {
 	 * Constructor.
 	 */
 	public function __construct() {
+
+		$this->name = strtolower( substr( strrchr( get_class( $this ), '\\' ), 1 ) );
 		$this->field_key = 'hogan_module_' . $this->name;
 
 		$this->wrapper_classes = array_merge(
@@ -73,21 +75,12 @@ abstract class Module {
 				'hogan-module-' . $this->name,
 			] )
 		);
-
-		// TODO: enque scripts? add_action( 'wp_enqueue_scripts', 'pantelotteriet_enqueue_assets' ).
 	}
 
 	/**
 	 * Base class for field definitions.
 	 */
 	public function get_layout_definition() { }
-
-	/**
-	 * Base class for loading module assets.
-	 */
-	public function load_assets() {
-		// TODO: wp_enqueue_style( 'style', get_stylesheet_uri(), [ 'aos' ], $_v ) ?
-	}
 
 	/**
 	 * Map raw field values to content array.
