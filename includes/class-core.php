@@ -204,33 +204,42 @@ class Core {
 
 		if ( $more && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
 
-			foreach ( $this->field_groups as $field_group ) {
+			$cache_key = $post->ID . '_hogan_modules';
+			$cache_group = 'hogan_modules';
+			$ttl = 500;
 
-				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
+			$flexible_content = wp_cache_get( $cache_key, $cache_group );
+			if ( empty( $flexible_content ) ) {
+				foreach ( $this->field_groups as $field_group ) {
 
-				if ( is_array( $layouts ) && count( $layouts ) ) {
-					foreach ( $layouts as $layout ) {
+					$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
-						if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
-							continue;
-						}
+					if ( is_array( $layouts ) && count( $layouts ) ) {
+						foreach ( $layouts as $layout ) {
 
-						// Get the right module.
-						$module = $this->modules[ $layout['acf_fc_layout'] ];
+							if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
+								continue;
+							}
 
-						if ( $module instanceof Module ) {
-							// TODO: Cache HTML.
-							ob_start();
+							// Get the right module.
+							$module = $this->modules[ $layout['acf_fc_layout'] ];
 
-							$module->load_args_from_layout_content( $layout );
-							$module->render_template();
+							if ( $module instanceof Module ) {
+								// TODO: Cache HTML.
+								ob_start();
 
-							$flexible_content .= ob_get_clean();
+								$module->load_args_from_layout_content( $layout );
+								$module->render_template();
+
+								$flexible_content .= ob_get_clean();
+							}
 						}
 					}
 				}
+
+				wp_cache_add( $cache_key, $flexible_content, $cache_group, $ttl );
 			}
-		}
+		} // End if().
 
 		// Re add filter after parsing content.
 		add_filter( 'the_content', [ $this, 'render_modules' ] );
