@@ -17,8 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function hogan_register_module( $module ) {
-	global $hogan;
-	$hogan->register_module( $module );
+
+	add_filter( 'hogan/modules', function( $modules ) use ( $module ) {
+		$modules[] = $module;
+		return $modules;
+	} );
+
 }
 
 /**

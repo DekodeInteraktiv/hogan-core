@@ -46,7 +46,10 @@ class Core {
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
 
-		// Register modules and default field group.
+		// Register all modules after all plugins have loaded.
+		add_action( 'plugins_loaded', [ $this, 'register_modules' ] );
+
+		// Register default field group.
 		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ], 15 );
 
 		// The content filter.
@@ -68,19 +71,20 @@ class Core {
 	}
 
 	/**
-	 * Registert module
-	 *
-	 * @param object $module Module object.
-	 *
-	 * @return void
+	 * Register modules from filter into core plugin.
 	 */
-	public function register_module( $module ) {
+	public function register_modules() {
 
-		if ( ! ( $module instanceof Module ) ) {
-			$module = new $module();
+		do_action( 'hogan/include_modules' );
+
+		foreach ( apply_filters( 'hogan/modules', [] ) as $module ) {
+
+			if ( ! ( $module instanceof Module ) ) {
+				$module = new $module();
+			}
+
+			$this->modules[ $module->name ] = $module;
 		}
-
-		$this->modules[ $module->name ] = $module;
 	}
 
 	/**
