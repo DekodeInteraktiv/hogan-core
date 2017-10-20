@@ -3,5 +3,5 @@
   "description": "Modular Flexible Content System",
   "homepage": "https://github.com/DekodeInteraktiv/hogan-core",
   "type": "wordpress-plugin",
-  "license": "GPL-2.0+"
+  "license": "GPL-3.0"
 }

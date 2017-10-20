@@ -6,8 +6,8 @@
  * Version: 1.0.0-dev
  * Author: Dekode
  * Author URI: https://dekode.no
- * License: GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License: GPL-3.0
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
  * Text Domain: hogan
  * Domain Path: /languages/
