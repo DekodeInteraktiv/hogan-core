@@ -63,11 +63,6 @@ abstract class Module {
 	public function __construct() {
 		$this->field_key = 'hogan_module_' . $this->name;
 
-		add_filter( 'hogan_modules', function( $modules ) {
-			$modules[] = $this;
-			return $modules;
-		} );
-
 		$this->wrapper_classes = array_merge(
 			apply_filters( 'hogan/module/wrapper_classes', [
 				'row',
@@ -106,7 +101,6 @@ abstract class Module {
 	 * Render module template.
 	 */
 	public function render_template() {
-		// TODO: Filter template and check if the template exists.
 		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
 	}
 }
