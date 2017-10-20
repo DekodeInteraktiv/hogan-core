@@ -47,7 +47,6 @@ class Core {
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
 
 		// Register modules and default field group.
-		add_action( 'acf/include_fields', [ $this, 'register_modules' ], 10 );
 		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ], 15 );
 
 		// The content filter.
@@ -68,19 +67,13 @@ class Core {
 		load_plugin_textdomain( 'hogan', false, $this->dir . '/languages' );
 	}
 
-	/**
-	 * Register all modules that exends class Modules.
-	 */
-	public function register_modules() {
-		// All modules are automatically registered upon creation in class-module.php __construct().
-		foreach ( apply_filters( 'hogan_modules', [] ) as $module ) {
+	public function register_module( $module ) {
 
-			if ( $module instanceof Module ) {
-				$this->modules[ $module->name ] = $module;
-			} else {
-				$instance = new $module();
-				$this->modules[ $instance->name ] = $instance;
-			}
+		if ( $module instanceof Module ) {
+			$this->modules[ $module->name ] = $module;
+		} else {
+			$instance = new $module();
+			$this->modules[ $instance->name ] = $instance;
 		}
 	}
 
@@ -136,7 +129,7 @@ class Core {
 				'name'         => 'hogan_' . $name . '_modules_name',
 				'button_label' => esc_html__( 'Add module', 'hogan' ),
 				'layouts'      => $field_group_layouts,
-			], $fields_after_flexible_content )
+			], $fields_after_flexible_content ),
 		];
 
 		acf_add_local_field_group(

@@ -9,6 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+function hogan_register_module( $module ) {
+	global $hogan;
+	$hogan->register_module( $module );
+}
+
 /**
  * De-register default field group.
  */
