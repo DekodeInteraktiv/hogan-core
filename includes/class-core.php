@@ -76,12 +76,11 @@ class Core {
 	 */
 	public function register_module( $module ) {
 
-		if ( $module instanceof Module ) {
-			$this->modules[ $module->name ] = $module;
-		} else {
-			$instance = new $module();
-			$this->modules[ $instance->name ] = $instance;
+		if ( ! ( $module instanceof Module ) ) {
+			$module = new $module();
 		}
+
+		$this->modules[ $module->name ] = $module;
 	}
 
 	/**
@@ -98,6 +97,7 @@ class Core {
 	 * @return void
 	 */
 	public function register_field_group( $name, $label, $modules = 'all', $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
+
 		// Sanitized field group name will be used for all filters, and prefix for field group and field names.
 		$name = sanitize_key( $name );
 
@@ -156,6 +156,7 @@ class Core {
 	 * @return void
 	 */
 	public function register_default_field_group() {
+
 		$location = [
 			[
 				[
@@ -204,12 +205,13 @@ class Core {
 
 		if ( $more && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
 
-			$cache_key = $post->ID . '_hogan_modules';
+			$cache_key = 'hogan_modules_' . $post->ID;
 			$cache_group = 'hogan_modules';
-			$ttl = 500;
 
 			$flexible_content = wp_cache_get( $cache_key, $cache_group );
+
 			if ( empty( $flexible_content ) ) {
+
 				foreach ( $this->field_groups as $field_group ) {
 
 					$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
@@ -237,9 +239,9 @@ class Core {
 					}
 				}
 
-				wp_cache_add( $cache_key, $flexible_content, $cache_group, $ttl );
+				wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
 			}
-		} // End if().
+		}
 
 		// Re add filter after parsing content.
 		add_filter( 'the_content', [ $this, 'render_modules' ] );

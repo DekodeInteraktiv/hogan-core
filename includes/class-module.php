@@ -1,6 +1,6 @@
 <?php
 /**
- * Base class for flexible content layouts.
+ * Base class for Hogan Modules.
  *
  * @package Hogan
  */
@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The class.
  */
 abstract class Module {
+
 	/**
 	 * Module name.
 	 *

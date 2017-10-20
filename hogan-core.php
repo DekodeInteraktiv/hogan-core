@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Hogan
- * Plugin URI: https://github.com/DekodeInteraktiv/hogan
+ * Plugin URI: https://github.com/DekodeInteraktiv/hogan-core
  * Description: Modular Flexible Content System
  * Version: 1.0.0-dev
  * Author: Dekode
