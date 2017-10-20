@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The class.
  */
-class Module {
+abstract class Module {
 
 	/**
 	 * Module name.
