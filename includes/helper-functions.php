@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+/**
+ * Registert module
+ */
 function hogan_register_module( $module ) {
 	global $hogan;
 	$hogan->register_module( $module );

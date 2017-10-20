@@ -67,6 +67,9 @@ class Core {
 		load_plugin_textdomain( 'hogan', false, $this->dir . '/languages' );
 	}
 
+	/**
+	 * Registert module
+	 */
 	public function register_module( $module ) {
 
 		if ( $module instanceof Module ) {
