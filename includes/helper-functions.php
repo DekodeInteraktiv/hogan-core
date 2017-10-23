@@ -18,6 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function hogan_register_module( $module ) {
 
+	if ( did_action( 'hogan/modules_registered' ) ) {
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ) , '1.0.0' );
+	}
+
 	add_filter( 'hogan/modules', function( $modules ) use ( $module ) {
 		$modules[] = $module;
 		return $modules;

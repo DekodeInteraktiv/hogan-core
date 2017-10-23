@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2017-10-19 18:49+0200\n"
-"PO-Revision-Date: 2017-10-19 18:50+0200\n"
+"POT-Creation-Date: 2017-10-23 08:30+0200\n"
+"PO-Revision-Date: 2017-10-23 08:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -20,21 +20,29 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/class-core.php:112
+#: includes/class-core.php:143
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:133
+#: includes/class-core.php:196
 msgid "Content modules"
 msgstr "Innholdsmoduler"
+
+#: includes/helper-functions.php:22
+msgid ""
+"Hogan modules have already been registered. Please run "
+"hogan_register_module() on action hogan/include_modules."
+msgstr ""
+"Hogan-moduler har allerede blitt registrert. Vennligst kjør "
+"hogan_register_module() på action hogan/include_modules."
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"
 msgstr "Hogan"
 
 #. Plugin URI of the plugin/theme
-msgid "https://github.com/DekodeInteraktiv/hogan"
-msgstr "https://github.com/DekodeInteraktiv/hogan"
+msgid "https://github.com/DekodeInteraktiv/hogan-core"
+msgstr "https://github.com/DekodeInteraktiv/hogan-core"
 
 #. Description of the plugin/theme
 msgid "Modular Flexible Content System"
@@ -47,3 +55,6 @@ msgstr "Dekode"
 #. Author URI of the plugin/theme
 msgid "https://dekode.no"
 msgstr "https://dekode.no"
+
+#~ msgid "https://github.com/DekodeInteraktiv/hogan"
+#~ msgstr "https://github.com/DekodeInteraktiv/hogan"

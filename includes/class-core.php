@@ -85,6 +85,8 @@ class Core {
 
 			$this->modules[ $module->name ] = $module;
 		}
+
+		do_action( 'hogan/modules_registered' );
 	}
 
 	/**
