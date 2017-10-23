@@ -233,7 +233,6 @@ class Core {
 							$module = $this->modules[ $layout['acf_fc_layout'] ];
 
 							if ( $module instanceof Module ) {
-								// TODO: Cache HTML.
 								ob_start();
 
 								$module->load_args_from_layout_content( $layout );
@@ -247,7 +246,7 @@ class Core {
 
 				wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
 			}
-		}
+		} // End if().
 
 		// Re add filter after parsing content.
 		add_filter( 'the_content', [ $this, 'render_modules' ] );
