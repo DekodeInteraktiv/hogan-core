@@ -9,7 +9,7 @@ Modular Flexible Content System
 
 ## Core Framework Modules
 
-Module | Installation | package.json
+Module | Installation | composer.json
 --- | --- | ---
 [Text](https://github.com/DekodeInteraktiv/hogan-text) | `composer require dekodeinteraktiv/hogan-text:@dev` | `"dekodeinteraktiv/hogan-text": "@dev"`
 
