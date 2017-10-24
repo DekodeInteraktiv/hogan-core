@@ -33,6 +33,11 @@ function hogan_register_module( $module ) {
  * De-register default field group.
  */
 function hogan_deregister_default_field_group() {
+
+	if ( did_action( 'hogan/field_groups_registered' ) ) {
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_deregister_default_field_group() on action hogan/include_field_groups.', 'hogan-core' ) , '1.0.0' );
+	}
+
 	add_filter( 'hogan/field_group/default/enabled', '__return_false' );
 }
 
