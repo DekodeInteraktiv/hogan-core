@@ -68,7 +68,6 @@ abstract class Module {
 
 		$this->wrapper_classes = array_merge(
 			apply_filters( 'hogan/module/wrapper_classes', [
-				'row',
 				'hogan-module',
 			] ),
 			apply_filters( 'hogan/module/' . $this->name . '/wrapper_classes', [
