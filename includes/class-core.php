@@ -46,11 +46,14 @@ class Core {
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
 
-		// Register all modules after all plugins have loaded.
-		add_action( 'plugins_loaded', [ $this, 'register_modules' ] );
+		// Register all modules when acf is ready.
+		add_action( 'acf/include_fields', [ $this, 'register_modules' ] );
 
 		// Register default field group.
-		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ], 15 );
+		$this->register_default_field_group();
+
+		// Register all field groups when acf is ready.
+		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
 
 		// The content filter.
 		add_filter( 'the_content', [ $this, 'render_modules' ] );
@@ -61,6 +64,8 @@ class Core {
 		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
+
+		do_action( 'hogan/loaded' );
 	}
 
 	/**
@@ -90,6 +95,20 @@ class Core {
 	}
 
 	/**
+	 * Register field groups from filter into core plugin.
+	 */
+	public function register_field_groups() {
+
+		do_action( 'hogan/include_field_groups' );
+
+		foreach ( apply_filters( 'hogan/field_groups', [] ) as $g ) {
+			$this->register_field_group( $g['name'], $g['label'], $g['modules'], $g['location'], $g['hide_on_screen'], $g['fields_before_flexible_content'], $g['fields_after_flexible_content'] );
+		}
+
+		do_action( 'hogan/field_groups_registered' );
+	}
+
+	/**
 	 * Register a specific field group.
 	 *
 	 * @param string $name                           Field group name.
@@ -114,7 +133,7 @@ class Core {
 		}
 
 		// Get flexible content layouts from modules.
-		$field_group_layouts = array_map( function( $module ) use ( $modules ) {
+		$field_group_layouts = array_filter( array_map( function( $module ) use ( $modules ) {
 
 			if ( is_array( $modules ) && ! empty( $modules ) ) {
 
@@ -127,7 +146,7 @@ class Core {
 				return $module->get_layout_definition();
 			}
 
-		}, $this->modules );
+		}, $this->modules ) );
 
 		if ( empty( $field_group_layouts ) ) {
 			// No modules, no fun.
@@ -193,7 +212,7 @@ class Core {
 			'send-trackbacks',
 		];
 
-		$this->register_field_group( 'default', __( 'Content modules', 'hogan' ), null, $location, $hide_on_screen );
+		hogan_register_field_group( 'default', __( 'Content modules', 'hogan' ), null, $location, $hide_on_screen );
 	}
 
 	/**

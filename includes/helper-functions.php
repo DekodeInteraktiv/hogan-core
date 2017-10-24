@@ -50,13 +50,23 @@ function hogan_deregister_default_field_group() {
  * @return void
  */
 function hogan_register_field_group( $name, $label, $modules = [], $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
-	// TODO: No need to go any further if did_action === 1?
-	add_action( 'acf/include_fields', function() use ( $name, $label, $modules, $location, $hide_on_screen, $fields_before_flexible_content, $fields_after_flexible_content ) {
-		global $hogan;
 
-		if ( $hogan instanceof \Dekode\Hogan\Plugin ) {
-			$hogan->register_field_group( $name, $label, $modules, $location, $hide_on_screen, $fields_after_flexible_content, $fields_after_flexible_content );
-		}
+	if ( did_action( 'hogan/field_groups_registered' ) ) {
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_register_field_group() on action hogan/include_field_groups.', 'hogan-core' ) , '1.0.0' );
+	}
 
-	}, 15 );
+	$group = [
+		'name' => sanitize_key( $name ),
+		'label' => $label,
+		'modules' => $modules,
+		'location' => $location,
+		'hide_on_screen' => $hide_on_screen,
+		'fields_before_flexible_content' => $fields_before_flexible_content,
+		'fields_after_flexible_content' => $fields_after_flexible_content,
+	];
+
+	add_filter( 'hogan/field_groups', function( $groups ) use ( $group ) {
+		$groups[] = $group;
+		return $groups;
+	} );
 }
