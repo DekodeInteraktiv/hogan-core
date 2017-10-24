@@ -14,11 +14,27 @@ Module | Installation | composer.json
 [Text](https://github.com/DekodeInteraktiv/hogan-text) | `composer require dekodeinteraktiv/hogan-text:@dev` | `"dekodeinteraktiv/hogan-text": "@dev"`
 [Gravity Forms](https://github.com/DekodeInteraktiv/hogan-form) | `composer require dekodeinteraktiv/hogan-form:@dev` | `"dekodeinteraktiv/hogan-form": "@dev"`
 
+## Adding modules
+Adding custom modules can be done using the `hogan_register_module()` function. Create a new module that extends the `\Dekode\Hogan\Module` class and add it to the Hogan repository like this:
+
+```php
+
+class TextModule2 extends extends \Dekode\Hogan\Module {
+	…
+}
+
+add_action( 'hogan/include_modules', function() {
+	hogan_register_module( new TextModule2() );
+} );
+```
+
+See the [Text Module](https://github.com/DekodeInteraktiv/hogan-text) for a complete example.
+
 ## Usage
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The default wysiwyg editor will be replaced.
 
 ### Remove default field group
-If you dont want to use the default field group, or for some other reason want to customize the field group yourself, run the helper function _hogan_deregister_default_field_group()_ in the theme setup or a mu-plugin.
+If you dont want to use the default field group, or for some other reason want to customize the field group yourself, run this helper function in the theme setup.
 
 ```php
 hogan_deregister_default_field_group();
@@ -48,7 +64,7 @@ add_action( 'hogan/include_field_groups', function() {
 
 	$name = 'field_group_1';
 	$label = __( 'Field group Label', 'text-domain' );
-	$modules = [ 'text' ]; // Array with the modules you want to make available or null for all.
+	$modules = [ 'text' ];
 	$location = [
 		[
 			'param' => 'post_type',
