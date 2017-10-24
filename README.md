@@ -1,11 +1,16 @@
 # Hogan [ ![Codeship Status for DekodeInteraktiv/hogan-core](https://app.codeship.com/projects/58f4d340-97ba-0135-2412-665d154dd139/status?branch=master)](https://app.codeship.com/projects/251897)
 
-Modular Flexible Content System
-
-
+Modular Flexible Content System for ACF Pro
 
 ## Installation
-…
+Install Hogan WordPress plugin using [Composer](https://getcomposer.org/) by requiring any of the modules listed below or just the core framework using:
+
+```
+composer require dekodeinteraktiv/hogan-core:@dev
+```
+
+Each module and the core framework itself will be installed as seperate WordPress plugins in the `wp-content/plugin` folder.
+
 
 ## Core Framework Modules
 
@@ -58,7 +63,7 @@ function hogan_register_field_group( $name, $label, $modules = [], $location = [
 
 #### Example:
 
-This example demonstrates how to add a custom field group with just the text module for post type page.
+This example demonstrates how to add a custom field group with just the text module for post type `page`.
 ```php
 add_action( 'hogan/include_field_groups', function() {
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2017-10-23 08:30+0200\n"
-"PO-Revision-Date: 2017-10-23 08:30+0200\n"
+"POT-Creation-Date: 2017-10-24 15:40+0200\n"
+"PO-Revision-Date: 2017-10-24 15:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -45,8 +45,8 @@ msgid "https://github.com/DekodeInteraktiv/hogan-core"
 msgstr "https://github.com/DekodeInteraktiv/hogan-core"
 
 #. Description of the plugin/theme
-msgid "Modular Flexible Content System"
-msgstr "Modulært Flexible Content-sytem"
+msgid "Modular Flexible Content System for ACF Pro"
+msgstr "Modulært Flexible Content-system for ACF Pro"
 
 #. Author of the plugin/theme
 msgid "Dekode"
@@ -55,6 +55,9 @@ msgstr "Dekode"
 #. Author URI of the plugin/theme
 msgid "https://dekode.no"
 msgstr "https://dekode.no"
+
+#~ msgid "Modular Flexible Content System"
+#~ msgstr "Modulært Flexible Content-sytem"
 
 #~ msgid "https://github.com/DekodeInteraktiv/hogan"
 #~ msgstr "https://github.com/DekodeInteraktiv/hogan"
