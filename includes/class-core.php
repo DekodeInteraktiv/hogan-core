@@ -64,8 +64,6 @@ class Core {
 		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
-
-		do_action( 'hogan/loaded' );
 	}
 
 	/**

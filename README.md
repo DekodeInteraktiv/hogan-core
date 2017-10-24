@@ -42,7 +42,7 @@ By default you will get a ACF Flexible Content group with all activated modules 
 If you dont want to use the default field group, or for some other reason want to customize the field group yourself, run this helper function in the theme setup.
 
 ```php
-add_action( 'hogan/loaded', function() {
+add_action( 'hogan/include_field_groups', function() {
 	hogan_deregister_default_field_group();
 } );
 ```
