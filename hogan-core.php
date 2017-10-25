@@ -9,7 +9,7 @@
  * License: GPL-3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
- * Text Domain: hogan
+ * Text Domain: hogan-core
  * Domain Path: /languages/
  *
  * @package Hogan
@@ -27,5 +27,5 @@ require_once 'includes/helper-functions.php';
 global $hogan;
 
 if ( ! isset( $hogan ) ) {
-	$hogan = new Dekode\Hogan\Core( dirname( __FILE__ ) );
+	$hogan = new Dekode\Hogan\Core( dirname( plugin_basename( __FILE__ ) ) );
 }

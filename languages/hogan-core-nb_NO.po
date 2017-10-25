@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2017-10-24 15:40+0200\n"
-"PO-Revision-Date: 2017-10-24 15:41+0200\n"
+"POT-Creation-Date: 2017-10-25 09:42+0200\n"
+"PO-Revision-Date: 2017-10-25 09:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -20,12 +20,13 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/class-core.php:143
+#: includes/class-core.php:160
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:196
-msgid "Content modules"
+#: includes/class-core.php:213 includes/class-core.php:214
+#: includes/class-core.php:216
+msgid "Content Modules"
 msgstr "Innholdsmoduler"
 
 #: includes/helper-functions.php:22
@@ -35,6 +36,22 @@ msgid ""
 msgstr ""
 "Hogan-moduler har allerede blitt registrert. Vennligst kjør "
 "hogan_register_module() på action hogan/include_modules."
+
+#: includes/helper-functions.php:38
+msgid ""
+"Hogan field groups have already been registered. Please run "
+"hogan_deregister_default_field_group() on action hogan/include_field_groups."
+msgstr ""
+"Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
+"hogan_deregister_default_field_group() i et hogan/include_field_groups-hook."
+
+#: includes/helper-functions.php:60
+msgid ""
+"Hogan field groups have already been registered. Please run "
+"hogan_register_field_group() on action hogan/include_field_groups."
+msgstr ""
+"Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
+"hogan_register_field_group() i et hogan/include_field_groups-hook."
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"
@@ -56,8 +73,5 @@ msgstr "Dekode"
 msgid "https://dekode.no"
 msgstr "https://dekode.no"
 
-#~ msgid "Modular Flexible Content System"
-#~ msgstr "Modulært Flexible Content-sytem"
-
-#~ msgid "https://github.com/DekodeInteraktiv/hogan"
-#~ msgstr "https://github.com/DekodeInteraktiv/hogan"
+#~ msgid "Content modules"
+#~ msgstr "Innholdsmoduler"

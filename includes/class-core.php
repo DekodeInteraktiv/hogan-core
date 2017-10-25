@@ -46,11 +46,11 @@ class Core {
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
 
+		// Register default field group.
+		add_action( 'plugins_loaded', [ $this, 'register_default_field_group' ] );
+
 		// Register all modules when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_modules' ] );
-
-		// Register default field group.
-		$this->register_default_field_group();
 
 		// Register all field groups when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
@@ -70,7 +70,7 @@ class Core {
 	 * Load textdomain for translations.
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'hogan', false, $this->dir . '/languages' );
+		load_plugin_textdomain( 'hogan-core', false, $this->dir . '/languages' );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Core {
 				'type'         => 'flexible_content',
 				'key'          => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key.
 				'name'         => 'hogan_' . $name . '_modules_name',
-				'button_label' => esc_html__( 'Add module', 'hogan' ),
+				'button_label' => esc_html__( 'Add module', 'hogan-core' ),
 				'layouts'      => $field_group_layouts,
 			], $fields_after_flexible_content ),
 		];
@@ -210,7 +210,7 @@ class Core {
 			'send-trackbacks',
 		];
 
-		hogan_register_field_group( 'default', __( 'Content modules', 'hogan' ), null, $location, $hide_on_screen );
+		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), null, $location, $hide_on_screen );
 	}
 
 	/**
