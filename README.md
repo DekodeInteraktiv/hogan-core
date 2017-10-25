@@ -74,9 +74,11 @@ add_action( 'hogan/include_field_groups', function() {
 	$modules = [ 'text' ];
 	$location = [
 		[
-			'param' => 'post_type',
-			'operator' => '==',
-			'value' => 'page',
+			[
+				'param' => 'post_type',
+				'operator' => '==',
+				'value' => 'page',
+			],
 		],
 	];
 
