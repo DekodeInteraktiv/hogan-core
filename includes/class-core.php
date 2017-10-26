@@ -152,15 +152,16 @@ class Core {
 		}
 
 		// Include custom fields before and after flexible content field.
-		$field_group_fields = [
+		$field_group_fields =
 			array_merge( $fields_before_flexible_content, [
-				'type'         => 'flexible_content',
-				'key'          => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key.
-				'name'         => 'hogan_' . $name . '_modules_name',
-				'button_label' => esc_html__( 'Add module', 'hogan-core' ),
-				'layouts'      => $field_group_layouts,
-			], $fields_after_flexible_content ),
-		];
+				[
+					'type'         => 'flexible_content',
+					'key'          => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key.
+					'name'         => 'hogan_' . $name . '_modules_name',
+					'button_label' => esc_html__( 'Add module', 'hogan-core' ),
+					'layouts'      => $field_group_layouts,
+				],
+			], $fields_after_flexible_content );
 
 		acf_add_local_field_group(
 			[
