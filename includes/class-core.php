@@ -152,7 +152,7 @@ class Core {
 		}
 
 		$fields_before_flexible_content = array_filters( 'hogan/field_group/' . $name . '/fields_before_flexible_content', $fields_before_flexible_content );
-		$fields_after_flexible_content = array_filters( 'hogan/field_group/' . $name . '/fields_before_flexible_content', $fields_after_flexible_content );
+		$fields_after_flexible_content = array_filters( 'hogan/field_group/' . $name . '/fields_after_flexible_content', $fields_after_flexible_content );
 
 		// Include custom fields before and after flexible content field.
 		$field_group_fields =
