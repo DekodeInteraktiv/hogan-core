@@ -5,8 +5,8 @@ Modular Flexible Content System for ACF Pro
 ## Installation
 Install Hogan WordPress plugin using [Composer](https://getcomposer.org/) by requiring any of the modules listed below or just the core framework using:
 
-```
-composer require dekodeinteraktiv/hogan-core:@dev
+```shell
+$ composer require dekodeinteraktiv/hogan-core:@dev
 ```
 
 Each module and the core framework itself will be installed as seperate WordPress plugins in the `wp-content/plugin` folder.
@@ -40,10 +40,10 @@ By default you will get a ACF Flexible Content group with all activated modules 
 
 ### Customizing the default field group
 The default field group can be customized using these filters:
-- Insert custom fields before the Flexible Content field: `hogan/field_group/default/fields_before_flexible_content`
-- Insert custom fields after the Flexible Content field: `hogan/field_group/default/fields_after_flexible_content`
-- Override the location parameter `hogan/field_group/default/location`
-- Override the hide_on_screen parameter `hogan/field_group/default/hide_on_screen`
+- `hogan/field_group/default/fields_before_flexible_content` Insert custom fields before modules.
+- `hogan/field_group/default/fields_after_flexible_content` Insert custom fields after modules.
+- `hogan/field_group/default/location` Override the location parameter.
+- `hogan/field_group/default/hide_on_screen` Override the hide_on_screen parameter.
 
 ### Remove default field group
 If you dont want to use the default field group, or for some other reason want to setup a customized field group yourself, run this helper function in the theme setup to disable the default group.
@@ -76,23 +76,22 @@ This example demonstrates how to add a custom field group with just the text mod
 ```php
 add_action( 'hogan/include_field_groups', function() {
 
-	$name = 'field_group_1';
-	$label = __( 'Field group Label', 'text-domain' );
-	$modules = [ 'text' ];
-	$location = [
-		[
-			[
-				'param' => 'post_type',
-				'operator' => '==',
-				'value' => 'page',
-			],
+  $name = 'field_group_1';
+  $label = __( 'Field group Label', 'text-domain' );
+  $modules = [ 'text' ];
+  $location = [
+    [
+      [
+        'param' => 'post_type',
+        'operator' => '==',
+        'value' => 'page',
+      ],
 		],
-	];
-
-	hogan_register_field_group( $name, $label, $modules, $location );
+  ];
+  
+  hogan_register_field_group( $name, $label, $modules, $location );
 });
 ```
-
 …
 
 ## Author
