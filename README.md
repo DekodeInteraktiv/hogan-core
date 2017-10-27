@@ -86,7 +86,7 @@ add_action( 'hogan/include_field_groups', function() {
         'operator' => '==',
         'value' => 'page',
       ],
-		],
+    ],
   ];
   
   hogan_register_field_group( $name, $label, $modules, $location );
