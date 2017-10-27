@@ -230,7 +230,7 @@ class Core {
 		// Remove current filter to avoid recursive loop.
 		remove_filter( 'the_content', [ $this, 'render_modules' ] );
 
-		if ( $more && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
+		if ( ( $more || is_search() ) && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
 
 			$cache_key = 'hogan_modules_' . $post->ID;
 			$cache_group = 'hogan_modules';
