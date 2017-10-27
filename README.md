@@ -14,10 +14,10 @@ Each module and the core framework itself will be installed as seperate WordPres
 
 ## Core Framework Modules
 
-Module | Installation | composer.json
---- | --- | ---
-[Text](https://github.com/DekodeInteraktiv/hogan-text) | `composer require dekodeinteraktiv/hogan-text:@dev` | `"dekodeinteraktiv/hogan-text": "@dev"`
-[Gravity Forms](https://github.com/DekodeInteraktiv/hogan-form) | `composer require dekodeinteraktiv/hogan-form:@dev` | `"dekodeinteraktiv/hogan-form": "@dev"`
+Module | Installation
+--- | ---
+[Text](https://github.com/DekodeInteraktiv/hogan-text) | `composer require dekodeinteraktiv/hogan-text:@dev`
+[Gravity Forms](https://github.com/DekodeInteraktiv/hogan-form) | `composer require dekodeinteraktiv/hogan-form:@dev`
 
 ## Adding modules
 Adding custom modules can be done using the `hogan_register_module()` function. Create a new module that extends the `\Dekode\Hogan\Module` class and add it to the Hogan repository like this:
@@ -36,10 +36,17 @@ add_action( 'hogan/include_modules', function() {
 See the [Text Module](https://github.com/DekodeInteraktiv/hogan-text) for a complete example.
 
 ## Usage
-By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The default wysiwyg editor will be replaced.
+By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
+
+### Customizing the default field group
+The default field group can be customized using these filters:
+- Insert custom fields before the Flexible Content field: `hogan/field_group/default/fields_before_flexible_content`
+- Insert custom fields after the Flexible Content field: `hogan/field_group/default/fields_after_flexible_content`
+- Override the location parameter `hogan/field_group/default/location`
+- Override the hide_on_screen parameter `hogan/field_group/default/hide_on_screen`
 
 ### Remove default field group
-If you dont want to use the default field group, or for some other reason want to customize the field group yourself, run this helper function in the theme setup.
+If you dont want to use the default field group, or for some other reason want to setup a customized field group yourself, run this helper function in the theme setup to disable the default group.
 
 ```php
 add_action( 'hogan/include_field_groups', function() {
@@ -48,7 +55,7 @@ add_action( 'hogan/include_field_groups', function() {
 ```
 
 ### Adding custom field groups
-Use the helper function `hogan_register_field_group()` in action `hogan/include_field_groups` to register a custom field groups.
+Use the helper function `hogan_register_field_group()` in action `hogan/include_field_groups` to register custom field groups.
 
 ```php
 function hogan_register_field_group( $name, $label, $modules = [], $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
