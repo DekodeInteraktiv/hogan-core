@@ -88,11 +88,17 @@ add_action( 'hogan/include_field_groups', function() {
       ],
     ],
   ];
-  
+
   hogan_register_field_group( $name, $label, $modules, $location );
 });
 ```
-…
+
+## Search
+Modules content is by default indexed as _Content_ by [SearchWP](https://searchwp.com/). This can be disabled using:
+```php
+add_filter( 'hogan/searchwp/index_modules_as_post_content', '__return_false' );
+```
+
 
 ## Author
 …
