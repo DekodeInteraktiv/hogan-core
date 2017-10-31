@@ -56,7 +56,7 @@ abstract class Module {
 	 *
 	 * @var array $wrapper_classes
 	 */
-	public $wrapper_classes = [];
+	private $wrapper_classes = [];
 
 	/**
 	 * Constructor.
@@ -95,5 +95,21 @@ abstract class Module {
 	 */
 	public function render_template() {
 		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
+	}
+
+	/**
+	 * Get module wrapper classes
+	 *
+	 * @param boolean $as_string Return classes as seperated string.
+	 * @param string  $seperator String seperator.
+	 * @return mixed  Classes as array or string with seperator.
+	 */
+	public function get_wrapper_classes( $as_string = false, $seperator = ' ' ) {
+
+		if ( true === $as_string ) {
+			return trim( implode( $seperator, array_filter( $this->wrapper_classes ) ) );
+		}
+
+		return array_filter( $this->wrapper_classes );
 	}
 }
