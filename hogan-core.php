@@ -27,5 +27,9 @@ require_once 'includes/helper-functions.php';
 global $hogan;
 
 if ( ! isset( $hogan ) ) {
-	$hogan = new Dekode\Hogan\Core( dirname( plugin_basename( __FILE__ ) ) );
+
+	$_dir = dirname( plugin_basename( __FILE__ ) );
+	$_url = plugin_dir_url( __FILE__ );
+
+	$hogan = new Dekode\Hogan\Core( $_dir, $_url );
 }

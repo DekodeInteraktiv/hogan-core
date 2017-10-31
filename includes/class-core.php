@@ -15,11 +15,18 @@ defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 class Core {
 
 	/**
-	 * Directory.
+	 * Plugin base directory
 	 *
 	 * @var string $dir
 	 */
 	public $dir;
+
+	/**
+	 * Plugin base URL
+	 *
+	 * @var string $url
+	 */
+	public $url;
 
 	/**
 	 * Field groups.
@@ -38,13 +45,18 @@ class Core {
 	/**
 	 * Module constructor.
 	 *
-	 * @param string $dir Plugin directory.
+	 * @param string $dir Plugin base directory.
+	 * @param string $url Plugin base url.
 	 */
-	public function __construct( $dir ) {
+	public function __construct( $dir, $url ) {
 		$this->dir = $dir;
+		$this->url = $url;
 
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
+
+		// Add admin stylesheets and scripts.
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
 
 		// Register default field group.
 		add_action( 'plugins_loaded', [ $this, 'register_default_field_group' ] );
@@ -76,6 +88,13 @@ class Core {
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'hogan-core', false, $this->dir . '/languages' );
+	}
+
+	/**
+	 * Load plugin admin assets.
+	 */
+	public function enqueue_admin_assets() {
+		wp_enqueue_style( 'hogan-admin-style', $this->url . 'assets/style.css', [ 'acf-pro-input' ] );
 	}
 
 	/**

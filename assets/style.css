@@ -1,0 +1,11 @@
+.acf-field-flexible-content {
+	background-color:  #ddd;
+}
+
+	.acf-field-flexible-content .layout {
+		border: solid 1px #999;
+	}
+
+	.acf-field-flexible-content .layout .acf-fc-layout-handle {
+		background-color: rgba( 0, 115, 170, .3 );
+	}
