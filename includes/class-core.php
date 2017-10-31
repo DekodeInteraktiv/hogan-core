@@ -55,8 +55,13 @@ class Core {
 		// Register all field groups when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
 
-		// The content filter.
-		add_filter( 'the_content', [ $this, 'render_modules' ] );
+		// Append Flexible Content modules to the_content.
+		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
+
+		// Index modules as post content in SearchWP.
+		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
+			add_filter( 'searchwp_pre_set_post', [ $this, 'populate_post_content_for_indexing' ] );
+		}
 
 		add_filter( 'acf/fields/wysiwyg/toolbars', [ $this, 'append_hogan_wysiwyg_toolbar' ] );
 		add_filter( 'tiny_mce_before_init', [ $this, 'override_tinymce_settings' ] );
@@ -218,61 +223,86 @@ class Core {
 	}
 
 	/**
-	 * Render modules.
+	 * Append modules HTML content to the_content for the global post object.
 	 *
 	 * @param string $content Content HTML string.
 	 */
-	public function render_modules( $content ) {
+	public function append_modules_content( $content ) {
 
 		global $more, $post;
 		$flexible_content = '';
 
 		// Remove current filter to avoid recursive loop.
-		remove_filter( 'the_content', [ $this, 'render_modules' ] );
+		remove_filter( 'the_content', [ $this, 'append_modules_content' ] );
 
-		if ( ( $more || is_search() ) && $post instanceof \WP_Post && function_exists( 'get_field' ) && ! post_password_required( $post ) ) {
+		if ( $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post ) ) {
+			$flexible_content = $this->get_modules_content( $post );
+		}
 
-			$cache_key = 'hogan_modules_' . $post->ID;
-			$cache_group = 'hogan_modules';
+		// Re-add filter after parsing content.
+		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
 
-			$flexible_content = wp_cache_get( $cache_key, $cache_group );
+		return $content . $flexible_content;
+	}
 
-			if ( empty( $flexible_content ) ) {
+	/**
+	 * Get modules HTML content.
+	 *
+	 * @param \WP_Post $post The post.
+	 * @return string
+	 */
+	private function get_modules_content( \WP_Post $post ) {
 
-				foreach ( $this->field_groups as $field_group ) {
+		$cache_key = 'hogan_modules_' . $post->ID;
+		$cache_group = 'hogan_modules';
 
-					$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
+		$flexible_content = wp_cache_get( $cache_key, $cache_group );
 
-					if ( is_array( $layouts ) && count( $layouts ) ) {
-						foreach ( $layouts as $layout ) {
+		if ( empty( $flexible_content ) ) {
 
-							if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
-								continue;
-							}
+			foreach ( $this->field_groups as $field_group ) {
 
-							// Get the right module.
-							$module = $this->modules[ $layout['acf_fc_layout'] ];
+				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
-							if ( $module instanceof Module ) {
-								ob_start();
+				if ( is_array( $layouts ) && count( $layouts ) ) {
+					foreach ( $layouts as $layout ) {
 
-								$module->load_args_from_layout_content( $layout );
-								$module->render_template();
+						if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
+							continue;
+						}
 
-								$flexible_content .= ob_get_clean();
-							}
+						// Get the right module.
+						$module = true === isset( $this->modules[ $layout['acf_fc_layout'] ] ) ? $this->modules[ $layout['acf_fc_layout'] ] : null;
+
+						if ( $module instanceof Module ) {
+							ob_start();
+
+							$module->load_args_from_layout_content( $layout );
+							$module->render_template();
+
+							$flexible_content .= ob_get_clean();
 						}
 					}
 				}
-
-				wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
 			}
-		} // End if().
 
-		// Re add filter after parsing content.
-		add_filter( 'the_content', [ $this, 'render_modules' ] );
+			wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
+		}
 
-		return $content . $flexible_content;
+		return $flexible_content;
+	}
+
+	/**
+	 * Populate the post_content with modules HTML before SearchWP indexing.
+	 *
+	 * @param \WP_Post $post The post.
+	 * @return \WP_Post
+	 */
+	public function populate_post_content_for_indexing( \WP_Post $post ) {
+
+		// Fake fill the post_content with modules before SearchWP indexing.
+		$post->post_content = $this->get_modules_content( $post );
+		return $post;
 	}
 
 	/**
