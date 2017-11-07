@@ -79,7 +79,31 @@ abstract class Module {
 	/**
 	 * Base class for field definitions.
 	 */
-	public function get_layout_definition() { }
+	final function get_layout_definition() {
+
+		$sub_fields = array_merge(
+			apply_filters( 'hogan/module/' . $this->name . '/fields/pre', [] ),
+			$this->get_fields(),
+			apply_filters( 'hogan/module/' . $this->name . '/fields/post', [] )
+		);
+
+		return [
+			'key'        => $this->field_key,
+			'name'       => $this->name,
+			'label'      => $this->label,
+			'display'    => apply_filters( 'hogan/module/' . $this->name . '/layout/display', 'block' ),
+			'sub_fields' => apply_filters( 'hogan/module/' . $this->name . '/layout/sub_fields', $sub_fields ),
+			'min'        => apply_filters( 'hogan/module/' . $this->name . '/layout/min', '' ),
+			'max'        => apply_filters( 'hogan/module/' . $this->name . '/layout/max', '' ),
+		];
+	}
+
+	/**
+	 * Field definitions per module.
+	 */
+	public function get_fields() {
+		return [];
+	}
 
 	/**
 	 * Map raw field values to content array.
