@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function hogan_register_module( $module ) {
 
 	if ( did_action( 'hogan/modules_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ) , '1.0.0' );
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
 	}
 
 	add_filter( 'hogan/modules', function( $modules ) use ( $module ) {
@@ -35,7 +35,7 @@ function hogan_register_module( $module ) {
 function hogan_deregister_default_field_group() {
 
 	if ( did_action( 'hogan/field_groups_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_deregister_default_field_group() on action hogan/include_field_groups.', 'hogan-core' ) , '1.0.0' );
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_deregister_default_field_group() on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
 	}
 
 	add_filter( 'hogan/field_group/default/enabled', '__return_false' );
@@ -57,7 +57,7 @@ function hogan_deregister_default_field_group() {
 function hogan_register_field_group( $name, $label, $modules = [], $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
 
 	if ( did_action( 'hogan/field_groups_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_register_field_group() on action hogan/include_field_groups.', 'hogan-core' ) , '1.0.0' );
+		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_register_field_group() on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
 	}
 
 	$group = [
