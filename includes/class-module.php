@@ -79,7 +79,7 @@ abstract class Module {
 	/**
 	 * Base class for field definitions.
 	 */
-	public final function get_layout_definition() {
+	final public function get_layout_definition() {
 
 		$sub_fields = array_merge(
 			apply_filters( 'hogan/module/' . $this->name . '/fields/pre', [] ),
