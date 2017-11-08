@@ -119,9 +119,37 @@ abstract class Module {
 
 	/**
 	 * Render module template.
+	 *
+	 * @param string  $raw_content Raw ACF layout content.
+	 * @param boolean $echo Echo content.
 	 */
-	public function render_template() {
+	public function render_template( $raw_content, $echo = true ) {
+
+		// Load module data from raw ACF layout content.
+		$this->load_args_from_layout_content( $raw_content );
+
+		if ( false === $echo ) {
+			ob_start();
+		}
+
+		// Global HTML wrapper tag.
+		$wrapper_tag = apply_filters( 'hogan/module/wrapper_tag', 'section' );
+
+		// Override wrapper tag for module.
+		$wrapper_tag = apply_filters( 'hogan/module/' . $this->name . '/wrapper_tag', $wrapper_tag );
+
+		// Output HTML wrapper start.
+		echo sprintf( '<%s class="%s">', esc_attr( $wrapper_tag ), esc_attr( $this->get_wrapper_classes( true ) ) );
+
+		// Include module template.
 		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
+
+		// Output HTML wrapper end.
+		echo sprintf( '</%s>', esc_attr( $wrapper_tag ) );
+
+		if ( false === $echo ) {
+			return ob_get_clean();
+		}
 	}
 
 	/**

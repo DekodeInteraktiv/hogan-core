@@ -296,8 +296,7 @@ class Core {
 						if ( $module instanceof Module ) {
 							ob_start();
 
-							$module->load_args_from_layout_content( $layout );
-							$module->render_template();
+							$module->render_template( $layout );
 
 							$flexible_content .= ob_get_clean();
 						}
