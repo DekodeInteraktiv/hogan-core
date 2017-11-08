@@ -20,6 +20,7 @@ Module | Installation
 [Gravity Forms](https://github.com/DekodeInteraktiv/hogan-form) | `composer require dekodeinteraktiv/hogan-form:@dev`
 [Embed](https://github.com/DekodeInteraktiv/hogan-embed) | `composer require dekodeinteraktiv/hogan-embed:@dev`
 [Gallery](https://github.com/DekodeInteraktiv/hogan-gallery) | `composer require dekodeinteraktiv/hogan-gallery:@dev`
+[People](https://github.com/DekodeInteraktiv/hogan-people) | `composer require dekodeinteraktiv/hogan-people:@dev`
 
 ## Adding modules
 Adding custom modules can be done using the `hogan_register_module()` function. Create a new module that extends the `\Dekode\Hogan\Module` class and add it to the Hogan repository like this:
