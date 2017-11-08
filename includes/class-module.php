@@ -102,14 +102,11 @@ abstract class Module {
 	 * @param array $content Content values.
 	 */
 	public function load_args_from_layout_content( $content ) {
+
+		// Global content is loaded after module content.
 		$this->raw_content = $content;
-	}
 
-	/**
-	 * Render module template.
-	 */
-	public function render_template() {
-
+		// Set wrapper classes after all content is set, directly before render.
 		$this->wrapper_classes = array_merge(
 			apply_filters( 'hogan/module/wrapper_classes', [
 				'hogan-module',
@@ -118,7 +115,12 @@ abstract class Module {
 				'hogan-module-' . $this->name,
 			], $this )
 		);
+	}
 
+	/**
+	 * Render module template.
+	 */
+	public function render_template() {
 		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
 	}
 
