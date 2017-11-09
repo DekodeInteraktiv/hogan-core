@@ -65,15 +65,6 @@ abstract class Module {
 
 		$this->name = strtolower( substr( strrchr( get_class( $this ), '\\' ), 1 ) );
 		$this->field_key = 'hogan_module_' . $this->name;
-
-		$this->wrapper_classes = array_merge(
-			apply_filters( 'hogan/module/wrapper_classes', [
-				'hogan-module',
-			] ),
-			apply_filters( 'hogan/module/' . $this->name . '/wrapper_classes', [
-				'hogan-module-' . $this->name,
-			] )
-		);
 	}
 
 	/**
@@ -111,7 +102,19 @@ abstract class Module {
 	 * @param array $content Content values.
 	 */
 	public function load_args_from_layout_content( $content ) {
+
+		// Global content is loaded after module content.
 		$this->raw_content = $content;
+
+		// Set wrapper classes after all content is set, directly before render.
+		$this->wrapper_classes = array_merge(
+			apply_filters( 'hogan/module/wrapper_classes', [
+				'hogan-module',
+			] ),
+			apply_filters( 'hogan/module/' . $this->name . '/wrapper_classes', [
+				'hogan-module-' . $this->name,
+			], $this )
+		);
 	}
 
 	/**
