@@ -141,8 +141,12 @@ abstract class Module {
 		// Output HTML wrapper start.
 		echo sprintf( '<%s class="%s">', esc_attr( $wrapper_tag ), esc_attr( $this->get_wrapper_classes( true ) ) );
 
+		do_action( 'hogan/module/' . $this->name . '/template/before_include', $this );
+
 		// Include module template.
 		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
+
+		do_action( 'hogan/module/' . $this->name . '/template/after_include', $this );
 
 		// Output HTML wrapper end.
 		echo sprintf( '</%s>', esc_attr( $wrapper_tag ) );
