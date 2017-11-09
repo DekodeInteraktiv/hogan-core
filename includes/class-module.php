@@ -73,9 +73,9 @@ abstract class Module {
 	final public function get_layout_definition() {
 
 		$sub_fields = array_merge(
-			apply_filters( 'hogan/module/' . $this->name . '/fields/pre', [] ),
+			apply_filters( 'hogan/module/' . $this->name . '/fields_before', [] ),
 			$this->get_fields(),
-			apply_filters( 'hogan/module/' . $this->name . '/fields/post', [] )
+			apply_filters( 'hogan/module/' . $this->name . '/fields_after', [] )
 		);
 
 		return [
