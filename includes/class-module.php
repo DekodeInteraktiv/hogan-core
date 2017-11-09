@@ -92,7 +92,7 @@ abstract class Module {
 	/**
 	 * Field definitions per module.
 	 */
-	public function get_fields() {
+	protected function get_fields() {
 		return [];
 	}
 
@@ -138,8 +138,11 @@ abstract class Module {
 		// Override wrapper tag for module.
 		$wrapper_tag = apply_filters( 'hogan/module/' . $this->name . '/wrapper_tag', $wrapper_tag );
 
+		// Wrapper classes as space seperated string.
+		$wrapper_classes = trim( implode( ' ', array_filter( $this->wrapper_classes ) ) );
+
 		// Output HTML wrapper start.
-		echo sprintf( '<%s class="%s">', esc_attr( $wrapper_tag ), esc_attr( $this->get_wrapper_classes( true ) ) );
+		echo sprintf( '<%s class="%s">', esc_attr( $wrapper_tag ), esc_attr( $wrapper_classes ) );
 
 		do_action( 'hogan/module/' . $this->name . '/template/before_include', $this );
 
@@ -154,21 +157,5 @@ abstract class Module {
 		if ( false === $echo ) {
 			return ob_get_clean();
 		}
-	}
-
-	/**
-	 * Get module wrapper classes
-	 *
-	 * @param boolean $as_string Return classes as seperated string.
-	 * @param string  $seperator String seperator.
-	 * @return mixed  Classes as array or string with seperator.
-	 */
-	public function get_wrapper_classes( $as_string = false, $seperator = ' ' ) {
-
-		if ( true === $as_string ) {
-			return trim( implode( $seperator, array_filter( $this->wrapper_classes ) ) );
-		}
-
-		return array_filter( $this->wrapper_classes );
 	}
 }
