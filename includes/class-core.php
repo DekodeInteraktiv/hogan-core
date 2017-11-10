@@ -284,6 +284,9 @@ class Core {
 				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
 				if ( is_array( $layouts ) && count( $layouts ) ) {
+
+					$module_counter = 0;
+
 					foreach ( $layouts as $layout ) {
 
 						if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
@@ -296,9 +299,10 @@ class Core {
 						if ( $module instanceof Module ) {
 							ob_start();
 
-							$module->render_template( $layout );
+							$module->render_template( $layout, $module_counter );
 
 							$flexible_content .= ob_get_clean();
+							$module_counter++;
 						}
 					}
 				}

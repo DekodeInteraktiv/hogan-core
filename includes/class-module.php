@@ -52,11 +52,18 @@ abstract class Module {
 	public $raw_content;
 
 	/**
-	 * Wrapper classes.
+	 * Template outer wrapper HTML tag.
 	 *
-	 * @var array $wrapper_classes
+	 * @var string
 	 */
-	private $wrapper_classes = [];
+	protected $outer_wrapper_tag = 'div';
+
+	/**
+	 * Template inner wrapper HTML tag.
+	 *
+	 * @var string
+	 */
+	protected $inner_wrapper_tag = 'div';
 
 	/**
 	 * Constructor.
@@ -105,54 +112,99 @@ abstract class Module {
 
 		// Global content is loaded after module content.
 		$this->raw_content = $content;
+	}
 
-		// Set wrapper classes after all content is set, directly before render.
-		$this->wrapper_classes = array_merge(
-			apply_filters( 'hogan/module/wrapper_classes', [
-				'hogan-module',
-			] ),
-			apply_filters( 'hogan/module/' . $this->name . '/wrapper_classes', [
-				'hogan-module-' . $this->name,
-			], $this )
+	/**
+	 * Validate module content before template is loaded.
+	 */
+	public function validate_args() {
+		return false;
+	}
+
+	/**
+	 * Render module wrappers opening tags before template include.
+	 *
+	 * @param integer $counter Module number.
+	 */
+	protected function render_opening_template_wrappers( $counter = 0 ) {
+
+		// Outer wrapper tag with filters for overriding both globally, per module and per module instance.
+		$this->outer_wrapper_tag = apply_filters( 'hogan/module/outer_wrapper_tag', $this->outer_wrapper_tag, $this );
+		$this->outer_wrapper_tag = apply_filters( 'hogan/module/' . $this->name . '/outer_wrapper_tag', $this->outer_wrapper_tag, $this );
+
+		// Inner wrapper tag with filters for overriding both globally, per module and per module instance.
+		$this->inner_wrapper_tag = apply_filters( 'hogan/module/inner_wrapper_tag', $this->inner_wrapper_tag, $this );
+		$this->inner_wrapper_tag = apply_filters( 'hogan/module/' . $this->name . '/inner_wrapper_tag', $this->inner_wrapper_tag, $this );
+
+		// Outer wrapper classes with filters for overriding both globally, per module and per module instance.
+		$outer_wrapper_classes = array_merge(
+			apply_filters( 'hogan/module/outer_wrapper_classes', [ 'hogan-module', 'hogan-module-' . $counter ], $this ),
+			apply_filters( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ 'hogan-module-' . $this->name ], $this )
 		);
+		$outer_wrapper_classes = trim( implode( ' ', array_filter( $outer_wrapper_classes ) ) );
+
+		// Inner wrapper classes with filters for overriding both globally, per module and per module instance.
+		$inner_wrapper_classes = array_merge(
+			apply_filters( 'hogan/module/inner_wrapper_classes', [] ),
+			apply_filters( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [], $this )
+		);
+		$inner_wrapper_classes = trim( implode( ' ', array_filter( $inner_wrapper_classes ) ) );
+
+		// Echo opening outer wrapper.
+		if ( ! empty( $this->outer_wrapper_tag ) ) {
+			echo sprintf( '<%s id="%s" class="%s">', esc_attr( $this->outer_wrapper_tag ), esc_attr( 'module-' . $counter ), esc_attr( $outer_wrapper_classes ) );
+		}
+
+		// Echo inner wrapper.
+		if ( ! empty( $this->inner_wrapper_tag ) ) {
+			echo sprintf( '<%s class="%s">', esc_attr( $this->inner_wrapper_tag ), esc_attr( $inner_wrapper_classes ) );
+		}
+	}
+
+	/**
+	 * Render module wrapper closing tags after template include.
+	 */
+	protected function render_closing_template_wrappers() {
+
+		// Echo closing inner wrapper.
+		if ( ! empty( $this->inner_wrapper_tag ) ) {
+			echo sprintf( '</%s>', esc_attr( $this->inner_wrapper_tag ) );
+		}
+
+		// Echo closing outer wrapper.
+		if ( ! empty( $this->outer_wrapper_tag ) ) {
+			echo sprintf( '</%s>', esc_attr( $this->outer_wrapper_tag ) );
+		}
 	}
 
 	/**
 	 * Render module template.
 	 *
 	 * @param string  $raw_content Raw ACF layout content.
+	 * @param integer $counter Module number.
 	 * @param boolean $echo Echo content.
 	 */
-	public function render_template( $raw_content, $echo = true ) {
+	public function render_template( $raw_content, $counter = 0, $echo = true ) {
 
 		// Load module data from raw ACF layout content.
 		$this->load_args_from_layout_content( $raw_content );
+
+		if ( true !== $this->validate_args() ) {
+			return;
+		}
 
 		if ( false === $echo ) {
 			ob_start();
 		}
 
-		// Global HTML wrapper tag.
-		$wrapper_tag = apply_filters( 'hogan/module/wrapper_tag', 'section' );
-
-		// Override wrapper tag for module.
-		$wrapper_tag = apply_filters( 'hogan/module/' . $this->name . '/wrapper_tag', $wrapper_tag );
-
-		// Wrapper classes as space seperated string.
-		$wrapper_classes = trim( implode( ' ', array_filter( $this->wrapper_classes ) ) );
-
-		// Output HTML wrapper start.
-		echo sprintf( '<%s class="%s">', esc_attr( $wrapper_tag ), esc_attr( $wrapper_classes ) );
-
-		do_action( 'hogan/module/' . $this->name . '/template/before_include', $this );
+		// Echo opening wrappers.
+		$this->render_opening_template_wrappers( $counter );
 
 		// Include module template.
-		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template );
+		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template, $this );
 
-		do_action( 'hogan/module/' . $this->name . '/template/after_include', $this );
-
-		// Output HTML wrapper end.
-		echo sprintf( '</%s>', esc_attr( $wrapper_tag ) );
+		// Echo closing wrappers.
+		$this->render_closing_template_wrappers();
 
 		if ( false === $echo ) {
 			return ob_get_clean();
