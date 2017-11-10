@@ -99,7 +99,7 @@ abstract class Module {
 	/**
 	 * Field definitions per module.
 	 */
-	abstract function get_fields();
+	abstract protected function get_fields();
 
 	/**
 	 * Map raw field values to content array.
@@ -115,7 +115,7 @@ abstract class Module {
 	/**
 	 * Validate module content before template is loaded.
 	 */
-	abstract function validate_args();
+	abstract protected function validate_args();
 
 	/**
 	 * Render module wrappers opening tags before template include.
