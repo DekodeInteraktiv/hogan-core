@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2017-10-25 09:42+0200\n"
-"PO-Revision-Date: 2017-10-25 09:42+0200\n"
+"POT-Creation-Date: 2017-11-14 10:59+0100\n"
+"PO-Revision-Date: 2017-11-14 11:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -20,12 +20,11 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/class-core.php:160
+#: includes/class-core.php:188
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:213 includes/class-core.php:214
-#: includes/class-core.php:216
+#: includes/class-core.php:241
 msgid "Content Modules"
 msgstr "Innholdsmoduler"
 
@@ -52,6 +51,14 @@ msgid ""
 msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_register_field_group() i et hogan/include_field_groups-hook."
+
+#: includes/helper-functions.php:93
+msgid "Heading"
+msgstr "Overskrift"
+
+#: includes/helper-functions.php:94
+msgid "Optional heading will show only if filled in."
+msgstr "Valgfri overskrift vises kun hvis fylt inn."
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"

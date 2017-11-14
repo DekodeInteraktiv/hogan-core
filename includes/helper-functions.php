@@ -75,3 +75,23 @@ function hogan_register_field_group( $name, $label, $modules = [], $location = [
 		return $groups;
 	} );
 }
+
+/**
+ * Helper function for adding default heading field
+ *
+ * @param array  $fields ACF fields array.
+ * @param object $module Hogan module object.
+ */
+function hogan_append_heading_field( &$fields, $module ) {
+
+	if ( true === apply_filters( 'hogan/module/' . $module->name . '/heading/enabled', true ) ) {
+
+		$fields[] = [
+			'type'         => 'text',
+			'key'          => $module->field_key . '_heading',
+			'name'         => 'heading',
+			'label'        => __( 'Heading', 'hogan-core' ),
+			'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
+		];
+	}
+}
