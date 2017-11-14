@@ -94,7 +94,8 @@ class Core {
 	 * Load plugin admin assets.
 	 */
 	public function enqueue_admin_assets() {
-		wp_enqueue_style( 'hogan-admin-style', $this->url . 'assets/style.css', [ 'acf-pro-input' ] );
+		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : false;
+		wp_enqueue_style( 'hogan-admin-style', $this->url . 'assets/style.css', [ 'acf-pro-input' ], $assets_version );
 	}
 
 	/**
@@ -349,6 +350,15 @@ class Core {
 				'pastetext',
 				'removeformat',
 				'code',
+			],
+		];
+
+		$toolbars['hogan_caption'] = [
+			1 => [
+				'bold',
+				'italic',
+				'link',
+				'unlink',
 			],
 		];
 

@@ -9,3 +9,11 @@
 	.acf-field-flexible-content .layout .acf-fc-layout-handle {
 		background-color: rgba( 0, 115, 170, .3 );
 	}
+
+/* Small height wysiwyg editor */
+
+.small-height-editor .acf-editor-wrap iframe, .small-height-editor .wp-editor-area {
+	min-height: 0 !important;
+	height: 80px !important;
+}
+
