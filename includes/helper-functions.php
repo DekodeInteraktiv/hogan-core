@@ -95,3 +95,30 @@ function hogan_append_heading_field( &$fields, $module ) {
 		];
 	}
 }
+
+/**
+ * Helper function for adding caption field
+ *
+ * @param array  $fields ACF fields array.
+ * @param object $module Hogan module object.
+ */
+function hogan_append_caption_field( &$fields, $module ) {
+
+	if ( true === apply_filters( 'hogan/module/' . $module->name . '/caption/enabled', true ) ) {
+
+		$fields[] = [
+			'type'         => 'wysiwyg',
+			'key'          => $module->field_key . '_caption',
+			'name'         => 'caption',
+			'label'        => __( 'Caption', 'hogan-core' ),
+			'delay'        => true,
+			'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/caption/tabs', 'visual' ),
+			'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/caption/allow_media_upload', 0 ),
+			'toolbar'      => apply_filters( 'hogan/module/' . $module->name . '/caption/toolbar', 'hogan_caption' ),
+			'wrapper'      => [
+				'class' => apply_filters( 'hogan/module/' . $module->name . '/caption/wrapper_class', 'small-height-editor' ),
+			],
+		];
+
+	}
+}
