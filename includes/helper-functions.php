@@ -111,7 +111,6 @@ function hogan_append_caption_field( &$fields, $module ) {
 			'key'          => $module->field_key . '_caption',
 			'name'         => 'caption',
 			'label'        => __( 'Caption', 'hogan-core' ),
-			'delay'        => true,
 			'instructions' => apply_filters( 'hogan/module/' . $module->name . '/caption/instructions', '' ),
 			'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/caption/tabs', 'visual' ),
 			'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/caption/allow_media_upload', 0 ),
