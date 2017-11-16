@@ -122,3 +122,18 @@ function hogan_append_caption_field( &$fields, $module ) {
 
 	}
 }
+
+/**
+ * Allowed wp_kses HTML for caption field
+ */
+function hogan_caption_allowed_html() {
+
+	return [
+		'strong' => true,
+		'em' => true,
+		'a' => [
+			'href' => true,
+			'target' => true,
+		],
+	];
+}
