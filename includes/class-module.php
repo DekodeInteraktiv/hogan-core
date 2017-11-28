@@ -141,7 +141,7 @@ abstract class Module {
 
 		// Inner wrapper classes with filters for overriding both globally, per module and per module instance.
 		$inner_wrapper_classes = array_merge(
-			apply_filters( 'hogan/module/inner_wrapper_classes', [] ),
+			apply_filters( 'hogan/module/inner_wrapper_classes', [], $this ),
 			apply_filters( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [], $this )
 		);
 		$inner_wrapper_classes = trim( implode( ' ', array_filter( $inner_wrapper_classes ) ) );
