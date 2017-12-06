@@ -50,6 +50,13 @@ class Core {
 	private static $instance = null;
 
 	/**
+	 * Priority for the_content filter.
+	 *
+	 * @var int $the_content_priority
+	 */
+	private $_the_content_priority = 0; //apply_filters( 'hogan/the_content_priority', 10 );
+
+	/**
 	 * Module constructor.
 	 *
 	 * @param string $dir Plugin base directory.
@@ -58,6 +65,8 @@ class Core {
 	private function __construct( $dir, $url ) {
 		$this->dir = $dir;
 		$this->url = $url;
+
+		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
 
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
@@ -75,7 +84,7 @@ class Core {
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
 
 		// Append Flexible Content modules to the_content.
-		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		// Index modules as post content in SearchWP.
 		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
@@ -276,14 +285,14 @@ class Core {
 		$flexible_content = '';
 
 		// Remove current filter to avoid recursive loop.
-		remove_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		remove_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority );
 
 		if ( $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post ) ) {
 			$flexible_content = $this->get_modules_content( $post );
 		}
 
 		// Re-add filter after parsing content.
-		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		return $content . $flexible_content;
 	}
