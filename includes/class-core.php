@@ -5,6 +5,7 @@
  * @package Hogan
  */
 
+declare( strict_types = 1 );
 namespace Dekode\Hogan;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
@@ -31,26 +32,43 @@ class Core {
 	/**
 	 * Field groups.
 	 *
-	 * @var array $field_groups
+	 * @var array $_field_groups
 	 */
-	private $field_groups = [];
+	private $_field_groups = [];
 
 	/**
 	 * Modules.
 	 *
-	 * @var array $modules
+	 * @var array $_modules
 	 */
-	private $modules = [];
+	private $_modules = [];
+
+	/**
+	 * Hold the class instance.
+	 *
+	 * @var Core $_instance
+	 */
+	private static $_instance = null;
+
+	/**
+	 * Priority for the_content filter.
+	 *
+	 * @var int $the_content_priority
+	 */
+	private $_the_content_priority = 0;
 
 	/**
 	 * Module constructor.
 	 *
 	 * @param string $dir Plugin base directory.
 	 * @param string $url Plugin base url.
+	 * @return void
 	 */
-	public function __construct( $dir, $url ) {
+	private function __construct( $dir, $url ) {
 		$this->dir = $dir;
 		$this->url = $url;
+
+		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
 
 		// Load text domain on plugins_loaded.
 		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
@@ -68,7 +86,7 @@ class Core {
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
 
 		// Append Flexible Content modules to the_content.
-		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		// Index modules as post content in SearchWP.
 		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
@@ -84,7 +102,25 @@ class Core {
 	}
 
 	/**
+	 * Get Core instance.
+	 *
+	 * @param string $dir Plugin base directory.
+	 * @param string $url Plugin base url.
+	 * @return Core Core instance.
+	 */
+	public static function get_instance( string $dir = '', string $url = '' ) : Core {
+
+		if ( null === self::$_instance ) {
+			self::$_instance = new Core( $dir, $url );
+		}
+
+		return self::$_instance;
+	}
+
+	/**
 	 * Load textdomain for translations.
+	 *
+	 * @return void
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'hogan-core', false, $this->dir . '/languages' );
@@ -92,6 +128,8 @@ class Core {
 
 	/**
 	 * Load plugin admin assets.
+	 *
+	 * @return void
 	 */
 	public function enqueue_admin_assets() {
 		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : false;
@@ -100,6 +138,8 @@ class Core {
 
 	/**
 	 * Register modules from filter into core plugin.
+	 *
+	 * @return void
 	 */
 	public function register_modules() {
 
@@ -111,7 +151,7 @@ class Core {
 				$module = new $module();
 			}
 
-			$this->modules[ $module->name ] = $module;
+			$this->_modules[ $module->name ] = $module;
 		}
 
 		do_action( 'hogan/modules_registered' );
@@ -119,6 +159,8 @@ class Core {
 
 	/**
 	 * Register field groups from filter into core plugin.
+	 *
+	 * @return void
 	 */
 	public function register_field_groups() {
 
@@ -149,14 +191,14 @@ class Core {
 		// Sanitized field group name will be used for all filters, and prefix for field group and field names.
 		$name = sanitize_key( $name );
 
-		$this->field_groups[] = $name;
+		$this->_field_groups[] = $name;
 
 		if ( true !== apply_filters( 'hogan/field_group/' . $name . '/enabled', true ) ) {
 			return;
 		}
 
 		// Get flexible content layouts from modules.
-		$field_group_layouts = array_filter( array_map( function( $module ) use ( $modules ) {
+		$field_group_layouts = array_filter( array_map( function( Module $module ) use ( $modules ) : array {
 
 			if ( is_array( $modules ) && ! empty( $modules ) ) {
 
@@ -169,7 +211,7 @@ class Core {
 				return $module->get_layout_definition();
 			}
 
-		}, $this->modules ) );
+		}, $this->_modules ) );
 
 		if ( empty( $field_group_layouts ) ) {
 			// No modules, no fun.
@@ -239,28 +281,29 @@ class Core {
 			'send-trackbacks',
 		];
 
-		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), null, $location, $hide_on_screen );
+		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), [], $location, $hide_on_screen );
 	}
 
 	/**
 	 * Append modules HTML content to the_content for the global post object.
 	 *
 	 * @param string $content Content HTML string.
+	 * @return string
 	 */
-	public function append_modules_content( $content ) {
+	public function append_modules_content( string $content ) : string {
 
 		global $more, $post;
 		$flexible_content = '';
 
 		// Remove current filter to avoid recursive loop.
-		remove_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		remove_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority );
 
 		if ( $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post ) ) {
 			$flexible_content = $this->get_modules_content( $post );
 		}
 
 		// Re-add filter after parsing content.
-		add_filter( 'the_content', [ $this, 'append_modules_content' ] );
+		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		return $content . $flexible_content;
 	}
@@ -271,7 +314,7 @@ class Core {
 	 * @param \WP_Post $post The post.
 	 * @return string
 	 */
-	private function get_modules_content( \WP_Post $post ) {
+	private function get_modules_content( \WP_Post $post ) : string {
 
 		$cache_key = 'hogan_modules_' . $post->ID;
 		$cache_group = 'hogan_modules';
@@ -280,7 +323,7 @@ class Core {
 
 		if ( empty( $flexible_content ) ) {
 
-			foreach ( $this->field_groups as $field_group ) {
+			foreach ( $this->_field_groups as $field_group ) {
 
 				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
@@ -295,7 +338,7 @@ class Core {
 						}
 
 						// Get the right module.
-						$module = true === isset( $this->modules[ $layout['acf_fc_layout'] ] ) ? $this->modules[ $layout['acf_fc_layout'] ] : null;
+						$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
 
 						if ( $module instanceof Module ) {
 							ob_start();
@@ -321,7 +364,7 @@ class Core {
 	 * @param \WP_Post $post The post.
 	 * @return \WP_Post
 	 */
-	public function populate_post_content_for_indexing( \WP_Post $post ) {
+	public function populate_post_content_for_indexing( \WP_Post $post ) : \WP_Post {
 
 		// Fake fill the post_content with modules before SearchWP indexing.
 		$post->post_content = $this->get_modules_content( $post );
@@ -334,7 +377,8 @@ class Core {
 	 * @param array $toolbars Current Toolbars.
 	 * @return array $toolbars Array with new toolbars.
 	 */
-	public function append_hogan_wysiwyg_toolbar( $toolbars ) {
+	public function append_hogan_wysiwyg_toolbar( array $toolbars ) : array {
+
 		// TODO: Include blockquote tinymce plugin. 'blockquote_cite'.
 		$toolbars['hogan'] = [
 			1 => [
@@ -371,7 +415,7 @@ class Core {
 	 * @param array $settings TinyMCE settings.
 	 * @return array $settings Optimized TinyMCE settings.
 	 */
-	public function override_tinymce_settings( $settings ) {
+	public function override_tinymce_settings( array $settings ) : array {
 		$settings['block_formats'] = apply_filters( 'hogan/tinymce_block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
 		return $settings;
 	}
