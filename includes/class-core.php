@@ -5,6 +5,7 @@
  * @package Hogan
  */
 
+declare( strict_types = 1 );
 namespace Dekode\Hogan;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
@@ -54,13 +55,14 @@ class Core {
 	 *
 	 * @var int $the_content_priority
 	 */
-	private $_the_content_priority = 0; //apply_filters( 'hogan/the_content_priority', 10 );
+	private $_the_content_priority = 0;
 
 	/**
 	 * Module constructor.
 	 *
 	 * @param string $dir Plugin base directory.
 	 * @param string $url Plugin base url.
+	 * @return void
 	 */
 	private function __construct( $dir, $url ) {
 		$this->dir = $dir;
@@ -117,6 +119,8 @@ class Core {
 
 	/**
 	 * Load textdomain for translations.
+	 *
+	 * @return void
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'hogan-core', false, $this->dir . '/languages' );
@@ -124,6 +128,8 @@ class Core {
 
 	/**
 	 * Load plugin admin assets.
+	 *
+	 * @return void
 	 */
 	public function enqueue_admin_assets() {
 		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : false;
@@ -132,6 +138,8 @@ class Core {
 
 	/**
 	 * Register modules from filter into core plugin.
+	 *
+	 * @return void
 	 */
 	public function register_modules() {
 
@@ -151,6 +159,8 @@ class Core {
 
 	/**
 	 * Register field groups from filter into core plugin.
+	 *
+	 * @return void
 	 */
 	public function register_field_groups() {
 
@@ -188,7 +198,7 @@ class Core {
 		}
 
 		// Get flexible content layouts from modules.
-		$field_group_layouts = array_filter( array_map( function( $module ) use ( $modules ) {
+		$field_group_layouts = array_filter( array_map( function( Module $module ) use ( $modules ) : array {
 
 			if ( is_array( $modules ) && ! empty( $modules ) ) {
 
@@ -271,15 +281,16 @@ class Core {
 			'send-trackbacks',
 		];
 
-		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), null, $location, $hide_on_screen );
+		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), [], $location, $hide_on_screen );
 	}
 
 	/**
 	 * Append modules HTML content to the_content for the global post object.
 	 *
 	 * @param string $content Content HTML string.
+	 * @return string
 	 */
-	public function append_modules_content( $content ) {
+	public function append_modules_content( string $content ) : string {
 
 		global $more, $post;
 		$flexible_content = '';
@@ -303,7 +314,7 @@ class Core {
 	 * @param \WP_Post $post The post.
 	 * @return string
 	 */
-	private function get_modules_content( \WP_Post $post ) {
+	private function get_modules_content( \WP_Post $post ) : string {
 
 		$cache_key = 'hogan_modules_' . $post->ID;
 		$cache_group = 'hogan_modules';
@@ -353,7 +364,7 @@ class Core {
 	 * @param \WP_Post $post The post.
 	 * @return \WP_Post
 	 */
-	public function populate_post_content_for_indexing( \WP_Post $post ) {
+	public function populate_post_content_for_indexing( \WP_Post $post ) : \WP_Post {
 
 		// Fake fill the post_content with modules before SearchWP indexing.
 		$post->post_content = $this->get_modules_content( $post );
@@ -366,7 +377,8 @@ class Core {
 	 * @param array $toolbars Current Toolbars.
 	 * @return array $toolbars Array with new toolbars.
 	 */
-	public function append_hogan_wysiwyg_toolbar( $toolbars ) {
+	public function append_hogan_wysiwyg_toolbar( array $toolbars ) : array {
+
 		// TODO: Include blockquote tinymce plugin. 'blockquote_cite'.
 		$toolbars['hogan'] = [
 			1 => [
@@ -403,7 +415,7 @@ class Core {
 	 * @param array $settings TinyMCE settings.
 	 * @return array $settings Optimized TinyMCE settings.
 	 */
-	public function override_tinymce_settings( $settings ) {
+	public function override_tinymce_settings( array $settings ) : array {
 		$settings['block_formats'] = apply_filters( 'hogan/tinymce_block_formats', 'Paragraph=p;Overskrift 2=h2;Overskrift 3=h3;Overskrift4=h4' );
 		return $settings;
 	}
