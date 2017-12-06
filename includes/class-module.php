@@ -5,6 +5,7 @@
  * @package Hogan
  */
 
+declare( strict_types = 1 );
 namespace Dekode\Hogan;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,6 +23,13 @@ abstract class Module {
 	 * @var string $name
 	 */
 	public $name;
+
+	/**
+	 * Module heading. Require use of hogan_append_heading_field() in module get_fields() implementation.
+	 *
+	 * @var string $heading
+	 */
+	public $heading;
 
 	/**
 	 * Module field key prefix.
@@ -52,6 +60,13 @@ abstract class Module {
 	public $raw_content;
 
 	/**
+	 * Module location in page layout.
+	 *
+	 * @var int $counter Incremental counter.
+	 */
+	public $counter;
+
+	/**
 	 * Template outer wrapper HTML tag.
 	 *
 	 * @var string
@@ -76,8 +91,10 @@ abstract class Module {
 
 	/**
 	 * Base class for field definitions.
+	 *
+	 * @return array
 	 */
-	final public function get_layout_definition() {
+	final public function get_layout_definition() : array {
 
 		$sub_fields = array_merge(
 			apply_filters( 'hogan/module/' . $this->name . '/fields_before', [] ),
@@ -97,30 +114,40 @@ abstract class Module {
 	}
 
 	/**
-	 * Field definitions per module.
+	 * Field definitions for module.
+	 *
+	 * @return array $fields Fields for this module
 	 */
-	abstract protected function get_fields();
+	abstract protected function get_fields() : array;
 
 	/**
-	 * Map raw field values to content array.
+	 * Map raw fields from acf to object variable.
 	 *
-	 * @param array $content Content values.
+	 * @param array $raw_content Content values.
+	 * @param int   $counter Module location in page layout.
+	 * @return void
 	 */
-	public function load_args_from_layout_content( $content ) {
+	public function load_args_from_layout_content( array $raw_content, int $counter = 0 ) {
 
-		// Global content is loaded after module content.
-		$this->raw_content = $content;
+		// Load global module content.
+		$this->heading = $raw_content['heading'] ?? '';
+
+		$this->raw_content = $raw_content;
+		$this->counter = $counter;
 	}
 
 	/**
 	 * Validate module content before template is loaded.
+	 *
+	 * @return bool Whether validation of the module is successful / filled with content.
 	 */
-	abstract protected function validate_args();
+	abstract protected function validate_args() : bool;
 
 	/**
 	 * Render module wrappers opening tags before template include.
 	 *
 	 * @param integer $counter Module number.
+	 * @return void
 	 */
 	protected function render_opening_template_wrappers( $counter = 0 ) {
 
@@ -159,6 +186,8 @@ abstract class Module {
 
 	/**
 	 * Render module wrapper closing tags after template include.
+	 *
+	 * @return void
 	 */
 	protected function render_closing_template_wrappers() {
 
@@ -179,14 +208,15 @@ abstract class Module {
 	 * @param string  $raw_content Raw ACF layout content.
 	 * @param integer $counter Module number.
 	 * @param boolean $echo Echo content.
+	 * @return string
 	 */
-	public function render_template( $raw_content, $counter = 0, $echo = true ) {
+	final public function render_template( $raw_content, $counter = 0, $echo = true ) : string {
 
 		// Load module data from raw ACF layout content.
-		$this->load_args_from_layout_content( $raw_content );
+		$this->load_args_from_layout_content( $raw_content, $counter );
 
 		if ( true !== $this->validate_args() ) {
-			return;
+			return '';
 		}
 
 		if ( false === $echo ) {
@@ -205,5 +235,7 @@ abstract class Module {
 		if ( false === $echo ) {
 			return ob_get_clean();
 		}
+
+		return '';
 	}
 }

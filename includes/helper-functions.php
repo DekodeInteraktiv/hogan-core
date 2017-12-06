@@ -5,6 +5,8 @@
  * @package Hogan
  */
 
+declare( strict_types = 1 );
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -12,25 +14,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registert module
  *
- * @param object $module Module object.
+ * @param \Dekode\Hogan\Module $module Module object.
  *
  * @return void
  */
-function hogan_register_module( $module ) {
+function hogan_register_module( \Dekode\Hogan\Module $module ) {
 
 	if ( did_action( 'hogan/modules_registered' ) ) {
 		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
 	}
 
-	add_filter( 'hogan/modules', function( $modules ) use ( $module ) {
+	add_filter( 'hogan/modules', function( array $modules ) use ( $module ) : array {
 		$modules[] = $module;
 		return $modules;
 	} );
-
 }
 
 /**
  * De-register default field group.
+ *
+ * @return void
  */
 function hogan_deregister_default_field_group() {
 
@@ -45,16 +48,15 @@ function hogan_deregister_default_field_group() {
  * Register a specific field group.
  *
  * @param string $name                           Field group name.
- * @param mixed  $label                          Label.
- * @param mixed  $modules                        Array/String with supported modules.
+ * @param string $label                          Label.
+ * @param array  $modules                        Array/String with supported modules.
  * @param array  $location                       Location rules.
  * @param array  $hide_on_screen                 Array of elements to hide on edit screen.
  * @param array  $fields_before_flexible_content Prepend fields.
  * @param array  $fields_after_flexible_content  Append fields.
- *
  * @return void
  */
-function hogan_register_field_group( $name, $label, $modules = [], $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
+function hogan_register_field_group( string $name, string $label, array $modules = [], array $location = [], array $hide_on_screen = [], array $fields_before_flexible_content = [], array $fields_after_flexible_content = [] ) {
 
 	if ( did_action( 'hogan/field_groups_registered' ) ) {
 		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_register_field_group() on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
@@ -70,7 +72,7 @@ function hogan_register_field_group( $name, $label, $modules = [], $location = [
 		'fields_after_flexible_content' => $fields_after_flexible_content,
 	];
 
-	add_filter( 'hogan/field_groups', function( $groups ) use ( $group ) {
+	add_filter( 'hogan/field_groups', function( array $groups ) use ( $group ) : array {
 		$groups[] = $group;
 		return $groups;
 	} );
@@ -79,10 +81,11 @@ function hogan_register_field_group( $name, $label, $modules = [], $location = [
 /**
  * Helper function for adding default heading field
  *
- * @param array  $fields ACF fields array.
- * @param object $module Hogan module object.
+ * @param array                $fields ACF fields array.
+ * @param \Dekode\Hogan\Module $module Hogan module object.
+ * @return void
  */
-function hogan_append_heading_field( &$fields, $module ) {
+function hogan_append_heading_field( array &$fields, \Dekode\Hogan\Module $module ) {
 
 	if ( true === apply_filters( 'hogan/module/' . $module->name . '/heading/enabled', true ) ) {
 
@@ -99,10 +102,11 @@ function hogan_append_heading_field( &$fields, $module ) {
 /**
  * Helper function for adding caption field
  *
- * @param array  $fields ACF fields array.
- * @param object $module Hogan module object.
+ * @param array                $fields ACF fields array.
+ * @param \Dekode\Hogan\Module $module Hogan module object.
+ * @return void
  */
-function hogan_append_caption_field( &$fields, $module ) {
+function hogan_append_caption_field( array &$fields, \Dekode\Hogan\Module $module ) {
 
 	if ( true === apply_filters( 'hogan/module/' . $module->name . '/caption/enabled', true ) ) {
 
@@ -125,8 +129,10 @@ function hogan_append_caption_field( &$fields, $module ) {
 
 /**
  * Allowed wp_kses HTML for caption field
+ *
+ * @return array
  */
-function hogan_caption_allowed_html() {
+function hogan_caption_allowed_html() : array {
 
 	return [
 		'strong' => true,
