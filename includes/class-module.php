@@ -24,6 +24,13 @@ abstract class Module {
 	public $name;
 
 	/**
+	 * Module heading. Require use of hogan_append_heading_field() in module get_fields() implementation.
+	 *
+	 * @var string $heading
+	 */
+	public $heading;
+
+	/**
 	 * Module field key prefix.
 	 *
 	 * @var string $field_key
@@ -116,7 +123,9 @@ abstract class Module {
 	 */
 	public function load_args_from_layout_content( array $raw_content, int $counter = 0 ) {
 
-		// Global content is loaded after module content.
+		// Load global module content.
+		$this->heading = $raw_content['heading'] ?? '';
+
 		$this->raw_content = $raw_content;
 		$this->counter = $counter;
 	}
