@@ -43,12 +43,19 @@ class Core {
 	private $modules = [];
 
 	/**
+	 * Hold the class instance.
+	 *
+	 * @var Core $instance
+	 */
+	private static $instance = null;
+
+	/**
 	 * Module constructor.
 	 *
 	 * @param string $dir Plugin base directory.
 	 * @param string $url Plugin base url.
 	 */
-	public function __construct( $dir, $url ) {
+	private function __construct( $dir, $url ) {
 		$this->dir = $dir;
 		$this->url = $url;
 
@@ -81,6 +88,22 @@ class Core {
 		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
+	}
+
+	/**
+	 * Get Core instance.
+	 *
+	 * @param string $dir Plugin base directory.
+	 * @param string $url Plugin base url.
+	 * @return Core Core instance.
+	 */
+	public static function get_instance( string $dir = '', string $url = '' ) : Core {
+
+		if ( null === self::$instance ) {
+			self::$instance = new Core( $dir, $url );
+		}
+
+		return self::$instance;
 	}
 
 	/**

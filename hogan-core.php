@@ -25,12 +25,7 @@ require_once 'includes/class-module.php';
 require_once 'includes/class-core.php';
 require_once 'includes/helper-functions.php';
 
-global $hogan;
+$_dir = dirname( plugin_basename( __FILE__ ) );
+$_url = plugin_dir_url( __FILE__ );
 
-if ( ! isset( $hogan ) ) {
-
-	$_dir = dirname( plugin_basename( __FILE__ ) );
-	$_url = plugin_dir_url( __FILE__ );
-
-	$hogan = new Dekode\Hogan\Core( $_dir, $_url );
-}
+\Dekode\Hogan\Core::get_instance( $_dir, $_url );
