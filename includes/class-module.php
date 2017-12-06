@@ -52,6 +52,13 @@ abstract class Module {
 	public $raw_content;
 
 	/**
+	 * Module location in page layout.
+	 *
+	 * @var int $counter Incremental counter.
+	 */
+	public $counter;
+
+	/**
 	 * Template outer wrapper HTML tag.
 	 *
 	 * @var string
@@ -102,14 +109,16 @@ abstract class Module {
 	abstract protected function get_fields();
 
 	/**
-	 * Map raw field values to content array.
+	 * Map raw fields from acf to object variable.
 	 *
-	 * @param array $content Content values.
+	 * @param array $raw_content Content values.
+	 * @param int   $counter Module location in page layout.
 	 */
-	public function load_args_from_layout_content( $content ) {
+	public function load_args_from_layout_content( array $raw_content, int $counter = 0 ) {
 
 		// Global content is loaded after module content.
-		$this->raw_content = $content;
+		$this->raw_content = $raw_content;
+		$this->counter = $counter;
 	}
 
 	/**
@@ -183,7 +192,7 @@ abstract class Module {
 	public function render_template( $raw_content, $counter = 0, $echo = true ) {
 
 		// Load module data from raw ACF layout content.
-		$this->load_args_from_layout_content( $raw_content );
+		$this->load_args_from_layout_content( $raw_content, $counter );
 
 		if ( true !== $this->validate_args() ) {
 			return;
