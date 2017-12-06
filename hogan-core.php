@@ -2,6 +2,7 @@
 /**
  * Plugin Name: Hogan
  * Plugin URI: https://github.com/DekodeInteraktiv/hogan-core
+ * GitHub Plugin URI: https://github.com/DekodeInteraktiv/hogan-core
  * Description: Modular Flexible Content System for ACF Pro
  * Version: 1.0.2
  * Author: Dekode
