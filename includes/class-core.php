@@ -32,23 +32,23 @@ class Core {
 	/**
 	 * Field groups.
 	 *
-	 * @var array $field_groups
+	 * @var array $_field_groups
 	 */
-	private $field_groups = [];
+	private $_field_groups = [];
 
 	/**
 	 * Modules.
 	 *
-	 * @var array $modules
+	 * @var array $_modules
 	 */
-	private $modules = [];
+	private $_modules = [];
 
 	/**
 	 * Hold the class instance.
 	 *
-	 * @var Core $instance
+	 * @var Core $_instance
 	 */
-	private static $instance = null;
+	private static $_instance = null;
 
 	/**
 	 * Priority for the_content filter.
@@ -110,11 +110,11 @@ class Core {
 	 */
 	public static function get_instance( string $dir = '', string $url = '' ) : Core {
 
-		if ( null === self::$instance ) {
-			self::$instance = new Core( $dir, $url );
+		if ( null === self::$_instance ) {
+			self::$_instance = new Core( $dir, $url );
 		}
 
-		return self::$instance;
+		return self::$_instance;
 	}
 
 	/**
@@ -151,7 +151,7 @@ class Core {
 				$module = new $module();
 			}
 
-			$this->modules[ $module->name ] = $module;
+			$this->_modules[ $module->name ] = $module;
 		}
 
 		do_action( 'hogan/modules_registered' );
@@ -191,7 +191,7 @@ class Core {
 		// Sanitized field group name will be used for all filters, and prefix for field group and field names.
 		$name = sanitize_key( $name );
 
-		$this->field_groups[] = $name;
+		$this->_field_groups[] = $name;
 
 		if ( true !== apply_filters( 'hogan/field_group/' . $name . '/enabled', true ) ) {
 			return;
@@ -211,7 +211,7 @@ class Core {
 				return $module->get_layout_definition();
 			}
 
-		}, $this->modules ) );
+		}, $this->_modules ) );
 
 		if ( empty( $field_group_layouts ) ) {
 			// No modules, no fun.
@@ -323,7 +323,7 @@ class Core {
 
 		if ( empty( $flexible_content ) ) {
 
-			foreach ( $this->field_groups as $field_group ) {
+			foreach ( $this->_field_groups as $field_group ) {
 
 				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
@@ -338,7 +338,7 @@ class Core {
 						}
 
 						// Get the right module.
-						$module = true === isset( $this->modules[ $layout['acf_fc_layout'] ] ) ? $this->modules[ $layout['acf_fc_layout'] ] : null;
+						$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
 
 						if ( $module instanceof Module ) {
 							ob_start();
