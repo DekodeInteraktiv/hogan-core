@@ -25,11 +25,11 @@ abstract class Module {
 	public $name;
 
 	/**
-	 * Module heading. Require use of hogan_append_heading_field() in module get_fields() implementation.
+	 * Module extra helper fields. Require use of helper function, e.g. hogan_append_heading_field() in module get_fields() implementation.
 	 *
-	 * @var string $heading
+	 * @var array $helper_fields
 	 */
-	public $heading;
+	public $helper_fields = [];
 
 	/**
 	 * Module field key prefix.
@@ -90,6 +90,17 @@ abstract class Module {
 	}
 
 	/**
+	 * Populate helper fields array with helper field. Used in function load_args_from_layout_content().
+	 *
+	 * @param string $field_name ACF field name.
+	 *
+	 * @return void
+	 */
+	public function add_helper_field( string $field_name ) {
+		$this->helper_fields[] = $field_name;
+	}
+
+	/**
 	 * Base class for field definitions.
 	 *
 	 * @return array
@@ -129,8 +140,10 @@ abstract class Module {
 	 */
 	public function load_args_from_layout_content( array $raw_content, int $counter = 0 ) {
 
-		// Load global module content.
-		$this->heading = $raw_content['heading'] ?? '';
+		// Add helper fields to module instance.
+		foreach ( $this->helper_fields as $helper_field ) {
+			$this->{$helper_field} = $raw_content[ $helper_field ] ?? '';
+		}
 
 		$this->raw_content = $raw_content;
 		$this->counter = $counter;

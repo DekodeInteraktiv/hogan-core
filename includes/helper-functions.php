@@ -96,6 +96,8 @@ function hogan_append_heading_field( array &$fields, \Dekode\Hogan\Module $modul
 			'label'        => __( 'Heading', 'hogan-core' ),
 			'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
 		];
+
+		$module->add_helper_field( 'heading' );
 	}
 }
 
@@ -124,6 +126,7 @@ function hogan_append_caption_field( array &$fields, \Dekode\Hogan\Module $modul
 			],
 		];
 
+		$module->add_helper_field( 'caption' );
 	}
 }
 
