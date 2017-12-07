@@ -92,7 +92,7 @@ abstract class Module {
 	/**
 	 * Populate helper fields array with helper field. Used in function load_args_from_layout_content().
 	 *
-	 * @param string $field_name
+	 * @param string $field_name ACF field name.
 	 *
 	 * @return void
 	 */
@@ -139,8 +139,6 @@ abstract class Module {
 	 * @return void
 	 */
 	public function load_args_from_layout_content( array $raw_content, int $counter = 0 ) {
-
-		// Load global module content.
 
 		// Add helper fields to module instance.
 		foreach ( $this->helper_fields as $helper_field ) {
