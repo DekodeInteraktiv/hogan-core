@@ -146,3 +146,45 @@ function hogan_caption_allowed_html() : array {
 		],
 	];
 }
+
+/**
+ * Conditionally join function arguments together
+ *
+ * @return string Joined arguments as space separated string.
+ */
+function hogan_args_as_string() : string {
+
+	$args = func_get_args();
+
+	$classes = array_map( function( $arg ) {
+
+		if ( is_array( $arg ) ) {
+
+			return implode( ' ', array_filter( array_map( function( $key, $value ) {
+				return $value ? $key : false;
+			}, array_keys( $arg ), $arg )) );
+		}
+
+		return $arg;
+
+	}, $args );
+
+	return implode( ' ', array_filter( $classes ) );
+}
+
+/**
+ * Conditionally join classnames together
+ */
+function hogan_classnames() {
+	$args    = func_get_args();
+	$classes = array_map( function( $arg ) {
+		if ( is_array( $arg ) ) {
+			return implode( ' ', array_filter( array_map( function( $expression, $class ) {
+				return $expression ? $class : false;
+			}, $arg, array_keys( $arg ) ) ) );
+		}
+		return $arg;
+	}, $args );
+
+	return implode( ' ', array_filter( $classes ) );
+}
