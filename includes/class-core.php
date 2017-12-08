@@ -355,7 +355,7 @@ class Core {
 			wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
 		}
 
-		return $flexible_content;
+		return (string) $flexible_content;
 	}
 
 	/**
