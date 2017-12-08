@@ -319,7 +319,7 @@ class Core {
 		$cache_key = 'hogan_modules_' . $post->ID;
 		$cache_group = 'hogan_modules';
 
-		$flexible_content = wp_cache_get( $cache_key, $cache_group );
+		$flexible_content = ''; // wp_cache_get( $cache_key, $cache_group );
 
 		if ( empty( $flexible_content ) ) {
 
@@ -352,7 +352,7 @@ class Core {
 				}
 			}
 
-			wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
+			//wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );
 		}
 
 		return (string) $flexible_content;
