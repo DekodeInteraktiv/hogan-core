@@ -85,7 +85,7 @@ abstract class Module {
 	 */
 	public function __construct() {
 
-		$this->name = strtolower( substr( strrchr( get_class( $this ), '\\' ), 1 ) );
+		$this->name      = strtolower( substr( strrchr( get_class( $this ), '\\' ), 1 ) );
 		$this->field_key = 'hogan_module_' . $this->name;
 	}
 
@@ -146,7 +146,7 @@ abstract class Module {
 		}
 
 		$this->raw_content = $raw_content;
-		$this->counter = $counter;
+		$this->counter     = $counter;
 	}
 
 	/**

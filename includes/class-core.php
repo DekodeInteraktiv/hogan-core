@@ -219,7 +219,7 @@ class Core {
 		}
 
 		$fields_before_flexible_content = apply_filters( 'hogan/field_group/' . $name . '/fields_before_flexible_content', $fields_before_flexible_content );
-		$fields_after_flexible_content = apply_filters( 'hogan/field_group/' . $name . '/fields_after_flexible_content', $fields_after_flexible_content );
+		$fields_after_flexible_content  = apply_filters( 'hogan/field_group/' . $name . '/fields_after_flexible_content', $fields_after_flexible_content );
 
 		// Include custom fields before and after flexible content field.
 		$field_group_fields =
@@ -254,16 +254,16 @@ class Core {
 		$location = [
 			[
 				[
-					'param' => 'post_type',
+					'param'    => 'post_type',
 					'operator' => '==',
-					'value' => 'post',
+					'value'    => 'post',
 				],
 			],
 			[
 				[
-					'param' => 'post_type',
+					'param'    => 'post_type',
 					'operator' => '==',
-					'value' => 'page',
+					'value'    => 'page',
 				],
 			],
 		];
@@ -316,10 +316,11 @@ class Core {
 	 */
 	private function get_modules_content( \WP_Post $post ) : string {
 
-		$cache_key = 'hogan_modules_' . $post->ID;
+		$cache_key   = 'hogan_modules_' . $post->ID;
 		$cache_group = 'hogan_modules';
 
-		$flexible_content = ''; // wp_cache_get( $cache_key, $cache_group );.
+		$flexible_content = '';
+		// $flexible_content = wp_cache_get( $cache_key, $cache_group ); @codingStandardsIgnoreLine
 
 		if ( empty( $flexible_content ) ) {
 
@@ -352,7 +353,7 @@ class Core {
 				}
 			}
 
-			// wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 );.
+			// wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 ); @codingStandardsIgnoreLine
 		}
 
 		return (string) $flexible_content;

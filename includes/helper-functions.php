@@ -63,13 +63,13 @@ function hogan_register_field_group( string $name, string $label, array $modules
 	}
 
 	$group = [
-		'name' => sanitize_key( $name ),
-		'label' => $label,
-		'modules' => $modules,
-		'location' => $location,
-		'hide_on_screen' => $hide_on_screen,
+		'name'                           => sanitize_key( $name ),
+		'label'                          => $label,
+		'modules'                        => $modules,
+		'location'                       => $location,
+		'hide_on_screen'                 => $hide_on_screen,
 		'fields_before_flexible_content' => $fields_before_flexible_content,
-		'fields_after_flexible_content' => $fields_after_flexible_content,
+		'fields_after_flexible_content'  => $fields_after_flexible_content,
 	];
 
 	add_filter( 'hogan/field_groups', function( array $groups ) use ( $group ) : array {
@@ -139,9 +139,9 @@ function hogan_caption_allowed_html() : array {
 
 	return [
 		'strong' => true,
-		'em' => true,
-		'a' => [
-			'href' => true,
+		'em'     => true,
+		'a'      => [
+			'href'   => true,
 			'target' => true,
 		],
 	];
