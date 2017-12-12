@@ -6,7 +6,7 @@ Modular Flexible Content System for ACF Pro
 Install Hogan WordPress plugin using [Composer](https://getcomposer.org/) by requiring any of the modules listed below or just the core framework using:
 
 ```shell
-$ composer require dekodeinteraktiv/hogan-core:@dev
+$ composer require dekodeinteraktiv/hogan-core
 ```
 
 Each module and the core framework itself will be installed as seperate WordPress plugins in the `wp-content/plugin` folder.
@@ -22,6 +22,7 @@ Module | Installation
 [Gallery](https://github.com/DekodeInteraktiv/hogan-gallery) | `composer require dekodeinteraktiv/hogan-gallery`
 [Grid](https://github.com/DekodeInteraktiv/hogan-grid) | `composer require dekodeinteraktiv/hogan-grid`
 [Link list](https://github.com/DekodeInteraktiv/hogan-linklist) | `composer require dekodeinteraktiv/hogan-linklist`
+[Links](https://github.com/DekodeInteraktiv/hogan-links) | `composer require dekodeinteraktiv/hogan-links`
 [Banner](https://github.com/DekodeInteraktiv/hogan-banner) | `composer require dekodeinteraktiv/hogan-banner`
 [Image](https://github.com/DekodeInteraktiv/hogan-image) | `composer require dekodeinteraktiv/hogan-image`
 [Expandable list](https://github.com/DekodeInteraktiv/hogan-expandable-list) | `composer require dekodeinteraktiv/hogan-expandable-list`
@@ -45,6 +46,8 @@ add_action( 'hogan/include_modules', function() {
 ```
 
 See the [Text Module](https://github.com/DekodeInteraktiv/hogan-text) for a complete example.
+
+See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-for-creating-new-modules) for more information. 
 
 ## Usage
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
