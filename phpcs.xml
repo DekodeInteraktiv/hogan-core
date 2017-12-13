@@ -7,4 +7,5 @@
 	<rule ref="WordPress-Docs" />
 	<rule ref="WordPress-Extra" />
 	<rule ref="WordPress-VIP" />
+	<rule ref="PHPCompatibility" />
 </ruleset>
