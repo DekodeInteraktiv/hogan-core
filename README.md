@@ -1,4 +1,4 @@
-# Hogan [ ![Codeship Status for DekodeInteraktiv/hogan-core](https://app.codeship.com/projects/58f4d340-97ba-0135-2412-665d154dd139/status?branch=master)](https://app.codeship.com/projects/251897)
+# Hogan [![Build Status](https://travis-ci.org/DekodeInteraktiv/hogan-core.svg?branch=master)](https://travis-ci.org/DekodeInteraktiv/hogan-core)
 
 Modular Flexible Content System for ACF Pro
 
@@ -47,7 +47,7 @@ add_action( 'hogan/include_modules', function() {
 
 See the [Text Module](https://github.com/DekodeInteraktiv/hogan-text) for a complete example.
 
-See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-for-creating-new-modules) for more information. 
+See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-for-creating-new-modules) for more information.
 
 ## Usage
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
