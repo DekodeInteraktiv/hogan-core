@@ -179,24 +179,24 @@ function hogan_args_as_string() : string {
  * @param array  $args Arguments to pass to the component.
  */
 function hogan_component( string $name, array $args = [] ) {
-	$components = [
+	$templates = [
 		'components/' . $name . '/' . $name . '.php',
 		'components/' . $name . '.php',
 	];
 
-	$template = '';
-	foreach ( $components as $component ) {
-		if ( ! $component ) {
+	$component = '';
+	foreach ( $templates as $template ) {
+		if ( ! $template ) {
 			continue;
 		}
 
-		if ( file_exists( HOGAN_CORE_PATH . '/' . $component ) ) {
-			$template = HOGAN_CORE_PATH . '/' . $component;
+		if ( file_exists( HOGAN_CORE_PATH . '/' . $template ) ) {
+			$component = HOGAN_CORE_PATH . '/' . $template;
 			break;
 		}
 	}
 
-	if ( $template && 0 === validate_file( $template ) ) {
-		include $template;
+	if ( $component && 0 === validate_file( $component ) ) {
+		include $component;
 	}
 }
