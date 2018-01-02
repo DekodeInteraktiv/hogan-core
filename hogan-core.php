@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+define( 'HOGAN_CORE_PATH', plugin_dir_path( __FILE__ ) );
+
 require_once 'includes/class-module.php';
 require_once 'includes/class-core.php';
 require_once 'includes/helper-functions.php';
