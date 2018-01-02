@@ -171,3 +171,32 @@ function hogan_args_as_string() : string {
 
 	return implode( ' ', array_filter( $classes ) );
 }
+
+/**
+ * Component
+ *
+ * @param string $name Name of component.
+ * @param array  $args Arguments to pass to the component.
+ */
+function hogan_component( string $name, array $args = [] ) {
+	$components = [
+		'components/' . $name . '/' . $name . '.php',
+		'components/' . $name . '.php',
+	];
+
+	$template = '';
+	foreach ( $components as $component ) {
+		if ( ! $component ) {
+			continue;
+		}
+
+		if ( file_exists( HOGAN_CORE_PATH . '/' . $component ) ) {
+			$template = HOGAN_CORE_PATH . '/' . $component;
+			break;
+		}
+	}
+
+	if ( $template && 0 === validate_file( $template ) ) {
+		include $template;
+	}
+}
