@@ -23,11 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+define( 'HOGAN_CORE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'HOGAN_CORE_DIR', dirname( plugin_basename( __FILE__ ) ) );
+define( 'HOGAN_CORE_URL', plugin_dir_url( __FILE__ ) );
+
 require_once 'includes/class-module.php';
 require_once 'includes/class-core.php';
 require_once 'includes/helper-functions.php';
 
-$_dir = dirname( plugin_basename( __FILE__ ) );
-$_url = plugin_dir_url( __FILE__ );
-
-\Dekode\Hogan\Core::get_instance( $_dir, $_url );
+\Dekode\Hogan\Core::get_instance( HOGAN_CORE_DIR, HOGAN_CORE_URL );
