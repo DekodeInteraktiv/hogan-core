@@ -449,7 +449,7 @@ class Core {
 	 * @param array  $field Current field.
 	 * @param array  $layout Current layout title.
 	 */
-	function extend_layout_titles( $title, $field, $layout ) : string {
+	public function extend_layout_titles( $title, $field, $layout ) : string {
 
 		if ( ! empty( get_sub_field( 'heading' ) ) ) {
 			$title .= ': ' . get_sub_field( 'heading' );
