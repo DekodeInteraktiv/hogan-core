@@ -173,6 +173,42 @@ function hogan_classnames() : string {
 }
 
 /**
+ * Build tag attributes
+ *
+ * @param array $attr Array of attributes.
+ * @return string Attributes.
+ */
+function hogan_attributes( array $attr = [] ) : string {
+	$attributes = '';
+
+	foreach ( $attr as $name => $value ) {
+		if ( empty( $value ) || ! $value ) {
+			continue;
+		}
+
+		if ( ! $name ) {
+			$attributes .= " {$value}";
+			continue;
+		}
+
+		if ( is_bool( $value ) ) {
+			$attributes .= " {$name}";
+			continue;
+		}
+
+		if ( 'src' === $name || 'href' === $name ) {
+			$value = esc_url( $value );
+		} else {
+			$value = esc_attr( $value );
+		}
+
+		$attributes .= " {$name}=\"{$value}\"";
+	}
+
+	return $attributes;
+}
+
+/**
  * Component
  *
  * @param string $name Name of component.
