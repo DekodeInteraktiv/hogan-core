@@ -99,6 +99,9 @@ class Core {
 		if ( true === apply_filters( 'hogan/flexible_content_layouts_collapsed_by_default', false ) && is_admin() ) {
 			add_action( 'acf/input/admin_footer', [ $this, 'append_footer_script_for_collapsed_flexible_content_layouts' ] );
 		};
+
+		add_filter( 'acf/fields/flexible_content/layout_title', [ $this, 'extend_layout_titles' ], 10, 3 );
+
 	}
 
 	/**
@@ -437,5 +440,21 @@ class Core {
 			} )( jQuery );
 		</script>
 		<?php
+	}
+
+	/**
+	 * Extend layout titles.
+	 *
+	 * @param string $title Layout title.
+	 * @param array  $field Current field.
+	 * @param array  $layout Current layout title.
+	 */
+	public function extend_layout_titles( $title, $field, $layout ) : string {
+
+		if ( ! empty( get_sub_field( 'heading' ) ) ) {
+			$title .= ': ' . get_sub_field( 'heading' );
+		}
+
+		return apply_filters( 'hogan/extend_layout_title', $title );
 	}
 }
