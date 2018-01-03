@@ -8,4 +8,10 @@
 	<rule ref="WordPress-Extra" />
 	<rule ref="WordPress-VIP" />
 	<rule ref="PHPCompatibility" />
+
+	<rule ref="WordPress.XSS.EscapeOutput">
+		<properties>
+			<property name="customAutoEscapedFunctions" value="hogan_attributes" type="array" />
+		</properties>
+	</rule>
 </ruleset>
