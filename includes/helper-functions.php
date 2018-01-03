@@ -187,9 +187,11 @@ function hogan_attributes( array $attr = [] ) : string {
 		}
 
 		if ( ! $name ) {
-			$attributes .= " {$value}";
+			$attributes .= ' ' . esc_attr( $value );
 			continue;
 		}
+
+		$name = esc_attr( $name );
 
 		if ( is_bool( $value ) ) {
 			$attributes .= " {$name}";
