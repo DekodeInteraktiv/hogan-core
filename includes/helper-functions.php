@@ -148,11 +148,11 @@ function hogan_caption_allowed_html() : array {
 }
 
 /**
- * Conditionally join function arguments together
+ * Conditionally join classnames together
  *
- * @return string Joined arguments as space separated string.
+ * @return string Joined classnames as space separated string.
  */
-function hogan_args_as_string() : string {
+function hogan_classnames() : string {
 
 	$args = func_get_args();
 
