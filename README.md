@@ -114,5 +114,7 @@ add_filter( 'hogan/searchwp/index_modules_as_post_content', '__return_false' );
 ```
 
 
-## Author
-…
+## Changelog
+
+### 1.0.8
+Added module title to collapsed layout name.
