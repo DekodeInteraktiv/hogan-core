@@ -186,10 +186,6 @@ function hogan_component( string $name, array $args = [] ) {
 
 	$component = '';
 	foreach ( $templates as $template ) {
-		if ( ! $template ) {
-			continue;
-		}
-
 		if ( file_exists( HOGAN_CORE_PATH . '/' . $template ) ) {
 			$component = HOGAN_CORE_PATH . '/' . $template;
 			break;
