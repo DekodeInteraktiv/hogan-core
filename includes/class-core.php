@@ -454,15 +454,7 @@ class Core {
 		if ( ! empty( get_sub_field( 'heading' ) ) ) {
 			$title .= ': ' . get_sub_field( 'heading' );
 		}
-		//@todo: add info to title if no heading:
-		// banner: størrelse?
-		// grid: antall kort?
-		// links: antall lenker?
-		// linklist: antall lister?
-		// image: bildestørrelsen?
-		// form: skjemadropin?
-		// gallery: antall bilder?
-		// "people": antall i repeater
-		return apply_filters( 'hogan/extend_layout_title' , $title );
+
+		return apply_filters( 'hogan/extend_layout_title', $title );
 	}
 }
