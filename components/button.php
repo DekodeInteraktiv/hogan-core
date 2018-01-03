@@ -46,6 +46,8 @@ printf( '<%1$s%2$s>%3$s</%1$s>',
 	esc_html( $tag ),
 	hogan_attributes( $attributes ),
 	wp_kses( $args['title'], [
-		'br' => [],
+		'br'     => [],
+		'em'     => [],
+		'strong' => [],
 	] )
 );
