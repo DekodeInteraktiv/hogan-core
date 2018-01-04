@@ -19,7 +19,7 @@ if ( empty( $args['title'] ) ) {
 }
 
 // Only allow certain tags.
-if ( ! in_array( $args['tag'], [ 'h1', 'h2', 'h3' ], true ) ) {
+if ( ! in_array( $args['tag'], [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ], true ) ) {
 	$args['tag'] = $defaults['tag'];
 }
 
