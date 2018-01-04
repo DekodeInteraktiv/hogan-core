@@ -148,11 +148,11 @@ function hogan_caption_allowed_html() : array {
 }
 
 /**
- * Conditionally join function arguments together
+ * Conditionally join classnames together
  *
- * @return string Joined arguments as space separated string.
+ * @return string Joined classnames as space separated string.
  */
-function hogan_args_as_string() : string {
+function hogan_classnames() : string {
 
 	$args = func_get_args();
 
@@ -170,6 +170,44 @@ function hogan_args_as_string() : string {
 	}, $args );
 
 	return implode( ' ', array_filter( $classes ) );
+}
+
+/**
+ * Build tag attributes
+ *
+ * @param array $attr Array of attributes.
+ * @return string Attributes.
+ */
+function hogan_attributes( array $attr = [] ) : string {
+	$attributes = '';
+
+	foreach ( $attr as $name => $value ) {
+		if ( empty( $value ) || ! $value ) {
+			continue;
+		}
+
+		if ( ! $name ) {
+			$attributes .= ' ' . esc_attr( $value );
+			continue;
+		}
+
+		$name = esc_attr( $name );
+
+		if ( is_bool( $value ) ) {
+			$attributes .= " {$name}";
+			continue;
+		}
+
+		if ( 'src' === $name || 'href' === $name ) {
+			$value = esc_url( $value );
+		} else {
+			$value = esc_attr( $value );
+		}
+
+		$attributes .= " {$name}=\"{$value}\"";
+	}
+
+	return $attributes;
 }
 
 /**
