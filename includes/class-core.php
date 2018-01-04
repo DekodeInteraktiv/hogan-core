@@ -434,7 +434,7 @@ class Core {
 		<script>
 			(function( $ ) {
 				$( document ).ready( function( ) {
-					$('.acf-flexible-content .layout[data-layout!="text"]').addClass('-collapsed');
+					$('.acf-flexible-content .layout:not([data-layout="text"]').addClass('-collapsed');
 				});
 			} )( jQuery );
 		</script>
