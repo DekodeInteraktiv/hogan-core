@@ -5,6 +5,10 @@
  * @package Hogan
  */
 
+if ( ! isset( $args ) || ! is_array( $args ) ) {
+	return;
+}
+
 $defaults = [
 	'classname' => '',
 	'tag'       => 'h2',
