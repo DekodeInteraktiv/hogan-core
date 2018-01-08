@@ -161,6 +161,14 @@ function hogan_classnames() : string {
 		if ( is_array( $arg ) ) {
 
 			return implode( ' ', array_filter( array_map( function( $key, $value ) {
+				if ( is_array( $value ) ) {
+					return hogan_classnames( $value );
+				}
+
+				if ( is_numeric( $key ) ) {
+					return $value;
+				}
+
 				return $value ? $key : false;
 			}, array_keys( $arg ), $arg )) );
 		}
@@ -169,7 +177,7 @@ function hogan_classnames() : string {
 
 	}, $args );
 
-	return implode( ' ', array_filter( $classes ) );
+	return trim( implode( ' ', array_filter( $classes ) ) );
 }
 
 /**
