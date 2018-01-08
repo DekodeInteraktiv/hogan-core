@@ -333,7 +333,7 @@ class Core {
 
 		global $more, $post;
 
-		if ( $this->is_current_post_flexible( $post, $more ) ) {
+		if ( $post instanceof \WP_Post && $this->is_current_post_flexible( $post, $more ) ) {
 			$layouts = $this->get_current_post_layouts( $post );
 
 			foreach ( $layouts as $layout ) {
