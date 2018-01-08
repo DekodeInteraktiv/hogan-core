@@ -301,7 +301,7 @@ class Core {
 	 * @param bool     $more More.
 	 * @return bool
 	 */
-	private function is_current_post_flexible( \WP_Post $post, $more ) {
+	private function is_current_post_flexible( $post, $more ) {
 		return $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post );
 	}
 
