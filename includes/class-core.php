@@ -37,6 +37,13 @@ class Core {
 	private $_field_groups = [];
 
 	/**
+	 * Current post layouts.
+	 *
+	 * @var array $_layouts
+	 */
+	private $_current_layouts = [];
+
+	/**
 	 * Modules.
 	 *
 	 * @var array $_modules
@@ -87,6 +94,9 @@ class Core {
 
 		// Append Flexible Content modules to the_content.
 		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
+
+		// Enqueue Scripts.
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_modules_assets' ] );
 
 		// Index modules as post content in SearchWP.
 		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
@@ -201,20 +211,17 @@ class Core {
 		}
 
 		// Get flexible content layouts from modules.
-		$field_group_layouts = array_filter( array_map( function( Module $module ) use ( $modules ) : array {
-
+		$field_group_layouts = [];
+		foreach ( $this->_modules as $module ) {
 			if ( is_array( $modules ) && ! empty( $modules ) ) {
-
-				// Limit modules to specified only.
 				if ( in_array( $module->name, $modules, true ) ) {
-					return $module->get_layout_definition();
+					$field_group_layouts[] = $module->get_layout_definition();
 				}
 			} else {
 				// All modules.
-				return $module->get_layout_definition();
+				$field_group_layouts[] = $module->get_layout_definition();
 			}
-
-		}, $this->_modules ) );
+		}
 
 		if ( empty( $field_group_layouts ) ) {
 			// No modules, no fun.
@@ -288,6 +295,64 @@ class Core {
 	}
 
 	/**
+	 * Check if current post is flexible.
+	 *
+	 * @param \WP_Post $post Current post.
+	 * @param bool     $more More.
+	 * @return bool
+	 */
+	private function is_current_post_flexible( \WP_Post $post, $more ) {
+		return $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post );
+	}
+
+	/**
+	 * Build an array of active layouts for current post.
+	 *
+	 * @param \WP_Post $post The post.
+	 * @return array
+	 */
+	private function get_current_post_layouts( \WP_Post $post ) {
+		if ( empty( $this->_current_layouts ) ) {
+			foreach ( $this->_field_groups as $field_group ) {
+
+				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
+
+				if ( is_array( $layouts ) && count( $layouts ) ) {
+					$this->_current_layouts = array_merge( $this->_current_layouts, $layouts );
+				}
+			}
+		}
+
+		return $this->_current_layouts;
+	}
+
+	/**
+	 * Enqueue module assets.
+	 */
+	public function enqueue_modules_assets() {
+
+		global $more, $post;
+
+		if ( $this->is_current_post_flexible( $post, $more ) ) {
+			$layouts = $this->get_current_post_layouts( $post );
+
+			foreach ( $layouts as $layout ) {
+
+				if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
+					continue;
+				}
+
+				// Get the right module.
+				$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
+
+				if ( $module instanceof Module && method_exists( $module, 'enqueue_assets' ) ) {
+					$module->enqueue_assets();
+				}
+			}
+		}
+	}
+
+	/**
 	 * Append modules HTML content to the_content for the global post object.
 	 *
 	 * @param string $content Content HTML string.
@@ -301,7 +366,7 @@ class Core {
 		// Remove current filter to avoid recursive loop.
 		remove_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority );
 
-		if ( $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post ) ) {
+		if ( $this->is_current_post_flexible( $post, $more ) ) {
 			$flexible_content = $this->get_modules_content( $post );
 		}
 
@@ -326,33 +391,26 @@ class Core {
 		// $flexible_content = wp_cache_get( $cache_key, $cache_group ); @codingStandardsIgnoreLine
 
 		if ( empty( $flexible_content ) ) {
+			$module_counter = 0;
 
-			foreach ( $this->_field_groups as $field_group ) {
+			$layouts = $this->get_current_post_layouts( $post );
 
-				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
+			foreach ( $layouts as $layout ) {
 
-				if ( is_array( $layouts ) && count( $layouts ) ) {
+				if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
+					continue;
+				}
 
-					$module_counter = 0;
+				// Get the right module.
+				$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
 
-					foreach ( $layouts as $layout ) {
+				if ( $module instanceof Module ) {
+					ob_start();
 
-						if ( ! isset( $layout['acf_fc_layout'] ) || empty( $layout['acf_fc_layout'] ) ) {
-							continue;
-						}
+					$module->render_template( $layout, $module_counter );
 
-						// Get the right module.
-						$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
-
-						if ( $module instanceof Module ) {
-							ob_start();
-
-							$module->render_template( $layout, $module_counter );
-
-							$flexible_content .= ob_get_clean();
-							$module_counter++;
-						}
-					}
+					$flexible_content .= ob_get_clean();
+					$module_counter++;
 				}
 			}
 
