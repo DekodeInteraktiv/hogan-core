@@ -170,7 +170,7 @@ function hogan_classnames() : string {
 				}
 
 				return $value ? $key : false;
-			}, array_keys( $arg ), $arg )) );
+			}, array_keys( $arg ), $arg ) ) );
 		}
 
 		return $arg;
