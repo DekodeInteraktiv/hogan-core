@@ -180,7 +180,11 @@ abstract class Module {
 				apply_filters( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [], $this )
 			);
 
-			echo sprintf( '<%s id="%s" class="%s">', esc_attr( $this->outer_wrapper_tag ), esc_attr( 'module-' . $counter ), esc_attr( $outer_wrapper_classes ) );
+			printf( '<%s id="%s" class="%s">',
+				esc_attr( $this->outer_wrapper_tag ),
+				esc_attr( 'module-' . $counter ),
+				esc_attr( $outer_wrapper_classes )
+			);
 		}
 
 		// Echo inner wrapper.
@@ -191,7 +195,10 @@ abstract class Module {
 				apply_filters( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [], $this )
 			);
 
-			echo sprintf( '<%s class="%s">', esc_attr( $this->inner_wrapper_tag ), esc_attr( $inner_wrapper_classes ) );
+			printf( '<%s class="%s">',
+				esc_attr( $this->inner_wrapper_tag ),
+				esc_attr( $inner_wrapper_classes )
+			);
 		}
 	}
 
@@ -204,12 +211,12 @@ abstract class Module {
 
 		// Echo closing inner wrapper.
 		if ( ! empty( $this->inner_wrapper_tag ) ) {
-			echo sprintf( '</%s>', esc_attr( $this->inner_wrapper_tag ) );
+			printf( '</%s>', esc_attr( $this->inner_wrapper_tag ) );
 		}
 
 		// Echo closing outer wrapper.
 		if ( ! empty( $this->outer_wrapper_tag ) ) {
-			echo sprintf( '</%s>', esc_attr( $this->outer_wrapper_tag ) );
+			printf( '</%s>', esc_attr( $this->outer_wrapper_tag ) );
 		}
 	}
 
