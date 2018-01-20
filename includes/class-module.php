@@ -175,11 +175,10 @@ abstract class Module {
 		// Echo opening outer wrapper.
 		if ( ! empty( $this->outer_wrapper_tag ) ) {
 			// Outer wrapper classes with filters for overriding both globally, per module and per module instance.
-			$outer_wrapper_classes = array_merge(
+			$outer_wrapper_classes = hogan_classnames(
 				apply_filters( 'hogan/module/outer_wrapper_classes', [ 'hogan-module', 'hogan-module-' . $this->name, 'hogan-module-' . $counter ], $this ),
 				apply_filters( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [], $this )
 			);
-			$outer_wrapper_classes = trim( implode( ' ', array_filter( $outer_wrapper_classes ) ) );
 
 			echo sprintf( '<%s id="%s" class="%s">', esc_attr( $this->outer_wrapper_tag ), esc_attr( 'module-' . $counter ), esc_attr( $outer_wrapper_classes ) );
 		}
@@ -187,11 +186,10 @@ abstract class Module {
 		// Echo inner wrapper.
 		if ( ! empty( $this->inner_wrapper_tag ) ) {
 			// Inner wrapper classes with filters for overriding both globally, per module and per module instance.
-			$inner_wrapper_classes = array_merge(
+			$inner_wrapper_classes = hogan_classnames(
 				apply_filters( 'hogan/module/inner_wrapper_classes', [ 'hogan-module-inner' ], $this ),
 				apply_filters( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [], $this )
 			);
-			$inner_wrapper_classes = trim( implode( ' ', array_filter( $inner_wrapper_classes ) ) );
 
 			echo sprintf( '<%s class="%s">', esc_attr( $this->inner_wrapper_tag ), esc_attr( $inner_wrapper_classes ) );
 		}
