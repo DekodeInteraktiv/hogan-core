@@ -147,5 +147,11 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ## Changelog
 
+### 1.0.13
+- Deprecated `hogan/module/{ $module }/outer_wrapper_tag` filter. Use `hogan/module/outer_wrapper_tag` instead.
+- Deprecated `hogan/module/{ $module }/inner_wrapper_tag` filter. Use `hogan/module/inner_wrapper_tag` instead.
+- Deprecated `hogan/module/{ $module }/outer_wrapper_classes` filter. Use `hogan/module/outer_wrapper_classes` instead.
+- Deprecated `hogan/module/{ $module }/inner_wrapper_classes` filter. Use `hogan/module/inner_wrapper_classes` instead.
+
 ### 1.0.8
 Added module title to collapsed layout name.
