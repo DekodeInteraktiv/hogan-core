@@ -166,18 +166,18 @@ abstract class Module {
 
 		// Outer wrapper tag with filters for overriding both globally, per module and per module instance.
 		$this->outer_wrapper_tag = apply_filters( 'hogan/module/outer_wrapper_tag', $this->outer_wrapper_tag, $this );
-		$this->outer_wrapper_tag = apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_tag', [ $this->outer_wrapper_tag, $this ], '1.0.13', 'hogan/module/outer_wrapper_tag', 'Will be remove in v1.1' );
+		$this->outer_wrapper_tag = apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_tag', [ $this->outer_wrapper_tag, $this ], '1.0.13', 'hogan/module/outer_wrapper_tag', 'Will be removed in v1.1' );
 
 		// Inner wrapper tag with filters for overriding both globally, per module and per module instance.
 		$this->inner_wrapper_tag = apply_filters( 'hogan/module/inner_wrapper_tag', $this->inner_wrapper_tag, $this );
-		$this->inner_wrapper_tag = apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_tag', [ $this->inner_wrapper_tag, $this ], '1.0.13', 'hogan/module/inner_wrapper_tag', 'Will be remove in v1.1' );
+		$this->inner_wrapper_tag = apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_tag', [ $this->inner_wrapper_tag, $this ], '1.0.13', 'hogan/module/inner_wrapper_tag', 'Will be removed in v1.1' );
 
 		// Echo opening outer wrapper.
 		if ( ! empty( $this->outer_wrapper_tag ) ) {
 			// Outer wrapper classes with filters for overriding both globally, per module and per module instance.
 			$outer_wrapper_classes = hogan_classnames(
 				apply_filters( 'hogan/module/outer_wrapper_classes', [ 'hogan-module', 'hogan-module-' . $this->name, 'hogan-module-' . $counter ], $this ),
-				apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/outer_wrapper_classes', 'Will be remove in v1.1' )
+				apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/outer_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
 			printf( '<%s id="%s" class="%s">',
@@ -192,7 +192,7 @@ abstract class Module {
 			// Inner wrapper classes with filters for overriding both globally, per module and per module instance.
 			$inner_wrapper_classes = hogan_classnames(
 				apply_filters( 'hogan/module/inner_wrapper_classes', [ 'hogan-module-inner' ], $this ),
-				apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/inner_wrapper_classes', 'Will be remove in v1.1' )
+				apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/inner_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
 			printf( '<%s class="%s">',
