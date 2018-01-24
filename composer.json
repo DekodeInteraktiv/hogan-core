@@ -3,7 +3,7 @@
   "description": "Modular Flexible Content System for ACF Pro",
   "homepage": "https://github.com/DekodeInteraktiv/hogan-core",
   "type": "wordpress-plugin",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "require": {
     "php": ">=7.0",
     "composer/installers": "~1.2"
