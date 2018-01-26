@@ -334,7 +334,8 @@ class Core {
 		global $more, $post;
 
 		if ( $this->is_current_post_flexible( $post, $more ) ) {
-			$layouts = $this->get_current_post_layouts( $post );
+			$layouts          = $this->get_current_post_layouts( $post );
+			$enqueued_modules = [];
 
 			foreach ( $layouts as $layout ) {
 
@@ -345,7 +346,8 @@ class Core {
 				// Get the right module.
 				$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
 
-				if ( $module instanceof Module && method_exists( $module, 'enqueue_assets' ) ) {
+				if ( $module instanceof Module && ! in_array( $module->name, $enqueued_modules, true ) && method_exists( $module, 'enqueue_assets' ) ) {
+					$enqueued_modules[] = $module->name;
 					$module->enqueue_assets();
 				}
 			}
