@@ -237,6 +237,12 @@ abstract class Module {
 			return '';
 		}
 
+		$template = apply_filters( 'hogan/module/' . $this->name . '/template', $this->template, $this );
+
+		if ( ! file_exists( $template ) || 0 !== validate_file( $template ) ) {
+			return '';
+		}
+
 		if ( false === $echo ) {
 			ob_start();
 		}
@@ -245,7 +251,7 @@ abstract class Module {
 		$this->render_opening_template_wrappers( $counter );
 
 		// Include module template.
-		include apply_filters( 'hogan/module/' . $this->name . '/template', $this->template, $this );
+		include $template;
 
 		// Echo closing wrappers.
 		$this->render_closing_template_wrappers();
