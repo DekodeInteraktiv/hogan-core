@@ -311,19 +311,28 @@ class Core {
 	 * @param \WP_Post $post The post.
 	 * @return array
 	 */
-	private function get_current_post_layouts( \WP_Post $post ) {
-		if ( empty( $this->_current_layouts ) ) {
+	private function get_current_post_layouts( \WP_Post $post ) : array {
+
+		$key = 'post-' . $post->ID;
+
+		if ( ! array_key_exists( $key, $this->_current_layouts ) || empty( $this->_current_layouts[ $key ] ) ) {
+
+			// Initial creation if key is does not exists.
+			$this->_current_layouts[ $key ] = [];
+
 			foreach ( $this->_field_groups as $field_group ) {
 
+				// Get post Hogan layouts/content for field group.
 				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
 
-				if ( is_array( $layouts ) && count( $layouts ) ) {
-					$this->_current_layouts = array_merge( $this->_current_layouts, $layouts );
+				if ( is_array( $layouts ) && ! empty( $layouts ) ) {
+					// Merge layouts/content from field group.
+					$this->_current_layouts[ $key ] = array_merge( $this->_current_layouts[ $key ], $layouts );
 				}
 			}
 		}
 
-		return $this->_current_layouts;
+		return $this->_current_layouts[ $key ];
 	}
 
 	/**

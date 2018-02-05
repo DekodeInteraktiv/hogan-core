@@ -155,3 +155,6 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ### 1.0.8
 Added module title to collapsed layout name.
+
+### 1.0.16
+- Bugfix get_current_post_layouts(). This would previously return modules for first post only in a loop. Array _current_layouts is now two dimensional with post id as key.
