@@ -147,6 +147,9 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ## Changelog
 
+### 1.0.17
+- Added custom blockquote btn to hogan toolbar. Only appears if TinyMCEPlugin [Blockquote with cite](https://github.com/DekodeInteraktiv/WP-Snippets) is added to MU-plugins in the project you are working on.
+
 ### 1.0.13
 - Deprecated `hogan/module/{ $module }/outer_wrapper_tag` filter. Use `hogan/module/outer_wrapper_tag` instead.
 - Deprecated `hogan/module/{ $module }/inner_wrapper_tag` filter. Use `hogan/module/inner_wrapper_tag` instead.
