@@ -452,12 +452,12 @@ class Core {
 	 */
 	public function append_hogan_wysiwyg_toolbar( array $toolbars ) : array {
 
-		// TODO: Include blockquote tinymce plugin. 'blockquote_cite'.
 		$toolbars['hogan'] = [
 			1 => [
 				'formatselect',
 				'bold',
 				'italic',
+				'blockquote_cite',
 				'numlist',
 				'bullist',
 				'undo',
