@@ -16,20 +16,6 @@ defined( 'ABSPATH' ) || exit; // Exit if accessed directly.
 class Core {
 
 	/**
-	 * Plugin base directory
-	 *
-	 * @var string $dir
-	 */
-	public $dir;
-
-	/**
-	 * Plugin base URL
-	 *
-	 * @var string $url
-	 */
-	public $url;
-
-	/**
 	 * Field groups.
 	 *
 	 * @var array $_field_groups
@@ -67,14 +53,9 @@ class Core {
 	/**
 	 * Module constructor.
 	 *
-	 * @param string $dir Plugin base directory.
-	 * @param string $url Plugin base url.
 	 * @return void
 	 */
-	private function __construct( $dir, $url ) {
-		$this->dir = $dir;
-		$this->url = $url;
-
+	private function __construct() {
 		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
 
 		// Load text domain on plugins_loaded.
@@ -117,14 +98,12 @@ class Core {
 	/**
 	 * Get Core instance.
 	 *
-	 * @param string $dir Plugin base directory.
-	 * @param string $url Plugin base url.
 	 * @return Core Core instance.
 	 */
-	public static function get_instance( string $dir = '', string $url = '' ) : Core {
+	public static function get_instance() : Core {
 
 		if ( null === self::$_instance ) {
-			self::$_instance = new Core( $dir, $url );
+			self::$_instance = new Core();
 		}
 
 		return self::$_instance;
@@ -136,7 +115,7 @@ class Core {
 	 * @return void
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'hogan-core', false, $this->dir . '/languages' );
+		load_plugin_textdomain( 'hogan-core', false, HOGAN_CORE_DIR . '/languages' );
 	}
 
 	/**
@@ -146,7 +125,7 @@ class Core {
 	 */
 	public function enqueue_admin_assets() {
 		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : false;
-		wp_enqueue_style( 'hogan-admin-style', $this->url . 'assets/style.css', [ 'acf-pro-input' ], $assets_version );
+		wp_enqueue_style( 'hogan-admin-style', HOGAN_CORE_URL . 'assets/style.css', [ 'acf-pro-input' ], $assets_version );
 	}
 
 	/**
