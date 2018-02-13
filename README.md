@@ -52,6 +52,23 @@ See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-fo
 ## Usage
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
 
+### Adding Hogan to post types.
+Hogan is by default added to pages. Use the filter `hogan/supported_post_types`
+to declare support to other post types.
+
+```php
+function supported_post_types( $post_types, $field_group_name ) {
+	$post_types[] = 'post';
+
+	return $post_types;
+}
+add_filter( 'hogan/supported_post_types', 'supported_post_types', 10, 2 );
+```
+
+By default `hogan/supported_post_types` adds all field groups. The second
+argument is the field group name if you only need specific field groups on some
+post types.
+
 ### Customizing the default field group
 The default field group can be customized using these filters:
 - `hogan/field_group/default/fields_before_flexible_content` Insert custom fields before modules.
@@ -146,6 +163,10 @@ We’re going to assume that you have installed `git`, `svn`, `php`, `apache` an
 For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#running-tests-locally
 
 ## Changelog
+
+### 1.1.0
+#### Breaking changes
+- Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
 
 ### 1.0.17
 - Added custom blockquote btn to hogan toolbar. Only appears if TinyMCEPlugin [Blockquote with cite](https://github.com/DekodeInteraktiv/WP-Snippets) is added to MU-plugins in the project you are working on.
