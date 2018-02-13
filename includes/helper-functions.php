@@ -146,13 +146,17 @@ function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module )
 	if ( true === apply_filters( 'hogan/module/' . $module->name . '/lead/enabled', true ) ) {
 
 		$fields[] = [
-			'type'         => 'textarea',
+			'type'         => 'wysiwyg',
 			'key'          => $module->field_key . '_lead',
 			'name'         => 'lead',
 			'label'        => __( 'Lead Paragraph', 'hogan-core' ),
-			'instructions' => __( 'Optional lead will show only if filled in.', 'hogan-core' ),
-			'rows'         => apply_filters( 'hogan/module/' . $module->name . '/lead/rows', 4 ),
-			'new_lines'    => apply_filters( 'hogan/module/' . $module->name . '/lead/new_lines', '' ),
+			'instructions' => apply_filters( 'hogan/module/' . $module->name . '/lead/instructions', '' ),
+			'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/lead/tabs', 'visual' ),
+			'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/lead/allow_media_upload', 0 ),
+			'toolbar'      => apply_filters( 'hogan/module/' . $module->name . '/lead/toolbar', 'hogan_caption' ),
+			'wrapper'      => [
+				'class' => apply_filters( 'hogan/module/' . $module->name . '/lead/wrapper_class', 'medium-height-editor' ),
+			],
 		];
 
 		$module->add_helper_field( 'lead' );
@@ -173,6 +177,18 @@ function hogan_caption_allowed_html() : array {
 			'href'   => true,
 			'target' => true,
 		],
+	];
+}
+
+/**
+ * Allowed wp_kses HTML for lead field
+ *
+ * @return array
+ */
+function hogan_lead_allowed_html() : array {
+
+	return hogan_caption_allowed_html() + [
+		'p' => true,
 	];
 }
 
