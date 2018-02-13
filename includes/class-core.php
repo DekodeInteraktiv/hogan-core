@@ -243,6 +243,8 @@ class Core {
 				],
 			], $fields_after_flexible_content );
 
+		$location = array_merge( $this->get_post_type_location( $name ), $location );
+
 		acf_add_local_field_group(
 			[
 				'key'            => 'hogan_' . $name, // i.e. hogan_default.
@@ -255,28 +257,38 @@ class Core {
 	}
 
 	/**
+	 * Add location rule to post types.
+	 *
+	 * @param string $name Field group name.
+	 *
+	 * @return array New location rules.
+	 */
+	private function get_post_type_location( string $name ) : array {
+		$supports_hogan_field_group = apply_filters( 'hogan/supported_post_types', [ 'page' ], $name );
+
+		$location = [];
+
+		if ( ! empty( $supports_hogan_field_group ) && is_array( $supports_hogan_field_group ) ) {
+			foreach ( $supports_hogan_field_group as $post_type ) {
+				$location[] = [
+					[
+						'param'    => 'post_type',
+						'operator' => '==',
+						'value'    => $post_type,
+					],
+				];
+			}
+		}
+
+		return $location;
+	}
+
+	/**
 	 * Register default field group for modules.
 	 *
 	 * @return void
 	 */
 	public function register_default_field_group() {
-
-		$location = [
-			[
-				[
-					'param'    => 'post_type',
-					'operator' => '==',
-					'value'    => 'post',
-				],
-			],
-			[
-				[
-					'param'    => 'post_type',
-					'operator' => '==',
-					'value'    => 'page',
-				],
-			],
-		];
 
 		$hide_on_screen = [
 			'the_content',
@@ -291,7 +303,7 @@ class Core {
 			'send-trackbacks',
 		];
 
-		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), [], $location, $hide_on_screen );
+		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), [], [], $hide_on_screen );
 	}
 
 	/**
