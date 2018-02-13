@@ -24,10 +24,12 @@ function hogan_register_module( \Dekode\Hogan\Module $module ) {
 		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
 	}
 
-	add_filter( 'hogan/modules', function( array $modules ) use ( $module ) : array {
-		$modules[] = $module;
-		return $modules;
-	} );
+	add_filter(
+		'hogan/modules', function( array $modules ) use ( $module ) : array {
+			$modules[] = $module;
+			return $modules;
+		}
+	);
 }
 
 /**
@@ -72,10 +74,12 @@ function hogan_register_field_group( string $name, string $label, array $modules
 		'fields_after_flexible_content'  => $fields_after_flexible_content,
 	];
 
-	add_filter( 'hogan/field_groups', function( array $groups ) use ( $group ) : array {
-		$groups[] = $group;
-		return $groups;
-	} );
+	add_filter(
+		'hogan/field_groups', function( array $groups ) use ( $group ) : array {
+			$groups[] = $group;
+			return $groups;
+		}
+	);
 }
 
 /**
@@ -142,13 +146,13 @@ function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module )
 	if ( true === apply_filters( 'hogan/module/' . $module->name . '/lead/enabled', true ) ) {
 
 		$fields[] = [
-			'type'      => 'textarea',
-			'key'       => $module->field_key . '_lead',
-			'name'      => 'lead',
-			'label'     => __( 'Lead Paragraph', 'hogan-core' ),
+			'type'         => 'textarea',
+			'key'          => $module->field_key . '_lead',
+			'name'         => 'lead',
+			'label'        => __( 'Lead Paragraph', 'hogan-core' ),
 			'instructions' => __( 'Optional lead will show only if filled in.', 'hogan-core' ),
-			'rows'      => apply_filters( 'hogan/module/' . $module->name . '/lead/rows', 4 ),
-			'new_lines' => apply_filters( 'hogan/module/' . $module->name . '/lead/new_lines', '' ),
+			'rows'         => apply_filters( 'hogan/module/' . $module->name . '/lead/rows', 4 ),
+			'new_lines'    => apply_filters( 'hogan/module/' . $module->name . '/lead/new_lines', '' ),
 		];
 
 		$module->add_helper_field( 'lead' );
@@ -181,26 +185,34 @@ function hogan_classnames() : string {
 
 	$args = func_get_args();
 
-	$classes = array_map( function( $arg ) {
+	$classes = array_map(
+		function( $arg ) {
 
-		if ( is_array( $arg ) ) {
+			if ( is_array( $arg ) ) {
 
-			return implode( ' ', array_filter( array_map( function( $key, $value ) {
-				if ( is_array( $value ) ) {
-					return hogan_classnames( $value );
-				}
+				return implode(
+					' ', array_filter(
+						array_map(
+							function( $key, $value ) {
+								if ( is_array( $value ) ) {
+									return hogan_classnames( $value );
+								}
 
-				if ( is_numeric( $key ) ) {
-					return $value;
-				}
+								if ( is_numeric( $key ) ) {
+									return $value;
+								}
 
-				return $value ? $key : false;
-			}, array_keys( $arg ), $arg ) ) );
-		}
+								return $value ? $key : false;
+							}, array_keys( $arg ), $arg
+						)
+					)
+				);
+			}
 
-		return $arg;
+				return $arg;
 
-	}, $args );
+		}, $args
+	);
 
 	return trim( implode( ' ', array_filter( $classes ) ) );
 }
