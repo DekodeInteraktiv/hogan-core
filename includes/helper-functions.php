@@ -131,6 +131,31 @@ function hogan_append_caption_field( array &$fields, \Dekode\Hogan\Module $modul
 }
 
 /**
+ * Helper function for adding default lead field
+ *
+ * @param array                $fields ACF fields array.
+ * @param \Dekode\Hogan\Module $module Hogan module object.
+ * @return void
+ */
+function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module ) {
+
+	if ( true === apply_filters( 'hogan/module/' . $module->name . '/lead/enabled', true ) ) {
+
+		$fields[] = [
+			'type'      => 'textarea',
+			'key'       => $module->field_key . '_lead',
+			'name'      => 'lead',
+			'label'     => __( 'Lead Paragraph', 'hogan-core' ),
+			'instructions' => __( 'Optional lead will show only if filled in.', 'hogan-core' ),
+			'rows'      => apply_filters( 'hogan/module/' . $module->name . '/lead/rows', 4 ),
+			'new_lines' => apply_filters( 'hogan/module/' . $module->name . '/lead/new_lines', '' ),
+		];
+
+		$module->add_helper_field( 'lead' );
+	}
+}
+
+/**
  * Allowed wp_kses HTML for caption field
  *
  * @return array
