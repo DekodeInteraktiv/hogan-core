@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2017-11-15 08:53+0100\n"
-"PO-Revision-Date: 2018-01-03 14:55+0100\n"
+"POT-Creation-Date: 2018-02-13 11:39+0100\n"
+"PO-Revision-Date: 2018-02-13 11:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: hogan-core.php\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -20,15 +20,15 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/class-core.php:189
+#: includes/class-core.php:241
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:242
+#: includes/class-core.php:294
 msgid "Content Modules"
 msgstr "Innhold"
 
-#: includes/helper-functions.php:22
+#: includes/helper-functions.php:24
 msgid ""
 "Hogan modules have already been registered. Please run "
 "hogan_register_module() on action hogan/include_modules."
@@ -36,7 +36,7 @@ msgstr ""
 "Hogan-moduler har allerede blitt registrert. Vennligst kjør "
 "hogan_register_module() på action hogan/include_modules."
 
-#: includes/helper-functions.php:38
+#: includes/helper-functions.php:41
 msgid ""
 "Hogan field groups have already been registered. Please run "
 "hogan_deregister_default_field_group() on action hogan/include_field_groups."
@@ -44,7 +44,7 @@ msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_deregister_default_field_group() i et hogan/include_field_groups-hook."
 
-#: includes/helper-functions.php:60
+#: includes/helper-functions.php:62
 msgid ""
 "Hogan field groups have already been registered. Please run "
 "hogan_register_field_group() on action hogan/include_field_groups."
@@ -52,17 +52,25 @@ msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_register_field_group() i et hogan/include_field_groups-hook."
 
-#: includes/helper-functions.php:93
+#: includes/helper-functions.php:96
 msgid "Heading"
 msgstr "Overskrift"
 
-#: includes/helper-functions.php:94
+#: includes/helper-functions.php:97
 msgid "Optional heading will show only if filled in."
 msgstr "Valgfri overskrift vises kun hvis fylt inn."
 
-#: includes/helper-functions.php:113
+#: includes/helper-functions.php:119
 msgid "Caption"
 msgstr "Bildetekst"
+
+#: includes/helper-functions.php:148
+msgid "Lead Paragraph"
+msgstr "Ingress"
+
+#: includes/helper-functions.php:149
+msgid "Optional lead will show only if filled in."
+msgstr "Valgfri ingress vises kun hvis fylt inn."
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"
