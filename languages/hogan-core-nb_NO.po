@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2018-02-13 11:39+0100\n"
-"PO-Revision-Date: 2018-02-13 11:39+0100\n"
+"POT-Creation-Date: 2018-02-13 14:14+0100\n"
+"PO-Revision-Date: 2018-02-13 14:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:294
+#: includes/class-core.php:306
 msgid "Content Modules"
 msgstr "Innhold"
 
@@ -36,7 +36,7 @@ msgstr ""
 "Hogan-moduler har allerede blitt registrert. Vennligst kjør "
 "hogan_register_module() på action hogan/include_modules."
 
-#: includes/helper-functions.php:41
+#: includes/helper-functions.php:43
 msgid ""
 "Hogan field groups have already been registered. Please run "
 "hogan_deregister_default_field_group() on action hogan/include_field_groups."
@@ -44,7 +44,7 @@ msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_deregister_default_field_group() i et hogan/include_field_groups-hook."
 
-#: includes/helper-functions.php:62
+#: includes/helper-functions.php:64
 msgid ""
 "Hogan field groups have already been registered. Please run "
 "hogan_register_field_group() on action hogan/include_field_groups."
@@ -52,25 +52,21 @@ msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_register_field_group() i et hogan/include_field_groups-hook."
 
-#: includes/helper-functions.php:96
+#: includes/helper-functions.php:100
 msgid "Heading"
 msgstr "Overskrift"
 
-#: includes/helper-functions.php:97
+#: includes/helper-functions.php:101
 msgid "Optional heading will show only if filled in."
 msgstr "Valgfri overskrift vises kun hvis fylt inn."
 
-#: includes/helper-functions.php:119
+#: includes/helper-functions.php:123
 msgid "Caption"
 msgstr "Bildetekst"
 
-#: includes/helper-functions.php:148
+#: includes/helper-functions.php:152
 msgid "Lead Paragraph"
 msgstr "Ingress"
-
-#: includes/helper-functions.php:149
-msgid "Optional lead will show only if filled in."
-msgstr "Valgfri ingress vises kun hvis fylt inn."
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"
@@ -91,6 +87,9 @@ msgstr "Dekode"
 #. Author URI of the plugin/theme
 msgid "https://dekode.no"
 msgstr "https://dekode.no"
+
+#~ msgid "Optional lead will show only if filled in."
+#~ msgstr "Valgfri ingress vises kun hvis fylt inn."
 
 #~ msgid "Content modules"
 #~ msgstr "Innholdsmoduler"
