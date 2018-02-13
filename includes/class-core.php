@@ -264,7 +264,7 @@ class Core {
 	 * @return array New location rules.
 	 */
 	private function get_post_type_location( string $name ) : array {
-		$supports_hogan_field_group = apply_filters( 'hogan/supported_post_types', [], $name );
+		$supports_hogan_field_group = apply_filters( 'hogan/supported_post_types', [ 'page' ], $name );
 
 		$location = [];
 

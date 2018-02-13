@@ -53,13 +53,12 @@ See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-fo
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
 
 ### Adding Hogan to post types.
-Hogan is by default not added to any post types. Use the filter
-`hogan/supported_post_types` to declare support to different post types.
+Hogan is by default added to pages. Use the filter `hogan/supported_post_types`
+to declare support to other post types.
 
 ```php
 function supported_post_types( $post_types, $field_group_name ) {
 	$post_types[] = 'post';
-	$post_types[] = 'page';
 
 	return $post_types;
 }
