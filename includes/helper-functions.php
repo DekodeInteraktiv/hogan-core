@@ -90,19 +90,41 @@ function hogan_register_field_group( string $name, string $label, array $modules
  * @return void
  */
 function hogan_append_heading_field( array &$fields, \Dekode\Hogan\Module $module ) {
+	$fields[] = [
+		'type'         => 'text',
+		'key'          => $module->field_key . '_heading',
+		'name'         => 'heading',
+		'label'        => __( 'Heading', 'hogan-core' ),
+		'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
+	];
 
-	if ( true === apply_filters( 'hogan/module/' . $module->name . '/heading/enabled', true ) ) {
+	$module->add_helper_field( 'heading' );
+}
 
-		$fields[] = [
-			'type'         => 'text',
-			'key'          => $module->field_key . '_heading',
-			'name'         => 'heading',
-			'label'        => __( 'Heading', 'hogan-core' ),
-			'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
-		];
+/**
+ * Helper function for adding default lead field
+ *
+ * @param array                $fields ACF fields array.
+ * @param \Dekode\Hogan\Module $module Hogan module object.
+ * @return void
+ */
+function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module ) {
 
-		$module->add_helper_field( 'heading' );
-	}
+	$fields[] = [
+		'type'         => 'wysiwyg',
+		'key'          => $module->field_key . '_lead',
+		'name'         => 'lead',
+		'label'        => __( 'Lead Paragraph', 'hogan-core' ),
+		'instructions' => apply_filters( 'hogan/module/' . $module->name . '/lead/instructions', '' ),
+		'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/lead/tabs', 'visual' ),
+		'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/lead/allow_media_upload', 0 ),
+		'toolbar'      => apply_filters( 'hogan/module/' . $module->name . '/lead/toolbar', 'hogan_caption' ),
+		'wrapper'      => [
+			'class' => apply_filters( 'hogan/module/' . $module->name . '/lead/wrapper_class', 'medium-height-editor' ),
+		],
+	];
+
+	$module->add_helper_field( 'lead' );
 }
 
 /**
@@ -131,35 +153,6 @@ function hogan_append_caption_field( array &$fields, \Dekode\Hogan\Module $modul
 		];
 
 		$module->add_helper_field( 'caption' );
-	}
-}
-
-/**
- * Helper function for adding default lead field
- *
- * @param array                $fields ACF fields array.
- * @param \Dekode\Hogan\Module $module Hogan module object.
- * @return void
- */
-function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module ) {
-
-	if ( true === apply_filters( 'hogan/module/' . $module->name . '/lead/enabled', true ) ) {
-
-		$fields[] = [
-			'type'         => 'wysiwyg',
-			'key'          => $module->field_key . '_lead',
-			'name'         => 'lead',
-			'label'        => __( 'Lead Paragraph', 'hogan-core' ),
-			'instructions' => apply_filters( 'hogan/module/' . $module->name . '/lead/instructions', '' ),
-			'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/lead/tabs', 'visual' ),
-			'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/lead/allow_media_upload', 0 ),
-			'toolbar'      => apply_filters( 'hogan/module/' . $module->name . '/lead/toolbar', 'hogan_caption' ),
-			'wrapper'      => [
-				'class' => apply_filters( 'hogan/module/' . $module->name . '/lead/wrapper_class', 'medium-height-editor' ),
-			],
-		];
-
-		$module->add_helper_field( 'lead' );
 	}
 }
 
