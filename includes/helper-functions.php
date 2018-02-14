@@ -219,6 +219,34 @@ function hogan_attributes( array $attr = [] ) : string {
 }
 
 /**
+ * Enqueue module assets
+ *
+ * @param string|array $modules Modules.
+ */
+function hogan_enqueue_module_assets( $modules ) {
+	if ( ! is_array( $modules ) ) {
+		$modules = [ $modules ];
+	}
+
+	$hogan = \Dekode\Hogan\Core::get_instance();
+
+	foreach ( $modules as $module ) {
+		$hogan->enqueue_module_assets( $module );
+	}
+}
+
+/**
+ * Module
+ *
+ * @param string $name Name of module.
+ * @param array  $args Arguments to pass to module.
+ */
+function hogan_module( string $name, array $args ) {
+	$hogan = \Dekode\Hogan\Core::get_instance();
+	$hogan->render_module_template( $name, $args );
+}
+
+/**
  * Component
  *
  * @param string $name Name of component.
