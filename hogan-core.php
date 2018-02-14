@@ -31,4 +31,4 @@ require_once 'includes/class-module.php';
 require_once 'includes/class-core.php';
 require_once 'includes/helper-functions.php';
 
-\Dekode\Hogan\Core::get_instance( HOGAN_CORE_DIR, HOGAN_CORE_URL );
+\Dekode\Hogan\Core::get_instance();
