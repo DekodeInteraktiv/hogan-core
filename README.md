@@ -168,6 +168,10 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 #### Breaking changes
 - Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
 
+#### Added
+- `hogan_module` - Helper function to render template with static content.
+- `hogan_enqueue_module_assets` - Helper function to enqueue module assets.
+
 ### 1.0.17
 - Added custom blockquote btn to hogan toolbar. Only appears if TinyMCEPlugin [Blockquote with cite](https://github.com/DekodeInteraktiv/WP-Snippets) is added to MU-plugins in the project you are working on.
 
