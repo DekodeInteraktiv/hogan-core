@@ -196,7 +196,7 @@ abstract class Module {
 			];
 
 			$outer_wrapper_classnames = hogan_classnames(
-				apply_filters( 'hogan/module/outer_wrapper_classes', array_merge( $outer_wrapper_default_classnames, $this->$outer_wrapper_classnames ), $this ),
+				apply_filters( 'hogan/module/outer_wrapper_classes', array_merge( $outer_wrapper_default_classnames, $this->outer_wrapper_classnames ), $this ),
 				apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/outer_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
