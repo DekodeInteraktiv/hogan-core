@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Hogan\n"
-"POT-Creation-Date: 2018-02-13 14:14+0100\n"
-"PO-Revision-Date: 2018-02-13 14:14+0100\n"
+"POT-Creation-Date: 2018-02-14 12:42+0100\n"
+"PO-Revision-Date: 2018-02-14 12:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -20,11 +20,11 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: includes/class-core.php:241
+#: includes/class-core.php:220
 msgid "Add module"
 msgstr "Legg til modul"
 
-#: includes/class-core.php:306
+#: includes/class-core.php:285
 msgid "Content Modules"
 msgstr "Innhold"
 
@@ -52,21 +52,21 @@ msgstr ""
 "Hogan-feltgrupper har allerede blitt registrert. Vennligst kjør "
 "hogan_register_field_group() i et hogan/include_field_groups-hook."
 
-#: includes/helper-functions.php:100
+#: includes/helper-functions.php:97
 msgid "Heading"
 msgstr "Overskrift"
 
-#: includes/helper-functions.php:101
+#: includes/helper-functions.php:98
 msgid "Optional heading will show only if filled in."
 msgstr "Valgfri overskrift vises kun hvis fylt inn."
 
-#: includes/helper-functions.php:123
-msgid "Caption"
-msgstr "Bildetekst"
-
-#: includes/helper-functions.php:152
+#: includes/helper-functions.php:117
 msgid "Lead Paragraph"
 msgstr "Ingress"
+
+#: includes/helper-functions.php:145
+msgid "Caption"
+msgstr "Bildetekst"
 
 #. Plugin Name of the plugin/theme
 msgid "Hogan"
