@@ -124,6 +124,14 @@ add_action( 'hogan/include_field_groups', function() {
 });
 ```
 
+## Adding header and lead to modules
+You can turn on a heading and/or lead field for every single module. Default is no heading or lead. The heading and lead will be included before module specific fields. E.g. to enable heading and lead for Hogan Grid use:
+
+```
+add_filter( 'hogan/module/text/heading/enabled', '__return_true' );
+add_filter( 'hogan/module/text/lead/enabled', '__return_true' );
+```
+
 ## Search
 Modules content is by default indexed as _Content_ by [SearchWP](https://searchwp.com/). This can be disabled using:
 ```php
@@ -167,6 +175,9 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 ### 1.1.0
 #### Breaking changes
 - Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
+
+#### Changed
+- Heading and lead is now built into Hogan Core and can to be included in every module using filters, see section [Adding header and lead to modules](#adding-header-and-lead-to-modules) for example.
 
 #### Added
 - `hogan_module` - Helper function to render template with static content.

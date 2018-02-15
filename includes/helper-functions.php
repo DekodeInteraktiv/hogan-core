@@ -24,10 +24,12 @@ function hogan_register_module( \Dekode\Hogan\Module $module ) {
 		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
 	}
 
-	add_filter( 'hogan/modules', function( array $modules ) use ( $module ) : array {
-		$modules[] = $module;
-		return $modules;
-	} );
+	add_filter(
+		'hogan/modules', function( array $modules ) use ( $module ) : array {
+			$modules[] = $module;
+			return $modules;
+		}
+	);
 }
 
 /**
@@ -72,10 +74,12 @@ function hogan_register_field_group( string $name, string $label, array $modules
 		'fields_after_flexible_content'  => $fields_after_flexible_content,
 	];
 
-	add_filter( 'hogan/field_groups', function( array $groups ) use ( $group ) : array {
-		$groups[] = $group;
-		return $groups;
-	} );
+	add_filter(
+		'hogan/field_groups', function( array $groups ) use ( $group ) : array {
+			$groups[] = $group;
+			return $groups;
+		}
+	);
 }
 
 /**
@@ -86,19 +90,41 @@ function hogan_register_field_group( string $name, string $label, array $modules
  * @return void
  */
 function hogan_append_heading_field( array &$fields, \Dekode\Hogan\Module $module ) {
+	$fields[] = [
+		'type'         => 'text',
+		'key'          => $module->field_key . '_heading',
+		'name'         => 'heading',
+		'label'        => __( 'Heading', 'hogan-core' ),
+		'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
+	];
 
-	if ( true === apply_filters( 'hogan/module/' . $module->name . '/heading/enabled', true ) ) {
+	$module->add_helper_field( 'heading' );
+}
 
-		$fields[] = [
-			'type'         => 'text',
-			'key'          => $module->field_key . '_heading',
-			'name'         => 'heading',
-			'label'        => __( 'Heading', 'hogan-core' ),
-			'instructions' => __( 'Optional heading will show only if filled in.', 'hogan-core' ),
-		];
+/**
+ * Helper function for adding default lead field
+ *
+ * @param array                $fields ACF fields array.
+ * @param \Dekode\Hogan\Module $module Hogan module object.
+ * @return void
+ */
+function hogan_append_lead_field( array &$fields, \Dekode\Hogan\Module $module ) {
 
-		$module->add_helper_field( 'heading' );
-	}
+	$fields[] = [
+		'type'         => 'wysiwyg',
+		'key'          => $module->field_key . '_lead',
+		'name'         => 'lead',
+		'label'        => __( 'Lead Paragraph', 'hogan-core' ),
+		'instructions' => apply_filters( 'hogan/module/' . $module->name . '/lead/instructions', '' ),
+		'tabs'         => apply_filters( 'hogan/module/' . $module->name . '/lead/tabs', 'visual' ),
+		'media_upload' => apply_filters( 'hogan/module/' . $module->name . '/lead/allow_media_upload', 0 ),
+		'toolbar'      => apply_filters( 'hogan/module/' . $module->name . '/lead/toolbar', 'hogan_caption' ),
+		'wrapper'      => [
+			'class' => apply_filters( 'hogan/module/' . $module->name . '/lead/wrapper_class', 'medium-height-editor' ),
+		],
+	];
+
+	$module->add_helper_field( 'lead' );
 }
 
 /**
@@ -148,6 +174,24 @@ function hogan_caption_allowed_html() : array {
 }
 
 /**
+ * Allowed wp_kses HTML for lead field
+ *
+ * @return array
+ */
+function hogan_lead_allowed_html() : array {
+
+	return [
+		'p'      => true,
+		'strong' => true,
+		'em'     => true,
+		'a'      => [
+			'href'   => true,
+			'target' => true,
+		],
+	];
+}
+
+/**
  * Conditionally join classnames together
  *
  * @return string Joined classnames as space separated string.
@@ -156,26 +200,34 @@ function hogan_classnames() : string {
 
 	$args = func_get_args();
 
-	$classes = array_map( function( $arg ) {
+	$classes = array_map(
+		function( $arg ) {
 
-		if ( is_array( $arg ) ) {
+			if ( is_array( $arg ) ) {
 
-			return implode( ' ', array_filter( array_map( function( $key, $value ) {
-				if ( is_array( $value ) ) {
-					return hogan_classnames( $value );
-				}
+				return implode(
+					' ', array_filter(
+						array_map(
+							function( $key, $value ) {
+								if ( is_array( $value ) ) {
+									return hogan_classnames( $value );
+								}
 
-				if ( is_numeric( $key ) ) {
-					return $value;
-				}
+								if ( is_numeric( $key ) ) {
+									return $value;
+								}
 
-				return $value ? $key : false;
-			}, array_keys( $arg ), $arg ) ) );
-		}
+								return $value ? $key : false;
+							}, array_keys( $arg ), $arg
+						)
+					)
+				);
+			}
 
-		return $arg;
+				return $arg;
 
-	}, $args );
+		}, $args
+	);
 
 	return trim( implode( ' ', array_filter( $classes ) ) );
 }

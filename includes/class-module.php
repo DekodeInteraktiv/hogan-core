@@ -121,8 +121,20 @@ abstract class Module {
 	 */
 	final public function get_layout_definition() : array {
 
+		$standard_fields = [];
+		// Add heading field to module.
+		if ( true === apply_filters( 'hogan/module/' . $this->name . '/heading/enabled', false ) ) {
+			hogan_append_heading_field( $standard_fields, $this );
+		}
+
+		// Add lead field to module.
+		if ( true === apply_filters( 'hogan/module/' . $this->name . '/lead/enabled', false ) ) {
+			hogan_append_lead_field( $standard_fields, $this );
+		}
+
 		$sub_fields = array_merge(
 			apply_filters( 'hogan/module/' . $this->name . '/fields_before', [] ),
+			$standard_fields,
 			$this->get_fields(),
 			apply_filters( 'hogan/module/' . $this->name . '/fields_after', [] )
 		);
@@ -200,7 +212,8 @@ abstract class Module {
 				apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/outer_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
-			printf( '<%s id="%s" class="%s">',
+			printf(
+				'<%s id="%s" class="%s">',
 				esc_attr( $this->outer_wrapper_tag ),
 				esc_attr( 'module-' . $counter ),
 				esc_attr( $outer_wrapper_classnames )
@@ -215,7 +228,8 @@ abstract class Module {
 				apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/inner_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
-			printf( '<%s class="%s">',
+			printf(
+				'<%s class="%s">',
 				esc_attr( $this->inner_wrapper_tag ),
 				esc_attr( $inner_wrapper_classnames )
 			);
@@ -269,6 +283,23 @@ abstract class Module {
 
 		// Echo opening wrappers.
 		$this->render_opening_template_wrappers( $counter );
+
+		// Include standard fields.
+		if ( true === apply_filters( 'hogan/module/' . $this->name . '/heading/enabled', false ) && ! empty( $this->heading ) ) {
+			hogan_component(
+				'heading', [
+					'title' => $this->heading,
+				]
+			);
+		}
+
+		if ( true === apply_filters( 'hogan/module/' . $this->name . '/lead/enabled', false ) && ! empty( $this->lead ) ) {
+			hogan_component(
+				'lead', [
+					'content' => $this->lead,
+				]
+			);
+		}
 
 		// Include module template.
 		include $template;

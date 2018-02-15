@@ -17,3 +17,9 @@
 	height: 80px !important;
 }
 
+/* Medium height wysiwyg editor */
+
+.medium-height-editor .acf-editor-wrap iframe, .medium-height-editor .wp-editor-area {
+	min-height: 0 !important;
+	height: 130px !important;
+}
