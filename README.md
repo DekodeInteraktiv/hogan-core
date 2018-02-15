@@ -175,6 +175,8 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 ### 1.1.0
 #### Breaking changes
 - Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
+
+#### Changed
 - Heading and lead is now built into Hogan Core and can to be included in every module using filters, see section [Adding header and lead to modules](#adding-header-and-lead-to-modules) for example.
 
 #### Added
