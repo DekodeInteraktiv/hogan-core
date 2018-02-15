@@ -177,6 +177,10 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 - Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
 - Heading and lead is now built into Hogan Core and can to be included in every module using filters, see section [Adding header and lead to modules](#adding-header-and-lead-to-modules) for example.
 
+#### Added
+- `hogan_module` - Helper function to render template with static content.
+- `hogan_enqueue_module_assets` - Helper function to enqueue module assets.
+
 ### 1.0.17
 - Added custom blockquote btn to hogan toolbar. Only appears if TinyMCEPlugin [Blockquote with cite](https://github.com/DekodeInteraktiv/WP-Snippets) is added to MU-plugins in the project you are working on.
 

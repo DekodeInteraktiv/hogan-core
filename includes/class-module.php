@@ -74,11 +74,25 @@ abstract class Module {
 	protected $outer_wrapper_tag = 'div';
 
 	/**
+	 * Template outer wrapper classnames.
+	 *
+	 * @var array
+	 */
+	protected $outer_wrapper_classnames = [];
+
+	/**
 	 * Template inner wrapper HTML tag.
 	 *
 	 * @var string
 	 */
 	protected $inner_wrapper_tag = 'div';
+
+	/**
+	 * Template inner wrapper classnames.
+	 *
+	 * @var array
+	 */
+	protected $inner_wrapper_classnames = [];
 
 	/**
 	 * Constructor.
@@ -187,8 +201,14 @@ abstract class Module {
 		// Echo opening outer wrapper.
 		if ( ! empty( $this->outer_wrapper_tag ) ) {
 			// Outer wrapper classes with filters for overriding both globally, per module and per module instance.
-			$outer_wrapper_classes = hogan_classnames(
-				apply_filters( 'hogan/module/outer_wrapper_classes', [ 'hogan-module', 'hogan-module-' . $this->name, 'hogan-module-' . $counter ], $this ),
+			$outer_wrapper_default_classnames = [
+				'hogan-module',
+				'hogan-module-' . $this->name,
+				'hogan-module-' . $counter,
+			];
+
+			$outer_wrapper_classnames = hogan_classnames(
+				apply_filters( 'hogan/module/outer_wrapper_classes', array_merge( $outer_wrapper_default_classnames, $this->outer_wrapper_classnames ), $this ),
 				apply_filters_deprecated( 'hogan/module/' . $this->name . '/outer_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/outer_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
@@ -196,22 +216,22 @@ abstract class Module {
 				'<%s id="%s" class="%s">',
 				esc_attr( $this->outer_wrapper_tag ),
 				esc_attr( 'module-' . $counter ),
-				esc_attr( $outer_wrapper_classes )
+				esc_attr( $outer_wrapper_classnames )
 			);
 		}
 
 		// Echo inner wrapper.
 		if ( ! empty( $this->inner_wrapper_tag ) ) {
 			// Inner wrapper classes with filters for overriding both globally, per module and per module instance.
-			$inner_wrapper_classes = hogan_classnames(
-				apply_filters( 'hogan/module/inner_wrapper_classes', [ 'hogan-module-inner' ], $this ),
+			$inner_wrapper_classnames = hogan_classnames(
+				apply_filters( 'hogan/module/inner_wrapper_classes', array_merge( [ 'hogan-module-inner' ], $this->inner_wrapper_classnames ), $this ),
 				apply_filters_deprecated( 'hogan/module/' . $this->name . '/inner_wrapper_classes', [ [], $this ], '1.0.13', 'hogan/module/inner_wrapper_classes', 'Will be removed in v1.1' )
 			);
 
 			printf(
 				'<%s class="%s">',
 				esc_attr( $this->inner_wrapper_tag ),
-				esc_attr( $inner_wrapper_classes )
+				esc_attr( $inner_wrapper_classnames )
 			);
 		}
 	}

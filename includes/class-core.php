@@ -37,6 +37,20 @@ class Core {
 	private $_modules = [];
 
 	/**
+	 * Module counter
+	 *
+	 * @var int $_module_counter
+	 */
+	private $_module_counter = 0;
+
+	/**
+	 * Enqueued module assets
+	 *
+	 * @var array $_enqueued_modules
+	 */
+	private $_enqueued_modules = [];
+
+	/**
 	 * Hold the class instance.
 	 *
 	 * @var Core $_instance
@@ -77,7 +91,7 @@ class Core {
 		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		// Enqueue Scripts.
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_modules_assets' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_current_post_modules_assets' ] );
 
 		// Index modules as post content in SearchWP.
 		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
@@ -124,7 +138,7 @@ class Core {
 	 * @return void
 	 */
 	public function enqueue_admin_assets() {
-		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : false;
+		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : HOGAN_CORE_VERSION;
 		wp_enqueue_style( 'hogan-admin-style', HOGAN_CORE_URL . 'assets/style.css', [ 'acf-pro-input' ], $assets_version );
 	}
 
@@ -147,6 +161,16 @@ class Core {
 		}
 
 		do_action( 'hogan/modules_registered' );
+	}
+
+	/**
+	 * Get module
+	 *
+	 * @param string $name Module name.
+	 * @return Module|null
+	 */
+	public function get_module( string $name ) {
+		return true === isset( $this->_modules[ $name ] ) ? $this->_modules[ $name ] : null;
 	}
 
 	/**
@@ -327,15 +351,14 @@ class Core {
 	}
 
 	/**
-	 * Enqueue module assets.
+	 * Enqueue module assets on current page.
 	 */
-	public function enqueue_modules_assets() {
+	public function enqueue_current_post_modules_assets() {
 
 		global $more, $post;
 
 		if ( $this->is_current_post_flexible( $post, $more ) ) {
-			$layouts          = $this->get_current_post_layouts( $post );
-			$enqueued_modules = [];
+			$layouts = $this->get_current_post_layouts( $post );
 
 			foreach ( $layouts as $layout ) {
 
@@ -343,13 +366,24 @@ class Core {
 					continue;
 				}
 
-				// Get the right module.
-				$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
+				// Enqueue assets.
+				$this->enqueue_module_assets( $layout['acf_fc_layout'] );
+			}
+		}
+	}
 
-				if ( $module instanceof Module && ! in_array( $module->name, $enqueued_modules, true ) && method_exists( $module, 'enqueue_assets' ) ) {
-					$enqueued_modules[] = $module->name;
-					$module->enqueue_assets();
-				}
+	/**
+	 * Enqueue module assets.
+	 *
+	 * @param string $name Module name.
+	 */
+	public function enqueue_module_assets( $name ) {
+		if ( ! in_array( $name, $this->_enqueued_modules, true ) ) {
+			$module = $this->get_module( $name );
+
+			if ( $module instanceof Module && method_exists( $module, 'enqueue_assets' ) ) {
+				$this->enqueued_modules[] = $name;
+				$module->enqueue_assets();
 			}
 		}
 	}
@@ -393,8 +427,6 @@ class Core {
 		// $flexible_content = wp_cache_get( $cache_key, $cache_group ); @codingStandardsIgnoreLine
 
 		if ( empty( $flexible_content ) ) {
-			$module_counter = 0;
-
 			$layouts = $this->get_current_post_layouts( $post );
 
 			foreach ( $layouts as $layout ) {
@@ -403,23 +435,31 @@ class Core {
 					continue;
 				}
 
-				// Get the right module.
-				$module = true === isset( $this->_modules[ $layout['acf_fc_layout'] ] ) ? $this->_modules[ $layout['acf_fc_layout'] ] : null;
-
-				if ( $module instanceof Module ) {
-					ob_start();
-
-					$module->render_template( $layout, $module_counter );
-
-					$flexible_content .= ob_get_clean();
-					$module_counter++;
-				}
+				ob_start();
+				$this->render_module_template( $layout['acf_fc_layout'], $layout );
+				$flexible_content .= ob_get_clean();
 			}
 
 			// wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 ); @codingStandardsIgnoreLine
 		}
 
 		return (string) $flexible_content;
+	}
+
+	/**
+	 * Render template.
+	 *
+	 * @param string $name Module name.
+	 * @param array  $args Module arguments.
+	 */
+	public function render_module_template( string $name, array $args ) {
+		// Get the right module.
+		$module = $this->get_module( $name );
+
+		if ( $module instanceof Module ) {
+			$module->render_template( $args, $this->_module_counter );
+			$this->_module_counter++;
+		}
 	}
 
 	/**
