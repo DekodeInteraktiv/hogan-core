@@ -112,10 +112,12 @@ abstract class Module {
 		if ( true === apply_filters( 'hogan/module/' . $this->name . '/heading/enabled', false ) ) {
 			hogan_append_heading_field( $standard_fields, $this );
 		}
+
 		// Add lead field to module.
 		if ( true === apply_filters( 'hogan/module/' . $this->name . '/lead/enabled', false ) ) {
 			hogan_append_lead_field( $standard_fields, $this );
 		}
+
 		$sub_fields = array_merge(
 			apply_filters( 'hogan/module/' . $this->name . '/fields_before', [] ),
 			$standard_fields,

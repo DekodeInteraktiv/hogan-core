@@ -180,8 +180,14 @@ function hogan_caption_allowed_html() : array {
  */
 function hogan_lead_allowed_html() : array {
 
-	return hogan_caption_allowed_html() + [
-		'p' => true,
+	return[
+		'p'      => true,
+		'strong' => true,
+		'em'     => true,
+		'a'      => [
+			'href'   => true,
+			'target' => true,
+		],
 	];
 }
 
