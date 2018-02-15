@@ -180,7 +180,7 @@ function hogan_caption_allowed_html() : array {
  */
 function hogan_lead_allowed_html() : array {
 
-	return[
+	return [
 		'p'      => true,
 		'strong' => true,
 		'em'     => true,
