@@ -172,6 +172,9 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ## Changelog
 
+### Unreleased
+- Check if server runs required php version
+
 ### 1.1.0
 #### Breaking changes
 - Hogan is no longer added by default to the post types `post`. Use the filter `hogan/supported_post_types` to declare Hogan support to different post types.
