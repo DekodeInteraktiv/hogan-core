@@ -484,8 +484,7 @@ class Core {
 	public function append_hogan_wysiwyg_toolbar( array $toolbars ) : array {
 
 		$toolbars['hogan'] = [
-			1 => [
-				'formatselect',
+			1 => apply_filters( 'hogan/tinymce/toolbar/hogan', [
 				'bold',
 				'italic',
 				'blockquote_cite',
@@ -498,16 +497,16 @@ class Core {
 				'pastetext',
 				'removeformat',
 				'code',
-			],
+			] ),
 		];
 
 		$toolbars['hogan_caption'] = [
-			1 => [
+			1 => apply_filters( 'hogan/tinymce/toolbar/hogan_caption', [
 				'bold',
 				'italic',
 				'link',
 				'unlink',
-			],
+			] ),
 		];
 
 		return $toolbars;

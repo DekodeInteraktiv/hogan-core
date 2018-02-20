@@ -174,6 +174,7 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ### Unreleased
 - Check if server runs required php version
+- Added filters to hogan toolbars. `hogan/tinymce/toolbar/{hogan|hogan_caption}`
 
 ### 1.1.0
 #### Breaking changes
