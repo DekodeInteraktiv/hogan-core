@@ -485,6 +485,7 @@ class Core {
 
 		$toolbars['hogan'] = [
 			1 => apply_filters( 'hogan/tinymce/toolbar/hogan', [
+				'formatselect',
 				'bold',
 				'italic',
 				'blockquote_cite',
