@@ -322,3 +322,28 @@ function hogan_component( string $name, array $args = [] ) {
 		include $component;
 	}
 }
+
+/**
+ * Cached version of url_to_postid, which can be expensive.
+ *
+ * Examine a url and try to determine the post ID it represents.
+ *
+ * @param string $url Permalink to check.
+ * @return int Post ID, or 0 on failure.
+ */
+function hogan_url_to_postid( string $url ) : int {
+	// Sanity check; no URLs not from this site.
+	if ( wp_parse_url( $url, PHP_URL_HOST ) !== wp_parse_url( home_url(), PHP_URL_HOST ) ) {
+		return 0;
+	}
+
+	$cache_key = md5( $url );
+	$post_id   = wp_cache_get( $cache_key, 'url_to_postid' );
+
+	if ( false === $post_id ) {
+		$post_id = url_to_postid( $url ); // phpcs:ignore
+		wp_cache_set( $cache_key, $post_id, 'url_to_postid', 3 * HOUR_IN_SECONDS );
+	}
+
+	return (int) $post_id;
+}
