@@ -172,6 +172,9 @@ For more info see https://make.wordpress.org/cli/handbook/plugin-unit-tests/#run
 
 ## Changelog
 
+### Unreleased
+- Added `hogan_url_to_postid` helper function. A cached version of `url_to_postid`.
+
 ### 1.1.1
 - Check if server runs required php version
 - Added filters to hogan toolbars. `hogan/tinymce/toolbar/{hogan|hogan_caption}`
