@@ -45,7 +45,7 @@ script:
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      phpcs -p -s -v . --standard=./phpcs.xml --extensions=php --runtime-set testVersion $TRAVIS_PHP_VERSION
+      phpcs --runtime-set testVersion $TRAVIS_PHP_VERSION
     fi
 
 notifications:
