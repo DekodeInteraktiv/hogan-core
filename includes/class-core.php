@@ -426,10 +426,6 @@ class Core {
 	 * @return string
 	 */
 	private function get_modules_content( \WP_Post $post ) : string {
-
-		$cache_key   = 'hogan_modules_' . $post->ID;
-		$cache_group = 'hogan_modules';
-
 		$flexible_content = $this->_flexible_content;
 
 		if ( empty( $flexible_content ) ) {
