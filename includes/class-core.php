@@ -44,6 +44,13 @@ class Core {
 	private $_module_counter = 0;
 
 	/**
+	 * Flexible content store
+	 *
+	 * @var string
+	 */
+	private $_flexible_content = '';
+
+	/**
 	 * Enqueued module assets
 	 *
 	 * @var array $_enqueued_modules
@@ -419,12 +426,7 @@ class Core {
 	 * @return string
 	 */
 	private function get_modules_content( \WP_Post $post ) : string {
-
-		$cache_key   = 'hogan_modules_' . $post->ID;
-		$cache_group = 'hogan_modules';
-
-		$flexible_content = '';
-		// $flexible_content = wp_cache_get( $cache_key, $cache_group ); @codingStandardsIgnoreLine
+		$flexible_content = $this->_flexible_content;
 
 		if ( empty( $flexible_content ) ) {
 			$layouts = $this->get_current_post_layouts( $post );
@@ -440,7 +442,11 @@ class Core {
 				$flexible_content .= ob_get_clean();
 			}
 
-			// wp_cache_add( $cache_key, $flexible_content, $cache_group, 500 ); @codingStandardsIgnoreLine
+			/*
+			 * Store the flexible content to reuse it if `the_content` is
+			 * runned more than once.
+			 */
+			$this->_flexible_content = $flexible_content;
 		}
 
 		return (string) $flexible_content;
