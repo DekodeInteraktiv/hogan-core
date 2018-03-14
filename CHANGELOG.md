@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.3
 - Added `hogan_get_link_title` helper function. [#68](https://github.com/DekodeInteraktiv/hogan-core/pull/68)
 
 ## 1.1.2
