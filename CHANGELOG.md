@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Added `hogan_get_link_title` helper function. [#68](https://github.com/DekodeInteraktiv/hogan-core/pull/68)
+
 ## 1.1.2
 - Added `hogan_url_to_postid` helper function. A cached version of `url_to_postid`. [#63](https://github.com/DekodeInteraktiv/hogan-core/pull/63)
 - Fix a bug where flexible content was rendered multiple times on the same page. [#66](https://github.com/DekodeInteraktiv/hogan-core/pull/66)

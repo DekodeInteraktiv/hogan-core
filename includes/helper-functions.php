@@ -347,3 +347,30 @@ function hogan_url_to_postid( string $url ) : int {
 
 	return (int) $post_id;
 }
+
+/**
+ * Get link title from link field
+ *
+ * @param array $link Link field.
+ * @return string Link title.
+ */
+function hogan_get_link_title( array $link ) : string {
+	// Return early if link title already exists.
+	if ( ! empty( $link['title'] ) ) {
+		return $link['title'];
+	}
+
+	// Try find post id based on url and return post title if found.
+	$post_id = hogan_url_to_postid( $link['url'] );
+	if ( 0 !== $post_id ) {
+		$title = get_the_title( $post_id );
+
+		// Check if the post does have a title.
+		if ( ! empty( $title ) ) {
+			return $title;
+		}
+	}
+
+	// Return url as a last resort.
+	return $link['url'];
+}
