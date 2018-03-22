@@ -389,7 +389,7 @@ class Core {
 			$module = $this->get_module( $name );
 
 			if ( $module instanceof Module && method_exists( $module, 'enqueue_assets' ) ) {
-				$this->enqueued_modules[] = $name;
+				$this->_enqueued_modules[] = $name;
 				$module->enqueue_assets();
 			}
 		}
