@@ -67,6 +67,13 @@ abstract class Module {
 	public $counter;
 
 	/**
+	 * Path to plugin
+	 *
+	 * @var string
+	 */
+	protected $path;
+
+	/**
 	 * Template outer wrapper HTML tag.
 	 *
 	 * @var string
@@ -96,11 +103,14 @@ abstract class Module {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param string $path Path to plugin.
 	 */
-	public function __construct() {
+	public function __construct( $path = '' ) {
 
 		$this->name      = strtolower( substr( strrchr( get_class( $this ), '\\' ), 1 ) );
 		$this->field_key = 'hogan_module_' . $this->name;
+		$this->path      = trailingslashit( $path );
 	}
 
 	/**
@@ -173,6 +183,27 @@ abstract class Module {
 
 		$this->raw_content = $raw_content;
 		$this->counter     = $counter;
+	}
+
+	/**
+	 * Include file
+	 *
+	 * @param string $file   File to include.
+	 * @param bool   $return Return or include file.
+	 */
+	final public function include_file( string $file, bool $return = false ) {
+		$file = $this->path . $file;
+		if ( ! file_exists( $file ) || 0 !== validate_file( $file ) ) {
+			return '';
+		}
+
+		if ( $return ) {
+			ob_start();
+			require $file;
+			return ob_get_clean();
+		}
+
+		require $file;
 	}
 
 	/**
