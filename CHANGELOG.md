@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+- Fixed a bug where enqueue module assets was runned multiple times [#70](https://github.com/DekodeInteraktiv/hogan-core/pull/70)
+- Add `include_file` helper function for modules [#71](https://github.com/DekodeInteraktiv/hogan-core/pull/71)
+
 ## 1.1.3
 - Added `hogan_get_link_title` helper function. [#68](https://github.com/DekodeInteraktiv/hogan-core/pull/68)
 
