@@ -71,6 +71,8 @@ class Core {
 	 */
 	private $_the_content_priority = 0;
 
+	public $test = [];
+
 	/**
 	 * Module constructor.
 	 *
@@ -89,10 +91,10 @@ class Core {
 		add_action( 'plugins_loaded', [ $this, 'register_default_field_group' ] );
 
 		// Register all modules when acf is ready.
-		add_action( 'acf/include_fields', [ $this, 'register_modules' ] );
+		add_action( 'init', [ $this, 'register_modules' ] );
 
 		// Register all field groups when acf is ready.
-		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
+		add_action( 'init', [ $this, 'register_field_groups' ] );
 
 		// Append Flexible Content modules to the_content.
 		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
@@ -253,17 +255,22 @@ class Core {
 				],
 			], $fields_after_flexible_content );
 
+		$this->test = $field_group_fields;
+
 		$location = array_merge( $this->get_post_type_location( $name ), $location );
 
-		acf_add_local_field_group(
-			[
-				'key'            => 'hogan_' . $name, // i.e. hogan_default.
-				'title'          => $label,
-				'fields'         => $field_group_fields,
-				'location'       => apply_filters( 'hogan/field_group/' . $name . '/location', $location ),
-				'hide_on_screen' => apply_filters( 'hogan/field_group/' . $name . '/hide_on_screen', $hide_on_screen ),
-			]
-		);
+		if ( function_exists( 'acf_add_local_field_group' ) ) {
+			acf_add_local_field_group(
+				[
+					'key'            => 'hogan_' . $name, // i.e. hogan_default.
+					'title'          => $label,
+					'fields'         => $field_group_fields,
+					'style'          => 'seamless',
+					'location'       => apply_filters( 'hogan/field_group/' . $name . '/location', $location ),
+					'hide_on_screen' => apply_filters( 'hogan/field_group/' . $name . '/hide_on_screen', $hide_on_screen ),
+				]
+			);
+		}
 	}
 
 	/**
@@ -324,7 +331,7 @@ class Core {
 	 * @return bool
 	 */
 	private function is_current_post_flexible( $post, $more ) {
-		return $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post );
+		return $post instanceof \WP_Post && ( $more || is_search() ) && ! post_password_required( $post );
 	}
 
 	/**
@@ -343,9 +350,14 @@ class Core {
 			$this->_current_layouts[ $key ] = [];
 
 			foreach ( $this->_field_groups as $field_group ) {
+				$flexible_content_field_name = 'hogan_' . $field_group . '_modules_name';
 
 				// Get post Hogan layouts/content for field group.
-				$layouts = get_field( 'hogan_' . $field_group . '_modules_name', $post );
+				if ( function_exists( 'get_field' ) ) {
+					$layouts = get_field( $flexible_content_field_name, $post );
+				} else {
+					$layouts = hogan_get_flexible_fields( $flexible_content_field_name, get_the_ID(), $this->test );
+				}
 
 				if ( is_array( $layouts ) && ! empty( $layouts ) ) {
 					// Merge layouts/content from field group.

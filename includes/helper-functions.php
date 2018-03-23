@@ -374,3 +374,83 @@ function hogan_get_link_title( array $link ) : string {
 	// Return url as a last resort.
 	return $link['url'];
 }
+
+function hogan_get_flexible_fields( string $name, int $post_id, array $config, bool $first = true ) {
+	$cache_key = md5( $name . $post_id );
+
+	$results = $first ? wp_cache_get( $cache_key, 'get_flexible_fields' ) : false;
+
+	if ( false === $results ) {
+		$results = [];
+
+		foreach ( $config as $field ) {
+			if ( empty( $field['name'] ) || ( $first && $field['name'] !== $name ) ) {
+				continue;
+			}
+
+			/**
+			 * Ship
+			 */
+			if ( 'tab' === $field['type'] ) {
+				continue;
+			}
+
+			$meta_key = $field['name'];
+			if ( isset( $field['meta_key_prefix'] ) ) {
+				$meta_key = $field['meta_key_prefix'] . $meta_key;
+			}
+			$field_value = get_post_meta( $post_id, $meta_key, true );
+			if ( isset( $field['layouts'] ) ) { // We're dealing with flexible content layouts.
+				if ( empty( $field_value ) ) {
+					continue;
+				}
+				// Build a keyed array of possible layout types.
+				$layout_types = [];
+				foreach ( $field['layouts'] as $key => $layout_type ) {
+					$layout_types[ $layout_type['name'] ] = $layout_type;
+				}
+				foreach ( $field_value as $key => $current_layout_type ) {
+					$new_config = $layout_types[ $current_layout_type ]['sub_fields'];
+					if ( empty( $new_config ) ) {
+						continue;
+					}
+					foreach ( $new_config as &$field_config ) {
+						$field_config['meta_key_prefix'] = $meta_key . "_{$key}_";
+					}
+					$results[ $field['name'] ][] = array_merge(
+						[
+							'acf_fc_layout' => $current_layout_type,
+						],
+						hogan_get_flexible_fields( $name, $post_id, $new_config, false )
+					);
+				}
+			} elseif ( isset( $field['sub_fields'] ) ) { // We're dealing with repeater fields.
+				if ( empty( $field_value ) ) {
+					continue;
+				}
+				for ( $i = 0; $i < $field_value; $i ++ ) {
+					$new_config = $field['sub_fields'];
+					if ( empty( $new_config ) ) {
+						continue;
+					}
+					foreach ( $new_config as &$field_config ) {
+						$field_config['meta_key_prefix'] = $meta_key . "_{$i}_";
+					}
+					$results[ $field['name'] ][] = hogan_get_flexible_fields( $name, $post_id, $new_config, false );
+				}
+			} else {
+				$results[ $field['name'] ] = $field_value;
+			} // End if.
+		} // End foreach.
+
+		if ( isset( $results[ $name ] ) ) {
+			$results = $results[ $name ];
+		}
+
+		if ( $first ) {
+			wp_cache_set( $cache_key, $results, 'get_flexible_fields', 3 * HOUR_IN_SECONDS );
+		}
+	}
+
+	return $results;
+}
