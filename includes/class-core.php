@@ -72,15 +72,14 @@ class Core {
 	private $_the_content_priority = 0;
 
 	/**
-	 * Module constructor. Core is instantiated on after_setup_theme hook.
+	 * Init hooks and filter on plugins_loaded.
 	 *
 	 * @return void
 	 */
-	private function __construct() {
-		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
+	public function setup_on_plugins_loaded() {
 
-		// Add admin stylesheets and scripts.
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
+		// Register core text domain.
+		\load_plugin_textdomain( 'hogan-core', false, HOGAN_CORE_DIR . '/languages' );
 
 		// Register default field group.
 		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ] );
@@ -91,11 +90,25 @@ class Core {
 		// Register all field groups when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
 
-		// Append Flexible Content modules to the_content.
-		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
+		// Add admin stylesheets and scripts.
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
 
 		// Enqueue Scripts.
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_current_post_modules_assets' ] );
+
+	}
+
+	/**
+	 * Init hooks and filter on after_setup_theme.
+	 *
+	 * @return void
+	 */
+	public function setup_on_after_setup_theme() {
+
+		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
+
+		// Append Flexible Content modules to the_content.
+		add_filter( 'the_content', [ $this, 'append_modules_content' ], $this->_the_content_priority, 1 );
 
 		// Index modules as post content in SearchWP.
 		if ( true === apply_filters( 'hogan/searchwp/index_modules_as_post_content', true ) ) {
@@ -111,6 +124,16 @@ class Core {
 
 		add_filter( 'acf/fields/flexible_content/layout_title', [ $this, 'extend_layout_titles' ], 10, 3 );
 
+	}
+
+	/**
+	 * Module constructor. Core is instantiated on plugin load.
+	 *
+	 * @return void
+	 */
+	private function __construct() {
+		add_action( 'plugins_loaded', [ $this, 'setup_on_plugins_loaded' ] );
+		add_action( 'after_setup_theme', [ $this, 'setup_on_after_setup_theme' ] );
 	}
 
 	/**
