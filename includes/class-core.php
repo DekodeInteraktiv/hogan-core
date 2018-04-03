@@ -72,21 +72,18 @@ class Core {
 	private $_the_content_priority = 0;
 
 	/**
-	 * Module constructor.
+	 * Module constructor. Core is instantiated on after_setup_theme hook.
 	 *
 	 * @return void
 	 */
 	private function __construct() {
 		$this->_the_content_priority = absint( apply_filters( 'hogan/the_content_priority', 10 ) );
 
-		// Load text domain on plugins_loaded.
-		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
-
 		// Add admin stylesheets and scripts.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
 
 		// Register default field group.
-		add_action( 'plugins_loaded', [ $this, 'register_default_field_group' ] );
+		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ] );
 
 		// Register all modules when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_modules' ] );
@@ -128,15 +125,6 @@ class Core {
 		}
 
 		return self::$_instance;
-	}
-
-	/**
-	 * Load textdomain for translations.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'hogan-core', false, HOGAN_CORE_DIR . '/languages' );
 	}
 
 	/**

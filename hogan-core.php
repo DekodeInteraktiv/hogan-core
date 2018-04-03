@@ -17,6 +17,9 @@
  * @author Dekode
  */
 
+declare( strict_types = 1 );
+namespace Dekode\Hogan;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -60,8 +63,27 @@ if ( version_compare( phpversion(), HOGAN_CORE_PHP_REQUIRED_VERSION, '<' ) ) {
 	return;
 }
 
-require_once 'includes/class-module.php';
-require_once 'includes/class-core.php';
-require_once 'includes/helper-functions.php';
+add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_core_text_domain' );
+add_action( 'after_setup_theme', __NAMESPACE__ . '\\get_core_instance' );
 
-\Dekode\Hogan\Core::get_instance();
+/**
+ * Register core text domain.
+ *
+ * @return void
+ */
+function load_core_text_domain() {
+	\load_plugin_textdomain( 'hogan-core', false, HOGAN_CORE_DIR . '/languages' );
+}
+
+/**
+ * Initialize Hogan
+ *
+ * @return Core The Core instance
+ */
+function get_core_instance() : Core {
+	require_once 'includes/class-module.php';
+	require_once 'includes/class-core.php';
+	require_once 'includes/helper-functions.php';
+
+	return Core::get_instance();
+}

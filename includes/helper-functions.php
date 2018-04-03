@@ -280,7 +280,7 @@ function hogan_enqueue_module_assets( $modules ) {
 		$modules = [ $modules ];
 	}
 
-	$hogan = \Dekode\Hogan\Core::get_instance();
+	$hogan = \Dekode\Hogan\get_core_instance();
 
 	foreach ( $modules as $module ) {
 		$hogan->enqueue_module_assets( $module );
@@ -294,7 +294,7 @@ function hogan_enqueue_module_assets( $modules ) {
  * @param array  $args Arguments to pass to module.
  */
 function hogan_module( string $name, array $args ) {
-	$hogan = \Dekode\Hogan\Core::get_instance();
+	$hogan = \Dekode\Hogan\get_core_instance();
 	$hogan->render_module_template( $name, $args );
 }
 
