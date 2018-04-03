@@ -315,8 +315,17 @@ abstract class Module {
 		// Echo opening wrappers.
 		$this->render_opening_template_wrappers( $counter );
 
+		$output_heading_component = true === apply_filters( 'hogan/module/' . $this->name . '/heading/enabled', false ) && ! empty( $this->heading );
+		$output_lead_component    = true === apply_filters( 'hogan/module/' . $this->name . '/lead/enabled', false ) && ! empty( $this->lead );
+		$wrap_heading_and_lead    = true === apply_filters( 'hogan/module/wrap_heading_and_lead', false, $this ) && ( $output_heading_component || $output_lead_component );
+
+		// Wrap standard fields.
+		if ( true === $wrap_heading_and_lead ) {
+			printf( '<div class="%s">', esc_attr( hogan_classnames( 'hogan-module-header', 'hogan-module-' . $this->name . '-header' ) ) );
+		}
+
 		// Include standard fields.
-		if ( true === apply_filters( 'hogan/module/' . $this->name . '/heading/enabled', false ) && ! empty( $this->heading ) ) {
+		if ( true === $output_heading_component ) {
 			hogan_component(
 				'heading', [
 					'title' => $this->heading,
@@ -324,12 +333,16 @@ abstract class Module {
 			);
 		}
 
-		if ( true === apply_filters( 'hogan/module/' . $this->name . '/lead/enabled', false ) && ! empty( $this->lead ) ) {
+		if ( true === $output_lead_component ) {
 			hogan_component(
 				'lead', [
 					'content' => $this->lead,
 				]
 			);
+		}
+
+		if ( true === $wrap_heading_and_lead ) {
+			echo '</div>';
 		}
 
 		// Include module template.
