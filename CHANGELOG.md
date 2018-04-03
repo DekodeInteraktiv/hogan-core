@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.6
+- Fix assets bug introduced in 1.1.5
+
 ## 1.1.5
 - Load Hogan late to enable filters from theme. [PR #74](https://github.com/DekodeInteraktiv/hogan-core/pull/74) (Fixes issue [#37](https://github.com/DekodeInteraktiv/hogan-core/issues/37))
 - Add optional wrapper around heading and lead. [PR #76](https://github.com/DekodeInteraktiv/hogan-core/pull/76) (Fixes issue [#60](https://github.com/DekodeInteraktiv/hogan-core/issues/60))
