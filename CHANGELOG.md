@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.5
+- Load Hogan late to enable filters from theme. [PR #74](https://github.com/DekodeInteraktiv/hogan-core/pull/74) (Fixes issue [#37](https://github.com/DekodeInteraktiv/hogan-core/issues/37))
+- Add optional wrapper around heading and lead. [PR #76](https://github.com/DekodeInteraktiv/hogan-core/pull/76) (Fixes issue [#60](https://github.com/DekodeInteraktiv/hogan-core/issues/60))
+- Add Dekode Coding Standards. [PR #73](https://github.com/DekodeInteraktiv/hogan-core/pull/73) (Fixes issue [#72](https://github.com/DekodeInteraktiv/hogan-core/issues/72))
+
 ## 1.1.4
 - Fixed a bug where enqueue module assets was runned multiple times [#70](https://github.com/DekodeInteraktiv/hogan-core/pull/70)
 - Add `include_file` helper function for modules [#71](https://github.com/DekodeInteraktiv/hogan-core/pull/71)
