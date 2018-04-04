@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.7
+- Simplify module registration. [PR #79](https://github.com/DekodeInteraktiv/hogan-core/pull/79)
+- Deprecated helper function hogan_register_module().
+
 ## 1.1.6
 - Fix assets bug introduced in 1.1.5
 
