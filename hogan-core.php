@@ -66,4 +66,5 @@ if ( version_compare( phpversion(), HOGAN_CORE_PHP_REQUIRED_VERSION, '<' ) ) {
 require_once 'includes/class-module.php';
 require_once 'includes/class-core.php';
 require_once 'includes/helper-functions.php';
+require_once 'includes/hogan-deprecated.php';
 Core::get_instance();

@@ -12,27 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registert module
- *
- * @param \Dekode\Hogan\Module $module Module object.
- *
- * @return void
- */
-function hogan_register_module( \Dekode\Hogan\Module $module ) {
-
-	if ( did_action( 'hogan/modules_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run hogan_register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
-	}
-
-	add_filter(
-		'hogan/modules', function( array $modules ) use ( $module ) : array {
-			$modules[] = $module;
-			return $modules;
-		}
-	);
-}
-
-/**
  * De-register default field group.
  *
  * @return void

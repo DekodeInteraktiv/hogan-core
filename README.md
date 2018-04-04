@@ -32,22 +32,19 @@ Module | Installation
 
 
 ## Adding modules
-Adding custom modules can be done using the `hogan_register_module()` function. Create a new module that extends the `\Dekode\Hogan\Module` class and add it to the Hogan repository like this:
+Adding custom modules can be done using the `register_module()` function in Core. Create a new module that extends the `\Dekode\Hogan\Module` class and add it to the Hogan repository like this:
 
 ```php
 
-class TextModule2 extends extends \Dekode\Hogan\Module {
-	…
+class DemoModule extends extends \Dekode\Hogan\Module {
+  …
 }
 
-add_action( 'hogan/include_modules', function() {
-	hogan_register_module( new TextModule2() );
-} );
+add_action( 'hogan/include_modules', function( \Dekode\Hogan\Core $core ) {
+  require_once 'class-demomodule.php';
+  $core->register_module( new DemoModule() );
+}, 10, 1 );
 ```
-
-See the [Text Module](https://github.com/DekodeInteraktiv/hogan-text) for a complete example.
-
-See the [Wiki](https://github.com/DekodeInteraktiv/hogan-core/wiki/Guidelines-for-creating-new-modules) for more information.
 
 ## Usage
 By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.

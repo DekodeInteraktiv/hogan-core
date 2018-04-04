@@ -85,7 +85,7 @@ class Core {
 		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ] );
 
 		// Register all modules when acf is ready.
-		add_action( 'acf/include_fields', [ $this, 'register_modules' ] );
+		add_action( 'acf/include_fields', [ $this, 'include_modules' ] );
 
 		// Register all field groups when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
@@ -161,24 +161,28 @@ class Core {
 	}
 
 	/**
-	 * Register modules from filter into core plugin.
+	 * Register module
+	 *
+	 * @param \Dekode\Hogan\Module $module Module object.
+	 * @return void
+	 */
+	public function register_module( \Dekode\Hogan\Module $module ) {
+
+		if ( did_action( 'hogan/modules_included' ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run $core->register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
+		}
+
+		$this->_modules[ $module->name ] = $module;
+	}
+
+	/**
+	 * Include all modules.
 	 *
 	 * @return void
 	 */
-	public function register_modules() {
-
-		do_action( 'hogan/include_modules' );
-
-		foreach ( apply_filters( 'hogan/modules', [] ) as $module ) {
-
-			if ( ! ( $module instanceof Module ) ) {
-				$module = new $module();
-			}
-
-			$this->_modules[ $module->name ] = $module;
-		}
-
-		do_action( 'hogan/modules_registered' );
+	public function include_modules() {
+		do_action( 'hogan/include_modules', $this );
+		do_action( 'hogan/modules_included' );
 	}
 
 	/**
