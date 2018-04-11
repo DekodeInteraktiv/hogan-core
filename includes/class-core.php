@@ -339,7 +339,7 @@ class Core {
 	 * @return bool
 	 */
 	private function is_current_post_flexible( $post, $more ) {
-		return $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() ) && ! post_password_required( $post );
+		return $post instanceof \WP_Post && function_exists( 'get_field' ) && ( $more || is_search() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) && ! post_password_required( $post );
 	}
 
 	/**
