@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.1.8
-- Fixed abug when flexible content wasn't rendered in rest api. [PR #81](https://github.com/DekodeInteraktiv/hogan-core/pull/81)
+- Fixed a bug where flexible content wasn't rendered in rest api. [PR #81](https://github.com/DekodeInteraktiv/hogan-core/pull/81)
 
 ## 1.1.7
 - Simplify module registration. [PR #79](https://github.com/DekodeInteraktiv/hogan-core/pull/79)
