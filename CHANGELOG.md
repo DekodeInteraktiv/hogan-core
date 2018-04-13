@@ -1,10 +1,13 @@
 # Changelog
 
+## Unreleased
+- Removed deprecated filters added in [version 1.0.13](https://github.com/DekodeInteraktiv/hogan-core/releases/tag/1.0.13). [PR #83](https://github.com/DekodeInteraktiv/hogan-core/pull/83) (https://github.com/DekodeInteraktiv/hogan-core/pull/81) (Fixes issue [#40](https://github.com/DekodeInteraktiv/hogan-core/issues/40))
+
 ## 1.1.9
 - Bugfix. [PR #85](https://github.com/DekodeInteraktiv/hogan-core/pull/85)
 
 ## 1.1.8
-- Fixed a bug where flexible content wasn't rendered in rest api. [PR #81](https://github.com/DekodeInteraktiv/hogan-core/pull/81)
+- Fixed a bug where flexible content wasn't rendered in rest api. [PR #81](https://github.com/DekodeInteraktiv/hogan-core/pull/81) (Fixes issue [#80](https://github.com/DekodeInteraktiv/hogan-core/issues/80))
 
 ## 1.1.7
 - Simplify module registration. [PR #79](https://github.com/DekodeInteraktiv/hogan-core/pull/79)
