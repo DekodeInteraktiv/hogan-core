@@ -44,11 +44,11 @@ class Core {
 	private $_module_counter = 0;
 
 	/**
-	 * Flexible content store
+	 * Flexible content stored for reuse if the_content is applied multiple times.
 	 *
-	 * @var string
+	 * @var array
 	 */
-	private $_flexible_content = '';
+	private $_flexible_content = [];
 
 	/**
 	 * Enqueued module assets
@@ -441,7 +441,7 @@ class Core {
 	 * @return string
 	 */
 	private function get_modules_content( \WP_Post $post ) : string {
-		$flexible_content = $this->_flexible_content;
+		$flexible_content = $this->_flexible_content[ $post->ID ] ?? null;
 
 		if ( empty( $flexible_content ) ) {
 			$layouts = $this->get_current_post_layouts( $post );
@@ -461,7 +461,7 @@ class Core {
 			 * Store the flexible content to reuse it if `the_content` is
 			 * runned more than once.
 			 */
-			$this->_flexible_content = $flexible_content;
+			$this->_flexible_content[ $post->ID ] = $flexible_content;
 		}
 
 		return (string) $flexible_content;
