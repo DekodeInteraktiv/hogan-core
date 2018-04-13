@@ -1,7 +1,12 @@
 # Changelog
 
-## Unreleased
-- Removed deprecated filters added in [version 1.0.13](https://github.com/DekodeInteraktiv/hogan-core/releases/tag/1.0.13). [PR #83](https://github.com/DekodeInteraktiv/hogan-core/pull/83) (https://github.com/DekodeInteraktiv/hogan-core/pull/81) (Fixes issue [#40](https://github.com/DekodeInteraktiv/hogan-core/issues/40))
+## 1.2.0
+### Removed
+- Removed deprecated filters. Deprecated since [version 1.0.13](https://github.com/DekodeInteraktiv/hogan-core/releases/tag/1.0.13). [PR #83](https://github.com/DekodeInteraktiv/hogan-core/pull/83) (Fixes issue [#40](https://github.com/DekodeInteraktiv/hogan-core/issues/40))
+
+### Fixed
+- Avoid collapsing new layouts. [PR #86](https://github.com/DekodeInteraktiv/hogan-core/pull/86) (Fixes issue [#29](https://github.com/DekodeInteraktiv/hogan-core/issues/29))
+
 
 ## 1.1.9
 - Bugfix. [PR #85](https://github.com/DekodeInteraktiv/hogan-core/pull/85)

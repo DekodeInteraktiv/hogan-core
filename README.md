@@ -21,14 +21,15 @@ Module | Installation
 [Embed](https://github.com/DekodeInteraktiv/hogan-embed) | `composer require dekodeinteraktiv/hogan-embed`
 [Gallery](https://github.com/DekodeInteraktiv/hogan-gallery) | `composer require dekodeinteraktiv/hogan-gallery`
 [Grid](https://github.com/DekodeInteraktiv/hogan-grid) | `composer require dekodeinteraktiv/hogan-grid`
+[Content Grid](https://github.com/DekodeInteraktiv/hogan-content-grid) | `composer require dekodeinteraktiv/hogan-content-grid`
 [Link list](https://github.com/DekodeInteraktiv/hogan-linklist) | `composer require dekodeinteraktiv/hogan-linklist`
 [Links](https://github.com/DekodeInteraktiv/hogan-links) | `composer require dekodeinteraktiv/hogan-links`
 [Banner](https://github.com/DekodeInteraktiv/hogan-banner) | `composer require dekodeinteraktiv/hogan-banner`
 [Image](https://github.com/DekodeInteraktiv/hogan-image) | `composer require dekodeinteraktiv/hogan-image`
 [Expandable list](https://github.com/DekodeInteraktiv/hogan-expandable-list) | `composer require dekodeinteraktiv/hogan-expandable-list`
 [Table](https://github.com/DekodeInteraktiv/hogan-table) | `composer require dekodeinteraktiv/hogan-table`
+[Parallax Image](https://github.com/DekodeInteraktiv/hogan-parallax-image) | `composer require dekodeinteraktiv/hogan-parallax-image`
 [Simple Posts](https://github.com/DekodeInteraktiv/hogan-simple-posts) | `composer require dekodeinteraktiv/hogan-simple-posts`
-[People](https://github.com/DekodeInteraktiv/hogan-people) | `composer require dekodeinteraktiv/hogan-people`
 
 
 ## Adding modules
