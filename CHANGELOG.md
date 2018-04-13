@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.9
+- Bugfix. [PR #85](https://github.com/DekodeInteraktiv/hogan-core/pull/85)
+
 ## 1.1.8
 - Fixed a bug where flexible content wasn't rendered in rest api. [PR #81](https://github.com/DekodeInteraktiv/hogan-core/pull/81)
 
