@@ -555,7 +555,7 @@ class Core {
 		<script>
 			(function( $ ) {
 				$( document ).ready( function( ) {
-					$('.acf-flexible-content .layout:not([data-layout="text"]').addClass('-collapsed');
+					$('.acf-flexible-content .layout:not([data-layout="text"]):not(.acf-clone)').addClass('-collapsed');
 				});
 			} )( jQuery );
 		</script>
