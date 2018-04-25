@@ -48,19 +48,16 @@ add_action( 'hogan/include_modules', function( \Dekode\Hogan\Core $core ) {
 ```
 
 ## Usage
-By default you will get a ACF Flexible Content group with all activated modules for post types `post` and `page`. The built in wysiwyg editor will be removed.
+By default you will get a ACF Flexible Content group with all activated modules for post type `page` only. The built in wysiwyg editor will be removed.
 
-### Adding Hogan to post types.
-Hogan is by default added to pages. Use the filter `hogan/supported_post_types`
-to declare support to other post types.
+### Adding Hogan to other post types.
+Hogan is by default added to pages. Use the filter `hogan/supported_post_types` to declare support to other post types.
 
 ```php
-function supported_post_types( $post_types, $field_group_name ) {
-	$post_types[] = 'post';
-
+add_filter( 'hogan/supported_post_types', function( array $post_types, string $field_group_name ) : array {
+	$post_types[] = 'post'; // Add Hogan support for posts.
 	return $post_types;
-}
-add_filter( 'hogan/supported_post_types', 'supported_post_types', 10, 2 );
+}, 10, 2 );
 ```
 
 By default `hogan/supported_post_types` adds all field groups. The second
@@ -68,58 +65,57 @@ argument is the field group name if you only need specific field groups on some
 post types.
 
 ### Customizing the default field group
-The default field group can be customized using these filters:
-- `hogan/field_group/default/fields_before_flexible_content` Insert custom fields before modules.
-- `hogan/field_group/default/fields_after_flexible_content` Insert custom fields after modules.
-- `hogan/field_group/default/location` Override the location parameter.
-- `hogan/field_group/default/hide_on_screen` Override the hide_on_screen parameter.
+All field groups, including the default one, can be filtered using the `hogan/field_group/default/args` filter. The default args are:
+```php
+'name'                           => 'default',
+'title'                          => __( 'Content Modules', 'hogan-core' ),
+'modules'                        => [], // All modules.
+'location'                       => [],
+'hide_on_screen'                 => [],
+'fields_before_flexible_content' => [],
+'fields_after_flexible_content'  => [],
+```
 
-### Remove default field group
-If you dont want to use the default field group, or for some other reason want to setup a customized field group yourself, run this helper function in the theme setup to disable the default group.
+### Disable default field group
+If you don't want to use the default field group, or for some other reason want to setup a customized field group yourself, field groups can be disabled with a filter.
 
 ```php
-add_action( 'hogan/include_field_groups', function() {
-	hogan_deregister_default_field_group();
-} );
+add_filter( 'hogan/field_group/default/enabled', '__return_false' );
 ```
 
 ### Adding custom field groups
-Use the helper function `hogan_register_field_group()` in action `hogan/include_field_groups` to register custom field groups.
+Use the core function `register_field_group()` in action `hogan/include_field_groups` to register custom field groups.
+
 
 ```php
-function hogan_register_field_group( $name, $label, $modules = [], $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
+add_action( 'hogan/include_field_groups', function( \Dekode\Hogan\Core $core ) {
+  $args = []; // Your field group args.
+  $core->register_field_group( $args );
+}, 10, 1 );
 ```
 
-#### Function arguments:
-- `$name`: Unique field group name
-- `$label`: Field group label
-- `$modules`: Array of modules you want to make available or null for all.
-- `$location`: The location parameter for [acf_add_local_field_group()](https://www.advancedcustomfields.com/resources/register-fields-via-php/)
-- `$hide_on_screen`: The hide_on_screen parameter for [acf_add_local_field_group()](https://www.advancedcustomfields.com/resources/register-fields-via-php/)
-- `$fields_before_flexible_content`: Custom ACF fields before the Flexible Content field.
-- `$fields_after_flexible_content`: Custom ACF fields after the Flexible Content field.
+See Customizing the default field group above for possible arguments.
 
 #### Example:
 
-This example demonstrates how to add a custom field group with just the text module for post type `page`.
+This example demonstrates how to add a custom field group with just the text module for post type `post`.
 ```php
-add_action( 'hogan/include_field_groups', function() {
-
-  $name = 'field_group_1';
-  $label = __( 'Field group Label', 'text-domain' );
-  $modules = [ 'text' ];
-  $location = [
-    [
+add_action( 'hogan/include_field_groups', function( \Dekode\Hogan\Core $core ) {
+  $core->register_field_group( [
+    'name' => 'field_group_1',
+    'title' => __( 'Field group title', 'text-domain' ),
+    'modules' => [ 'text' ],
+    'location' => [
       [
-        'param' => 'post_type',
-        'operator' => '==',
-        'value' => 'page',
+        [
+		  'param' => 'post_type',
+		  'operator' => '==',
+          'value' => 'post',
+        ],
       ],
     ],
-  ];
-
-  hogan_register_field_group( $name, $label, $modules, $location );
-});
+  ] );
+}, 10, 1);
 ```
 
 ## Adding header and lead to modules

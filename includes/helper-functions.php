@@ -12,56 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * De-register default field group.
- *
- * @return void
- */
-function hogan_deregister_default_field_group() {
-
-	if ( did_action( 'hogan/field_groups_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_deregister_default_field_group() on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
-	}
-
-	add_filter( 'hogan/field_group/default/enabled', '__return_false' );
-}
-
-/**
- * Register a specific field group.
- *
- * @param string $name                           Field group name.
- * @param string $label                          Label.
- * @param array  $modules                        Array/String with supported modules.
- * @param array  $location                       Location rules.
- * @param array  $hide_on_screen                 Array of elements to hide on edit screen.
- * @param array  $fields_before_flexible_content Prepend fields.
- * @param array  $fields_after_flexible_content  Append fields.
- * @return void
- */
-function hogan_register_field_group( string $name, string $label, array $modules = [], array $location = [], array $hide_on_screen = [], array $fields_before_flexible_content = [], array $fields_after_flexible_content = [] ) {
-
-	if ( did_action( 'hogan/field_groups_registered' ) ) {
-		_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please run hogan_register_field_group() on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
-	}
-
-	$group = [
-		'name'                           => sanitize_key( $name ),
-		'label'                          => $label,
-		'modules'                        => $modules,
-		'location'                       => $location,
-		'hide_on_screen'                 => $hide_on_screen,
-		'fields_before_flexible_content' => $fields_before_flexible_content,
-		'fields_after_flexible_content'  => $fields_after_flexible_content,
-	];
-
-	add_filter(
-		'hogan/field_groups', function( array $groups ) use ( $group ) : array {
-			$groups[] = $group;
-			return $groups;
-		}
-	);
-}
-
-/**
  * Helper function for adding default heading field
  *
  * @param array                $fields ACF fields array.

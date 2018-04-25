@@ -81,14 +81,14 @@ class Core {
 		// Register core text domain.
 		\load_plugin_textdomain( 'hogan-core', false, HOGAN_CORE_DIR . '/languages' );
 
-		// Register default field group.
-		add_action( 'acf/include_fields', [ $this, 'register_default_field_group' ] );
-
 		// Register all modules when acf is ready.
 		add_action( 'acf/include_fields', [ $this, 'include_modules' ] );
 
+		// Register default field group.
+		add_action( 'hogan/include_field_groups', [ $this, 'register_default_field_group' ] );
+
 		// Register all field groups when acf is ready.
-		add_action( 'acf/include_fields', [ $this, 'register_field_groups' ] );
+		add_action( 'acf/include_fields', [ $this, 'include_field_groups' ] );
 
 		// Add admin stylesheets and scripts.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
@@ -169,7 +169,7 @@ class Core {
 	public function register_module( \Dekode\Hogan\Module $module ) {
 
 		if ( did_action( 'hogan/modules_included' ) ) {
-			_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please run $core->register_module() on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules have already been registered. Please do module registration on action hogan/include_modules.', 'hogan-core' ), '1.0.0' );
 		}
 
 		$this->_modules[ $module->name ] = $module;
@@ -200,101 +200,116 @@ class Core {
 	 *
 	 * @return void
 	 */
-	public function register_field_groups() {
-
-		do_action( 'hogan/include_field_groups' );
-
-		foreach ( apply_filters( 'hogan/field_groups', [] ) as $g ) {
-			$this->register_field_group( $g['name'], $g['label'], $g['modules'], $g['location'], $g['hide_on_screen'], $g['fields_before_flexible_content'], $g['fields_after_flexible_content'] );
-		}
-
-		do_action( 'hogan/field_groups_registered' );
+	public function include_field_groups() {
+		do_action( 'hogan/include_field_groups', $this );
+		do_action( 'hogan/field_groups_included' );
 	}
 
 	/**
-	 * Register a specific field group.
+	 * Register a field group.
 	 *
-	 * @param string $name                           Field group name.
-	 * @param mixed  $label                          Label.
-	 * @param mixed  $modules                        Array/String with supported modules.
-	 * @param array  $location                       Location rules.
-	 * @param array  $hide_on_screen                 Array of elements to hide on edit screen.
-	 * @param array  $fields_before_flexible_content Prepend fields.
-	 * @param array  $fields_after_flexible_content  Append fields.
-	 *
+	 * @param array $args Field group arguments.
 	 * @return void
 	 */
-	public function register_field_group( $name, $label, $modules = 'all', $location = [], $hide_on_screen = [], $fields_before_flexible_content = [], $fields_after_flexible_content = [] ) {
+	public function register_field_group( array $args ) {
+
+		if ( ! did_action( 'hogan/modules_included' ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Hogan modules haven\'t been registered yet. Please do field group registration on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
+		}
+
+		if ( did_action( 'hogan/field_groups_included' ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Hogan field groups have already been registered. Please register/deregister field groups on action hogan/include_field_groups.', 'hogan-core' ), '1.0.0' );
+		}
+
+		$args = wp_parse_args( $args, [
+			'name'                           => '',
+			'title'                          => __( 'Content Modules', 'hogan-core' ),
+			'modules'                        => [], // All modules.
+			'location'                       => [],
+			'hide_on_screen'                 => [],
+			'fields_before_flexible_content' => [],
+			'fields_after_flexible_content'  => [],
+		] );
 
 		// Sanitized field group name will be used for all filters, and prefix for field group and field names.
-		$name = sanitize_key( $name );
+		$args['name'] = sanitize_key( $args['name'] );
 
-		$this->_field_groups[] = $name;
-
-		if ( true !== apply_filters( 'hogan/field_group/' . $name . '/enabled', true ) ) {
+		if ( empty( $args['name'] ) ) {
+			// Everyone should have a name.
 			return;
 		}
 
-		// Get flexible content layouts from modules.
+		// Filter for disabling entire field group.
+		if ( true !== apply_filters( 'hogan/field_group/' . $args['name'] . '/enabled', true ) ) {
+			return; // Don't you want to play with me, Billy?
+		}
+
+		// Deprecated filters as of 1.3.0. To be removed as some point in the future.
+		$args['fields_before_flexible_content'] = apply_filters_deprecated( 'hogan/field_group/' . $args['name'] . '/fields_before_flexible_content', [ $args['fields_before_flexible_content'] ], '1.3.0', 'hogan/field_group/' . $args['name'] . '/args' );
+		$args['fields_after_flexible_content']  = apply_filters_deprecated( 'hogan/field_group/' . $args['name'] . '/fields_after_flexible_content', [ $args['fields_after_flexible_content'] ], '1.3.0', 'hogan/field_group/' . $args['name'] . '/args' );
+		$args['location']                       = apply_filters_deprecated( 'hogan/field_group/' . $args['name'] . '/location', [ $args['location'] ], '1.3.0', 'hogan/field_group/' . $args['name'] . '/args' );
+		$args['hide_on_screen']                 = apply_filters_deprecated( 'hogan/field_group/' . $args['name'] . '/hide_on_screen', [ $args['hide_on_screen'] ], '1.3.0', 'hogan/field_group/' . $args['name'] . '/args' );
+
+		// Allow all args to be filtered before creating acf field group.
+		$args = apply_filters( 'hogan/field_group/' . $args['name'] . '/args', $args );
+
+		// Create a list of flexible content layouts based on selected modules.
 		$field_group_layouts = [];
+
 		foreach ( $this->_modules as $module ) {
-			if ( is_array( $modules ) && ! empty( $modules ) ) {
-				if ( in_array( $module->name, $modules, true ) ) {
+
+			if ( is_array( $args['modules'] ) && ! empty( $args['modules'] ) ) {
+				// Include a subset of modules.
+				if ( in_array( $module->name, $args['modules'], true ) ) {
 					$field_group_layouts[] = $module->get_layout_definition();
 				}
 			} else {
-				// All modules.
+				// Include all modules modules.
 				$field_group_layouts[] = $module->get_layout_definition();
 			}
 		}
 
 		if ( empty( $field_group_layouts ) ) {
-			// No modules, no fun.
-			return;
+			return; // Why keep on living, what's the use?
 		}
 
-		$fields_before_flexible_content = apply_filters( 'hogan/field_group/' . $name . '/fields_before_flexible_content', $fields_before_flexible_content );
-		$fields_after_flexible_content  = apply_filters( 'hogan/field_group/' . $name . '/fields_after_flexible_content', $fields_after_flexible_content );
+		// Set field group key based on name, i.e. hogan_default.
+		$args['key'] = 'hogan_' . $args['name'];
 
-		// Include custom fields before and after flexible content field.
-		$field_group_fields =
-			array_merge( $fields_before_flexible_content, [
-				[
-					'type'         => 'flexible_content',
-					'key'          => 'hogan_' . $name . '_modules_key', // i.e. hogan_default_modules_key.
-					'name'         => 'hogan_' . $name . '_modules_name',
-					'button_label' => esc_html__( 'Add module', 'hogan-core' ),
-					'layouts'      => $field_group_layouts,
-				],
-			], $fields_after_flexible_content );
-
-		$location = array_merge( $this->get_post_type_location( $name ), $location );
-
-		acf_add_local_field_group(
+		// Set field group fields from modules.
+		$args['fields'] = array_merge( $args['fields_before_flexible_content'], [
 			[
-				'key'            => 'hogan_' . $name, // i.e. hogan_default.
-				'title'          => $label,
-				'fields'         => $field_group_fields,
-				'location'       => apply_filters( 'hogan/field_group/' . $name . '/location', $location ),
-				'hide_on_screen' => apply_filters( 'hogan/field_group/' . $name . '/hide_on_screen', $hide_on_screen ),
-			]
-		);
+				'type'         => 'flexible_content',
+				'key'          => 'hogan_' . $args['name'] . '_modules_key',
+				'name'         => 'hogan_' . $args['name'] . '_modules_name',
+				'button_label' => __( 'Add module', 'hogan-core' ),
+				'layouts'      => $field_group_layouts,
+			],
+		], $args['fields_after_flexible_content'] );
+
+		// Add to core field groups.
+		$this->_field_groups[] = $args['name'];
+
+		// Create ACF field group.
+		acf_add_local_field_group( $args );
 	}
 
 	/**
-	 * Add location rule to post types.
+	 * Register default field group for all modules.
 	 *
-	 * @param string $name Field group name.
-	 *
-	 * @return array New location rules.
+	 * @return void
 	 */
-	private function get_post_type_location( string $name ) : array {
-		$supports_hogan_field_group = apply_filters( 'hogan/supported_post_types', [ 'page' ], $name );
+	public function register_default_field_group() {
 
-		$location = [];
+		$location   = [];
+		$post_types = apply_filters( 'hogan/field_group/default/supported_post_types', [ 'page' ] );
 
-		if ( ! empty( $supports_hogan_field_group ) && is_array( $supports_hogan_field_group ) ) {
-			foreach ( $supports_hogan_field_group as $post_type ) {
+		// Include the deprecated global filter, to be removed at some point.
+		$post_types = apply_filters_deprecated( 'hogan/supported_post_types', [ $post_types ], '1.3.0', 'hogan/field_group/default/supported_post_types' );
+
+		if ( is_array( $post_types ) && ! empty( $post_types ) ) {
+			// Add default location parameter for each supported post type.
+			foreach ( $post_types as $post_type ) {
 				$location[] = [
 					[
 						'param'    => 'post_type',
@@ -305,30 +320,23 @@ class Core {
 			}
 		}
 
-		return $location;
-	}
-
-	/**
-	 * Register default field group for modules.
-	 *
-	 * @return void
-	 */
-	public function register_default_field_group() {
-
-		$hide_on_screen = [
-			'the_content',
-			'custom_fields',
-			'discussion',
-			'comments',
-			'revisions',
-			'slug',
-			'author',
-			'format',
-			'tags',
-			'send-trackbacks',
-		];
-
-		hogan_register_field_group( 'default', __( 'Content Modules', 'hogan-core' ), [], [], $hide_on_screen );
+		// Register a field group with mostly default args.
+		$this->register_field_group( [
+			'name'           => 'default',
+			'location'       => $location,
+			'hide_on_screen' => [
+				'the_content',
+				'custom_fields',
+				'discussion',
+				'comments',
+				'revisions',
+				'slug',
+				'author',
+				'format',
+				'tags',
+				'send-trackbacks',
+			],
+		] );
 	}
 
 	/**
