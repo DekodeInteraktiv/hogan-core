@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.0
+- Cleanup field group registration [PR #89](https://github.com/DekodeInteraktiv/hogan-core/pull/89)
+
 ## 1.2.0
 ### Removed
 - Removed deprecated filters. Deprecated since [version 1.0.13](https://github.com/DekodeInteraktiv/hogan-core/releases/tag/1.0.13). [PR #83](https://github.com/DekodeInteraktiv/hogan-core/pull/83) (Fixes issue [#40](https://github.com/DekodeInteraktiv/hogan-core/issues/40))
