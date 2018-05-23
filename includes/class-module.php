@@ -341,8 +341,14 @@ abstract class Module {
 			echo '</div>';
 		}
 
+		// Render custom fields before template.
+		do_action( 'hogan/module/render_fields_before', $raw_content, $this );
+
 		// Include module template.
 		include $template;
+
+		// Render custom fields after template.
+		do_action( 'hogan/module/render_fields_after', $raw_content, $this );
 
 		// Echo closing wrappers.
 		$this->render_closing_template_wrappers();
