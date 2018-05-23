@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.1
+- Added action hooks for rendering custom before and after fields for modules.
+
 ## 1.3.0
 - Cleanup field group registration [PR #89](https://github.com/DekodeInteraktiv/hogan-core/pull/89)
 
