@@ -72,6 +72,13 @@ class Core {
 	private $_the_content_priority = 0;
 
 	/**
+	 * Assets version
+	 *
+	 * @var string $_assets_version
+	 */
+	private $_assets_version;
+
+	/**
 	 * Init hooks and filter on plugins_loaded.
 	 *
 	 * @return void
@@ -94,6 +101,7 @@ class Core {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
 
 		// Enqueue Scripts.
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_core_assets' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_current_post_modules_assets' ] );
 
 	}
@@ -134,6 +142,8 @@ class Core {
 	private function __construct() {
 		add_action( 'plugins_loaded', [ $this, 'setup_on_plugins_loaded' ] );
 		add_action( 'after_setup_theme', [ $this, 'setup_on_after_setup_theme' ] );
+
+		$this->assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : HOGAN_CORE_VERSION;
 	}
 
 	/**
@@ -156,8 +166,25 @@ class Core {
 	 * @return void
 	 */
 	public function enqueue_admin_assets() {
-		$assets_version = defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ? time() : HOGAN_CORE_VERSION;
-		wp_enqueue_style( 'hogan-admin-style', HOGAN_CORE_URL . 'assets/style.css', [ 'acf-pro-input' ], $assets_version );
+		wp_enqueue_style( 'hogan-admin-style', HOGAN_CORE_URL . 'assets/css/hogan-core-admin.css', [ 'acf-pro-input' ], $this->assets_version );
+	}
+
+	/**
+	 * Load plugin core assets.
+	 *
+	 * @return void
+	 */
+	public function enqueue_core_assets() {
+		wp_enqueue_style( 'hogan-core', HOGAN_CORE_URL . 'assets/css/hogan-core.css', [], $this->assets_version );
+
+		/**
+		 * Filters the content width of the modules
+		 *
+		 * @param int $content_width Width.
+		 */
+		$content_width = (int) apply_filters( 'hogan/frontend/content_width', 1360 );
+
+		wp_add_inline_style( 'hogan-core', sprintf( '.hogan-module-inner { max-width: %spx; }', $content_width ) );
 	}
 
 	/**

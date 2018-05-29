@@ -1,0 +1,25 @@
+{
+  "name": "hogan-core",
+  "version": "1.0.0",
+  "private": true,
+  "entry": {
+    "hogan-core": "./src/style.scss",
+    "hogan-core-admin": "./src/admin.scss"
+  },
+  "scripts": {
+    "build": "heisenberg-scripts build",
+    "watch": "heisenberg-scripts build --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "heisenberg": {
+    "build": {
+      "commonsChunkPlugin": false,
+      "dest": "assets",
+      "hashFilenames": false,
+      "manifest": false
+    }
+  },
+  "devDependencies": {
+    "heisenberg-scripts": "0.3.6"
+  }
+}

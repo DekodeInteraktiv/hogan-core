@@ -122,6 +122,22 @@ add_filter( 'hogan/module/text/heading/enabled', '__return_true' );
 add_filter( 'hogan/module/text/lead/enabled', '__return_true' );
 ```
 
+## Style
+Hogan core comes with a minimal stylesheet.
+
+The width of hogan modules is by default set to 1360px. This can be changed
+using the filter `hogan/frontend/content_width`:
+```php
+add_filter( 'hogan/frontend/content_width', function( int $content_width ) {
+	return 1920;
+}
+```
+
+If you don't want the stylesheet in your theme you can deregister it.
+```php
+wp_deregister_style( 'hogan-core' );
+```
+
 ## Search
 Modules content is by default indexed as _Content_ by [SearchWP](https://searchwp.com/). This can be disabled using:
 ```php

@@ -1,0 +1,31 @@
+/* stylelint-disable declaration-no-important */
+
+/**
+ * Hogan Core Admin
+ */
+
+.acf-field-flexible-content {
+	background-color: #ddd;
+
+	.layout {
+		border: solid 1px #999;
+
+		.acf-fc-layout-handle {
+			background-color: rgba(0, 115, 170, 0.3);
+		}
+	}
+}
+
+/* Small height wysiwyg editor */
+.small-height-editor .acf-editor-wrap iframe,
+.small-height-editor .wp-editor-area {
+	height: 80px !important;
+	min-height: 0 !important;
+}
+
+/* Medium height wysiwyg editor */
+.medium-height-editor .acf-editor-wrap iframe,
+.medium-height-editor .wp-editor-area {
+	height: 130px !important;
+	min-height: 0 !important;
+}
