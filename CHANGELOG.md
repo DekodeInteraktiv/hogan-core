@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.0
+- Added default module width css [PR #90](https://github.com/DekodeInteraktiv/hogan-core/pull/90)
+
 ## 1.3.1
 - Added action hooks for rendering custom before and after fields for modules.
 
