@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.1
+- Bugfix SearchWP indexing [PR #93](https://github.com/DekodeInteraktiv/hogan-core/pull/93)
+
 ## 1.4.0
 - Added default module width css [PR #90](https://github.com/DekodeInteraktiv/hogan-core/pull/90)
 
