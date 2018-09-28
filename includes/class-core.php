@@ -526,8 +526,13 @@ class Core {
 	 */
 	public function populate_post_content_for_indexing( \WP_Post $post ) : \WP_Post {
 
-		// Fake fill the post_content with modules before SearchWP indexing.
-		$post->post_content = $this->get_modules_content( $post );
+		$module_content = $this->get_modules_content( $post );
+
+		if ( ! empty( $module_content ) ) {
+			// Fake fill the post_content with modules before SearchWP indexing.
+			$post->post_content = $module_content;
+		}
+
 		return $post;
 	}
 
