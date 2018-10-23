@@ -509,6 +509,10 @@ class Core {
 	 * @param array  $args Module arguments.
 	 */
 	public function render_module_template( string $name, array $args ) {
+		if ( ! apply_filters( 'hogan/module/' . $name . '/show_in_rest', true ) && \hogan_is_rest() ) {
+			return;
+		}
+
 		// Get the right module.
 		$module = $this->get_module( $name );
 

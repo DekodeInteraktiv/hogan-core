@@ -303,3 +303,12 @@ function hogan_get_link_title( array $link ) : string {
 	// Return url as a last resort.
 	return $link['url'];
 }
+
+/**
+ * Check if request is a rest api request
+ *
+ * @return boolean true if from rest api otherwise false
+ */
+function hogan_is_rest() : bool {
+	return ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+}
