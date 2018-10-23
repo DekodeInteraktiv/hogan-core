@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/DekodeInteraktiv/hogan-core
  * GitHub Plugin URI: https://github.com/DekodeInteraktiv/hogan-core
  * Description: Modular Flexible Content System for ACF Pro
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: Dekode
  * Author URI: https://dekode.no
  * License: GPL-3.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'HOGAN_CORE_VERSION', '1.4.1' );
+define( 'HOGAN_CORE_VERSION', '1.4.2' );
 define( 'HOGAN_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'HOGAN_CORE_DIR', dirname( plugin_basename( __FILE__ ) ) );
 define( 'HOGAN_CORE_URL', plugin_dir_url( __FILE__ ) );

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2
+- Added filter to hide a module when fetched trough the rest api  [PR #95](https://github.com/DekodeInteraktiv/hogan-core/pull/95)
+
 ## 1.4.1
 - Bugfix SearchWP indexing [PR #93](https://github.com/DekodeInteraktiv/hogan-core/pull/93)
 
