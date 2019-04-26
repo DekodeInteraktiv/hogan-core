@@ -30,6 +30,7 @@ Module | Installation
 [Table](https://github.com/DekodeInteraktiv/hogan-table) | `composer require dekodeinteraktiv/hogan-table`
 [Parallax Image](https://github.com/DekodeInteraktiv/hogan-parallax-image) | `composer require dekodeinteraktiv/hogan-parallax-image`
 [Simple Posts](https://github.com/DekodeInteraktiv/hogan-simple-posts) | `composer require dekodeinteraktiv/hogan-simple-posts`
+[Reusable Modules](https://github.com/DekodeInteraktiv/hogan-reusable-modules) | `composer require dekodeinteraktiv/hogan-reusable-modules`
 
 
 ## Adding modules

@@ -240,11 +240,14 @@ abstract class Module {
 				apply_filters( 'hogan/module/outer_wrapper_classes', array_merge( $outer_wrapper_default_classnames, $this->outer_wrapper_classnames ), $this )
 			);
 
+			$outer_wrapper_attributes = apply_filters( 'hogan/module/outer_wrapper_attributes', [], $this );
+
 			printf(
-				'<%s id="%s" class="%s">',
+				'<%s id="%s" class="%s"%s>',
 				esc_attr( $this->outer_wrapper_tag ),
 				esc_attr( 'module-' . $counter ),
-				esc_attr( $outer_wrapper_classnames )
+				esc_attr( $outer_wrapper_classnames ),
+				hogan_attributes( $outer_wrapper_attributes )
 			);
 		}
 
@@ -255,10 +258,13 @@ abstract class Module {
 				apply_filters( 'hogan/module/inner_wrapper_classes', array_merge( [ 'hogan-module-inner' ], $this->inner_wrapper_classnames ), $this )
 			);
 
+			$inner_wrapper_attributes = apply_filters( 'hogan/module/inner_wrapper_attributes', [], $this );
+
 			printf(
-				'<%s class="%s">',
+				'<%s class="%s"%s>',
 				esc_attr( $this->inner_wrapper_tag ),
-				esc_attr( $inner_wrapper_classnames )
+				esc_attr( $inner_wrapper_classnames ),
+				hogan_attributes( $inner_wrapper_attributes )
 			);
 		}
 	}
